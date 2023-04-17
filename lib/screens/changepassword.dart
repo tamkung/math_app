@@ -4,19 +4,19 @@ import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:math_app/widget/navdrawer.dart';
 import 'package:math_app/config/constant.dart';
 
-class Profile extends StatefulWidget {
-  const Profile({super.key});
+class Changepassword extends StatefulWidget {
+  const Changepassword({super.key});
 
   @override
-  State<Profile> createState() => _ProfileState();
+  State<Changepassword> createState() => _ChangepasswordState();
 }
 
-class _ProfileState extends State<Profile> {
+class _ChangepasswordState extends State<Changepassword> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       endDrawer: NavDrawer(),
-      backgroundColor: pColor,
+      backgroundColor: Colors.white,
       appBar: AppBar(
         centerTitle: true,
         title: Text(
@@ -40,13 +40,9 @@ class _ProfileState extends State<Profile> {
           width: MediaQuery.of(context).size.width,
           decoration: const BoxDecoration(
             shape: BoxShape.rectangle,
-            color: pColor,
+            color: Colors.white,
             borderRadius: BorderRadius.only(
               topRight: Radius.circular(30),
-            ),
-            image: DecorationImage(
-              image: AssetImage("assets/images/bg-home.png"),
-              fit: BoxFit.fill,
             ),
           ),
           child: Stack(
@@ -79,7 +75,7 @@ class _ProfileState extends State<Profile> {
                             decoration: InputDecoration(
                               border: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(25)),
-                              labelText: 'ชื่อผู้ใช้',
+                              labelText: 'รหัสผ่านเก่า',
                               icon: Icon(Icons.person),
                             ),
                           ),
@@ -93,7 +89,7 @@ class _ProfileState extends State<Profile> {
                             decoration: InputDecoration(
                               border: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(25)),
-                              labelText: 'นามสกุล',
+                              labelText: 'รหัสผ่านใหม่',
                               icon: Icon(Icons.person),
                             ),
                           ),
@@ -107,7 +103,7 @@ class _ProfileState extends State<Profile> {
                             decoration: InputDecoration(
                               border: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(25)),
-                              labelText: 'อีเมล',
+                              labelText: 'ยืนยันรหัสผ่านใหม่',
                               icon: Icon(Icons.email),
                             ),
                           ),
@@ -124,9 +120,9 @@ class _ProfileState extends State<Profile> {
                               ),
                             ),
                             onPressed: () {
-                              Navigator.pushNamed(context, 'ChangePassword');
+                              //Navigator.pushNamed(context, 'changepassword');
                             },
-                            child: Text('เปลี่ยนรหัสผ่าน',
+                            child: Text('บันทึก',
                                 style: TextStyle(
                                   fontSize: 20,
                                   color: Colors.white,

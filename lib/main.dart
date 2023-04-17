@@ -1,11 +1,11 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:flutter/material.dart';
+import 'package:math_app/screens/changepassword.dart';
 import 'package:math_app/screens/profile.dart';
 
 import 'config/constant.dart';
 import 'screens/home.dart';
-import 'screens/learning/learn1.dart';
 import 'screens/login.dart';
 import 'screens/register.dart';
 import 'screens/game.dart';
@@ -31,8 +31,7 @@ class MyApp extends StatelessWidget {
         'Register': (context) => RegisterScreen(),
         'Home': (context) => HomeScreen(),
         'Profile': (context) => Profile(),
-        'Learn1': (context) => Learn1(),
-        'test': (context) => test(),
+        'ChangePassword': (context) => Changepassword(),
       },
     );
   }
