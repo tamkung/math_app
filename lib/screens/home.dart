@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
@@ -10,18 +12,23 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: pColor,
       endDrawer: NavDrawer(),
       appBar: AppBar(
-        shape: BeveledRectangleBorder(
+        backgroundColor: Colors.white,
+        foregroundColor: Colors.black,
+        automaticallyImplyLeading: false,
+        elevation: 0,
+        shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.only(
-            bottomLeft: Radius.circular(20),
+            bottomLeft: Radius.circular(30),
           ),
         ),
         toolbarHeight: 100,
         title: Column(
           children: [
-            Text("สวัสดี"),
-            Text("ชื่อผู้ใช้"),
+            txtStyle("สวัสดี", 20),
+            txtStyle("ชื่อผู้ใช้" + " นามสกุล", 15),
           ],
         ),
       ),
@@ -52,6 +59,17 @@ class HomeScreen extends StatelessWidget {
       ),
     );
   }
+}
+
+Widget txtStyle(String text, double size) {
+  return Text(
+    text,
+    style: TextStyle(
+      color: Colors.black,
+      fontSize: size,
+      fontWeight: FontWeight.bold,
+    ),
+  );
 }
 
 Widget menuContainer(text, image, nav) {
