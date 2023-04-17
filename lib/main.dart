@@ -4,6 +4,7 @@ import 'config/constant.dart';
 import 'screens/home.dart';
 import 'screens/login.dart';
 import 'screens/register.dart';
+import 'screens/game.dart';
 
 void main() {
   runApp(const MyApp());
@@ -24,6 +25,9 @@ class MyApp extends StatelessWidget {
       routes: {
         'Register': (context) => RegisterScreen(),
         'Home': (context) => HomeScreen(),
+        'Game': (context) => Game(
+              title: 'dasds',
+            ),
       },
     );
   }

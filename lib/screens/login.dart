@@ -75,7 +75,7 @@ class LoginScreen extends StatelessWidget {
                 ),
               ),
               onPressed: () {
-                Navigator.pushNamed(context, 'Home');
+                Navigator.pushNamed(context, 'Game');
               },
               child: Text('เข้าสู่ระบบ'),
             ),
