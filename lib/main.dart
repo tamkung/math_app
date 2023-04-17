@@ -8,6 +8,7 @@ import 'screens/home.dart';
 import 'screens/login.dart';
 import 'screens/register.dart';
 import 'screens/game.dart';
+import 'testTime/test.dart';
 
 void main() {
   runApp(const MyApp());
@@ -28,7 +29,8 @@ class MyApp extends StatelessWidget {
       routes: {
         'Register': (context) => RegisterScreen(),
         'Home': (context) => HomeScreen(),
-        'Profile' :(context) => Profile(),
+        'Profile': (context) => Profile(),
+        'test': (context) => test(),
       },
     );
   }
