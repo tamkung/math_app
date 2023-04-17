@@ -7,6 +7,7 @@ import 'config/constant.dart';
 import 'screens/home.dart';
 import 'screens/login.dart';
 import 'screens/register.dart';
+import 'screens/game.dart';
 
 void main() {
   runApp(const MyApp());

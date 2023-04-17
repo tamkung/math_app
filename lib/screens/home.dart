@@ -25,12 +25,12 @@ class HomeScreen extends StatelessWidget {
           ],
         ),
       ),
-      body: SafeArea(
+      body: SingleChildScrollView(
         child: Container(
           color: pColor,
           alignment: Alignment.center,
           child: Padding(
-            padding: const EdgeInsets.fromLTRB(10, 10, 10, 0),
+            padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               mainAxisSize: MainAxisSize.max,
