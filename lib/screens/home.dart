@@ -65,15 +65,15 @@ class HomeScreen extends StatelessWidget {
                     mainAxisSize: MainAxisSize.max,
                     children: [
                       menuContainer("รูปเลขาคณิตสองมิติและสามมิติ",
-                          "assets/images/menu1.png", "Learn"),
-                      menuContainer(
-                          "การหาพื้นที่", "assets/images/menu2.png", "Learn"),
-                      menuContainer(
-                          "การหาปริมาตร", "assets/images/menu3.png", "Learn"),
+                          "assets/images/menu1.png", "Learn1", context),
+                      menuContainer("การหาพื้นที่", "assets/images/menu2.png",
+                          "Learn", context),
+                      menuContainer("การหาปริมาตร", "assets/images/menu3.png",
+                          "Learn", context),
                       menuContainer("การหาพื้นที่ผิว",
-                          "assets/images/menu4.png", "Learn"),
+                          "assets/images/menu4.png", "Learn", context),
                       menuContainer("การหาความยาวรอบรูป",
-                          "assets/images/menu5.png", "Learn"),
+                          "assets/images/menu5.png", "Learn", context),
                     ],
                   ),
                 ),
@@ -97,10 +97,10 @@ Widget txtStyle(String text, double size) {
   );
 }
 
-Widget menuContainer(text, image, nav) {
+Widget menuContainer(text, image, nav, context) {
   return TextButton(
     onPressed: () {
-      // Navigator.pushNamed(context, nav);
+      Navigator.pushNamed(context, nav);
     },
     child: Container(
       padding: EdgeInsets.all(10),
