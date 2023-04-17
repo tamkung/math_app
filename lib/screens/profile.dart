@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
+import 'package:math_app/config/constant.dart';
 
 class Profile extends StatefulWidget {
   const Profile({super.key});
@@ -12,6 +13,24 @@ class Profile extends StatefulWidget {
 class _ProfileState extends State<Profile> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold();
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(
+          "ประวัติ",
+          style: TextStyle(
+            color: Colors.black,
+            fontSize: 30,
+          ),
+        ),
+        centerTitle: true,
+        backgroundColor: Colors.white,
+        elevation: 0,
+        toolbarHeight: 100,
+        foregroundColor: pColor,
+      ),
+      body: Container(
+        color: Colors.white,
+      ),
+    );
   }
 }
