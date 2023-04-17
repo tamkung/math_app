@@ -15,12 +15,11 @@ class _ChangepasswordState extends State<Changepassword> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      endDrawer: NavDrawer(),
       backgroundColor: Colors.white,
       appBar: AppBar(
         centerTitle: true,
         title: Text(
-          'ประวัติ',
+          'เปลี่ยนรหัสผ่าน',
           style: TextStyle(fontSize: 40),
         ),
         backgroundColor: Color.fromARGB(255, 255, 255, 255),
