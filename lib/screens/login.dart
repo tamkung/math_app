@@ -18,18 +18,18 @@ class LoginScreen extends StatelessWidget {
             Text(
               'เข้าสู่ระบบ',
               style: TextStyle(
-                fontSize: 24,
+                fontSize: 40,
               ),
             ),
             SizedBox(
-              height: 20,
+              height: 30,
             ),
             Container(
               padding: EdgeInsets.symmetric(horizontal: 20),
               child: TextFormField(
                 decoration: InputDecoration(
                   border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10)),
+                      borderRadius: BorderRadius.circular(25)),
                   labelText: 'อีเมล',
                   icon: Icon(Icons.email),
                 ),
@@ -43,7 +43,7 @@ class LoginScreen extends StatelessWidget {
               child: TextFormField(
                 decoration: InputDecoration(
                   border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10)),
+                      borderRadius: BorderRadius.circular(25)),
                   labelText: 'รหัสผ่าน',
                   icon: Icon(Icons.lock),
                 ),
@@ -77,7 +77,10 @@ class LoginScreen extends StatelessWidget {
               onPressed: () {
                 Navigator.pushNamed(context, 'Home');
               },
-              child: Text('เข้าสู่ระบบ'),
+              child: Text('เข้าสู่ระบบ',style: TextStyle(
+                fontSize: 20,
+              
+              ),),
             ),
             SizedBox(
               height: 10,

@@ -1,7 +1,4 @@
 import 'package:flutter/material.dart';
-import 'dart:async';
-import 'dart:convert';
-import 'dart:io';
 
 const pColor = Color(0xFF8159FB);
 

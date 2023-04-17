@@ -1,4 +1,7 @@
+// ignore_for_file: prefer_const_constructors
+
 import 'package:flutter/material.dart';
+import 'package:math_app/screens/profile.dart';
 
 import 'config/constant.dart';
 import 'screens/home.dart';
@@ -24,6 +27,7 @@ class MyApp extends StatelessWidget {
       routes: {
         'Register': (context) => RegisterScreen(),
         'Home': (context) => HomeScreen(),
+        'Profile' :(context) => Profile(),
       },
     );
   }
