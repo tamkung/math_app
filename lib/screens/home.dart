@@ -33,28 +33,53 @@ class HomeScreen extends StatelessWidget {
         ),
       ),
       body: SingleChildScrollView(
-        child: Container(
-          color: pColor,
-          alignment: Alignment.center,
-          child: Padding(
-            padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              mainAxisSize: MainAxisSize.max,
-              children: [
-                menuContainer("รูปเลขาคณิตสองมิติและสามมิติ",
-                    "assets/images/menu1.png", "Learn"),
-                menuContainer(
-                    "การหาพื้นที่", "assets/images/menu2.png", "Learn"),
-                menuContainer(
-                    "การหาปริมาตร", "assets/images/menu3.png", "Learn"),
-                menuContainer(
-                    "การหาพื้นที่ผิว", "assets/images/menu4.png", "Learn"),
-                menuContainer(
-                    "การหาความยาวรอบรูป", "assets/images/menu5.png", "Learn"),
-              ],
+        child: Stack(
+          children: [
+            Positioned(
+              right: 0,
+              top: 0,
+              child: Container(
+                color: Color.fromARGB(255, 255, 255, 255),
+                width: 100,
+                height: 100,
+              ),
             ),
-          ),
+            Positioned(
+              child: Container(
+                decoration: const BoxDecoration(
+                  shape: BoxShape.rectangle,
+                  color: pColor,
+                  borderRadius: BorderRadius.only(
+                    topRight: Radius.circular(30),
+                  ),
+                  image: DecorationImage(
+                    image: AssetImage("assets/images/bg-home.png"),
+                    fit: BoxFit.fill,
+                  ),
+                ),
+                alignment: Alignment.center,
+                child: Padding(
+                  padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    mainAxisSize: MainAxisSize.max,
+                    children: [
+                      menuContainer("รูปเลขาคณิตสองมิติและสามมิติ",
+                          "assets/images/menu1.png", "Learn"),
+                      menuContainer(
+                          "การหาพื้นที่", "assets/images/menu2.png", "Learn"),
+                      menuContainer(
+                          "การหาปริมาตร", "assets/images/menu3.png", "Learn"),
+                      menuContainer("การหาพื้นที่ผิว",
+                          "assets/images/menu4.png", "Learn"),
+                      menuContainer("การหาความยาวรอบรูป",
+                          "assets/images/menu5.png", "Learn"),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ],
         ),
       ),
     );
