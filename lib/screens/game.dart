@@ -24,7 +24,7 @@ class _GameState extends State<Game> {
       body: Stack(
         children: [
           WebView(
-            initialUrl: '',
+            initialUrl: 'http://18.139.38.227:1000/html/',
             javascriptMode: JavascriptMode.unrestricted,
             onWebViewCreated: (WebViewController controller) async {
               _controller = controller;
@@ -42,7 +42,7 @@ class _GameState extends State<Game> {
             },
           ),
           if (_isLoading)
-            Center(
+            const Center(
               child: CircularProgressIndicator(),
             ),
         ],

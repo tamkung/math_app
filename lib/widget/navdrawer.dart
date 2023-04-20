@@ -22,7 +22,9 @@ class NavDrawer extends StatelessWidget {
           ListTile(
             leading: Icon(Icons.games_outlined),
             title: Text('Game'),
-            onTap: () => {},
+            onTap: () => {
+              Navigator.pushNamed(context, 'Game'),
+            },
           ),
           ListTile(
             leading: Icon(Icons.border_color),

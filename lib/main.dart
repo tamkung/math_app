@@ -32,6 +32,9 @@ class MyApp extends StatelessWidget {
         'Home': (context) => HomeScreen(),
         'Profile': (context) => Profile(),
         'ChangePassword': (context) => Changepassword(),
+        'Game': (context) => Game(
+              title: '',
+            ),
       },
     );
   }
