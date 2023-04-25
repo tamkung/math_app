@@ -10,6 +10,7 @@ class RegisterScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: pColor,
         centerTitle: true,
         title: Text("สมัครสมาชิก"),
       ),

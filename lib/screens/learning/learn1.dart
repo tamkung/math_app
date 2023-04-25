@@ -74,9 +74,49 @@ class _Learn1State extends State<Learn1> {
                 ),
               ),
               height: 100,
+              child: Container(
+                margin: const EdgeInsets.all(30),
+                child: ListView(
+                  children: [
+                    cardItem('title', 'subtitle', 'tap'),
+                    cardItem('title', 'subtitle', 'tap'),
+                    cardItem('title', 'subtitle', 'tap'),
+                    cardItem('title', 'subtitle', 'tap'),
+                    cardItem('title', 'subtitle', 'tap'),
+                  ],
+                ),
+              ),
             ),
           ),
         ],
+      ),
+    );
+  }
+
+  Widget cardItem(String title, String progress, String tap) {
+    return Card(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.only(
+          bottomLeft: Radius.circular(20),
+          bottomRight: Radius.circular(20),
+          topLeft: Radius.circular(20),
+        ),
+      ),
+      child: ListTile(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.only(
+            bottomLeft: Radius.circular(20),
+            bottomRight: Radius.circular(20),
+            topLeft: Radius.circular(20),
+          ),
+        ),
+        leading: Icon(Icons.play_circle_outline),
+        title: Text("title"),
+        trailing: Text('Math is a subject'),
+        onTap: () {
+          print(tap);
+          Navigator.pushNamed(context, 'Video');
+        },
       ),
     );
   }
