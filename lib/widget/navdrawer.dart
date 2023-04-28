@@ -34,7 +34,7 @@ class NavDrawer extends StatelessWidget {
           ListTile(
             leading: Icon(Icons.exit_to_app),
             title: Text('Logout'),
-            onTap: () => {},
+            onTap: () => Navigator.pushNamed(context, 'Login'),
           ),
           ListTile(
             leading: Icon(Icons.settings),

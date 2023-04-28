@@ -10,7 +10,6 @@ class LoginScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
-        alignment: Alignment.center,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           mainAxisSize: MainAxisSize.max,
@@ -24,34 +23,137 @@ class LoginScreen extends StatelessWidget {
             SizedBox(
               height: 30,
             ),
-            Container(
-              padding: EdgeInsets.symmetric(horizontal: 20),
-              child: TextFormField(
-                decoration: InputDecoration(
-                  border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(25)),
-                  labelText: 'อีเมล',
-                  icon: Icon(Icons.email),
+            //-------------------------TextField---------------------
+            Stack(
+              children: [
+                Container(
+                  height: 80,
+                  width: 200,
                 ),
-              ),
-            ),
-            SizedBox(
-              height: 20,
-            ),
-            Container(
-              padding: EdgeInsets.symmetric(horizontal: 20),
-              child: TextFormField(
-                decoration: InputDecoration(
-                  border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(25)),
-                  labelText: 'รหัสผ่าน',
-                  icon: Icon(Icons.lock),
+                Container(
+                  decoration: BoxDecoration(
+                      border: Border.all(width: 2),
+                      borderRadius: BorderRadius.all(Radius.circular(25))),
+                  margin: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                  padding: EdgeInsets.symmetric(horizontal: 10),
+                  child: TextFormField(
+                    decoration: InputDecoration(
+                        hintText: 'อีเมล',
+                        icon: Icon(
+                          Icons.email,
+                          color: tColor,
+                        ),
+                        border:
+                            OutlineInputBorder(borderSide: BorderSide.none)),
+                  ),
                 ),
-              ),
+                Positioned(
+                  top: 0,
+                  left: 60,
+                  child: Container(
+                    color: Colors.white,
+                    padding: EdgeInsets.symmetric(horizontal: 5),
+                    child: Text(
+                      'อีเมล',
+                      style: TextStyle(
+                          fontSize: 14,
+                          backgroundColor: Colors.white,
+                          color: Colors.grey[700]),
+                    ),
+                  ),
+                ),
+              ],
             ),
+
+            // Container(
+            //   decoration: BoxDecoration(
+            //       border: Border.all(width: 2),
+            //       borderRadius: BorderRadius.all(Radius.circular(25))),
+            //   margin: EdgeInsets.symmetric(horizontal: 20),
+            //   padding: EdgeInsets.symmetric(horizontal: 10),
+            //   child: TextFormField(
+            //     decoration: InputDecoration(
+            //         hintText: 'อีเมล',
+            //         icon: Icon(
+            //           Icons.email,
+            //           color: tColor,
+            //         ),
+            //         border: OutlineInputBorder(borderSide: BorderSide.none)),
+            //   ),
+            // ),
+
+            //-------------------------TextField---------------------
+
+            // Container(
+            //   decoration: BoxDecoration(
+            //       border: Border.all(width: 2),
+            //       borderRadius: BorderRadius.all(Radius.circular(25))),
+            //   margin: EdgeInsets.symmetric(horizontal: 20),
+            //   padding: EdgeInsets.symmetric(horizontal: 10),
+            //   child: TextFormField(
+            //     decoration: InputDecoration(
+            //         hintText: 'รหัสผ่าน',
+            //         icon: Icon(
+            //           Icons.lock,
+            //           color: tColor,
+            //         ),
+            //         border: OutlineInputBorder(borderSide: BorderSide.none)),
+            //   ),
+            // ),
             SizedBox(
               height: 5,
             ),
+            //-----------------------test--------
+            Stack(
+              children: [
+                Container(
+                  height: 80,
+                  width: 200,
+                ),
+                Container(
+                  decoration: BoxDecoration(
+                      border: Border.all(width: 2),
+                      borderRadius: BorderRadius.all(Radius.circular(25))),
+                  margin: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                  padding: EdgeInsets.symmetric(horizontal: 10),
+                  child: TextFormField(
+                    decoration: InputDecoration(
+                        hintText: 'รหัสผ่าน',
+                        icon: Container(
+                          // : ShapeDecoration(shape: CircleBorder()),
+                          // decoration: BoxDecoration(
+                          //     border: Border.all(width: 2),
+                          //     borderRadius:
+                          //         BorderRadius.all(Radius.circular(25))),
+                          padding: EdgeInsets.all(10),
+                          color: pColor,
+                          child: Icon(
+                            Icons.lock,
+                            color: Colors.white,
+                          ),
+                        ),
+                        border:
+                            OutlineInputBorder(borderSide: BorderSide.none)),
+                  ),
+                ),
+                Positioned(
+                  top: 0,
+                  left: 60,
+                  child: Container(
+                    color: Colors.white,
+                    padding: EdgeInsets.symmetric(horizontal: 10),
+                    child: Text(
+                      'รหัสผ่าน',
+                      style: TextStyle(
+                          fontSize: 14,
+                          backgroundColor: Colors.white,
+                          color: Colors.grey[700]),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+
             Container(
               padding: EdgeInsets.only(right: 20),
               alignment: Alignment.centerRight,
@@ -69,18 +171,26 @@ class LoginScreen extends StatelessWidget {
               height: 10,
             ),
             ElevatedButton(
-              style: ButtonStyle(
+              style: ElevatedButton.styleFrom(
                 backgroundColor: MaterialStateColor.resolveWith(
                   (states) => pColor,
+                ),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
                 ),
               ),
               onPressed: () {
                 Navigator.pushNamed(context, 'Home');
               },
-              child: Text('เข้าสู่ระบบ',style: TextStyle(
-                fontSize: 20,
-              
-              ),),
+              child: Padding(
+                padding: EdgeInsets.all(10),
+                child: Text(
+                  'เข้าสู่ระบบ',
+                  style: TextStyle(
+                    fontSize: 20,
+                  ),
+                ),
+              ),
             ),
             SizedBox(
               height: 10,

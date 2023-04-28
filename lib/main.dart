@@ -41,6 +41,7 @@ class MyApp extends StatelessWidget {
       ),
       routes: {
         'Index': (context) => IndexScreen(),
+        'Login':(context)=> LoginScreen(),
         'Register': (context) => RegisterScreen(),
         'Home': (context) => HomeScreen(),
         'Profile': (context) => Profile(),
