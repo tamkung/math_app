@@ -1,7 +1,7 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:flutter/material.dart';
-import 'package:math_app/screens/changepassword.dart';
+import 'package:math_app/screens/login/changepassword.dart';
 import 'package:math_app/screens/index.dart';
 import 'package:math_app/screens/learning/learn1.dart';
 import 'package:math_app/screens/profile.dart';
@@ -9,8 +9,8 @@ import 'package:splashscreen/splashscreen.dart';
 
 import 'config/constant.dart';
 import 'screens/home.dart';
-import 'screens/login.dart';
-import 'screens/register.dart';
+import 'screens/login/login.dart';
+import 'screens/login/register.dart';
 import 'screens/game.dart';
 import 'screens/video/videoscreen.dart';
 import 'testTime/test.dart';
