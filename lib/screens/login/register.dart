@@ -1,13 +1,25 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:math_app/config/constant.dart';
+import 'package:mysql1/mysql1.dart';
 
 class RegisterScreen extends StatelessWidget {
   const RegisterScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final firstnameController = TextEditingController();
+    final lastnameController = TextEditingController();
+    final yearController = TextEditingController();
+    final phoneNumberController = TextEditingController();
+    final emailController = TextEditingController();
+    final passwordController = TextEditingController();
+    final confirmPasswordController = TextEditingController();
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: pColor,
@@ -19,101 +31,34 @@ class RegisterScreen extends StatelessWidget {
           padding: const EdgeInsets.only(top: 20),
           child: Column(
             children: [
-              Container(
-                padding: EdgeInsets.symmetric(horizontal: 20),
-                child: TextFormField(
-                  decoration: InputDecoration(
-                    border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10)),
-                    labelText: 'รหัสชั้นเรียน',
-                    icon: Icon(Icons.card_giftcard),
-                  ),
-                ),
-              ),
+              buildTextField(
+                  "ชื่อผู้ใช้", Icon(Icons.person), firstnameController),
               SizedBox(
                 height: 10,
               ),
-              Container(
-                padding: EdgeInsets.symmetric(horizontal: 20),
-                child: TextFormField(
-                  decoration: InputDecoration(
-                    border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10)),
-                    labelText: 'ชื่อผู้ใช้',
-                    icon: Icon(Icons.person),
-                  ),
-                ),
-              ),
+              buildTextField("นามสกุล", Icon(Icons.person), lastnameController),
               SizedBox(
                 height: 10,
               ),
-              Container(
-                padding: EdgeInsets.symmetric(horizontal: 20),
-                child: TextFormField(
-                  decoration: InputDecoration(
-                    border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10)),
-                    labelText: 'นามสกุล',
-                    icon: Icon(Icons.person),
-                  ),
-                ),
-              ),
+              buildTextField("ชั้นปี", Icon(Icons.school), yearController),
               SizedBox(
                 height: 10,
               ),
-              Container(
-                padding: EdgeInsets.symmetric(horizontal: 20),
-                child: TextFormField(
-                  decoration: InputDecoration(
-                    border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10)),
-                    labelText: 'เบอร์โทรศัพท์',
-                    icon: Icon(Icons.call),
-                  ),
-                ),
-              ),
+              buildTextField(
+                  "เบอร์โทรศัพท์", Icon(Icons.phone), phoneNumberController),
               SizedBox(
                 height: 10,
               ),
-              Container(
-                padding: EdgeInsets.symmetric(horizontal: 20),
-                child: TextFormField(
-                  decoration: InputDecoration(
-                    border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10)),
-                    labelText: 'อีเมล',
-                    icon: Icon(Icons.email),
-                  ),
-                ),
-              ),
+              buildTextField("อีเมล", Icon(Icons.email), emailController),
               SizedBox(
                 height: 10,
               ),
-              Container(
-                padding: EdgeInsets.symmetric(horizontal: 20),
-                child: TextFormField(
-                  decoration: InputDecoration(
-                    border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10)),
-                    labelText: 'รหัสผ่าน',
-                    icon: Icon(Icons.lock),
-                  ),
-                ),
-              ),
+              buildTextField("รหัสผ่าน", Icon(Icons.lock), passwordController),
               SizedBox(
                 height: 10,
               ),
-              Container(
-                padding: EdgeInsets.symmetric(horizontal: 20),
-                child: TextFormField(
-                  decoration: InputDecoration(
-                    border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10)),
-                    labelText: 'ยืนยันรหัสผ่าน',
-                    icon: Icon(Icons.lock),
-                  ),
-                ),
-              ),
+              buildTextField("ยืนยันรหัสผ่าน", Icon(Icons.lock),
+                  confirmPasswordController),
               SizedBox(
                 height: 10,
               ),
@@ -123,7 +68,18 @@ class RegisterScreen extends StatelessWidget {
                     (states) => pColor,
                   ),
                 ),
-                onPressed: () {
+                onPressed: () async {
+                  final firstname = firstnameController.text;
+                  final lastName = lastnameController.text;
+                  final year = yearController.text;
+                  final phoneNumber = phoneNumberController.text;
+                  final email = emailController.text;
+                  final password = passwordController.text;
+                  final confirmPassword = confirmPasswordController.text;
+                  print(
+                      '$firstname $lastName $year $phoneNumber $email $password $confirmPassword');
+                  await insertData(
+                      firstname, lastName, year, email, confirmPassword);
                   //Navigator.pushNamed(context, 'Home');
                 },
                 child: Text('สมัครใช้งาน'),
@@ -151,5 +107,48 @@ class RegisterScreen extends StatelessWidget {
         ),
       ),
     );
+  }
+}
+
+Widget buildTextField(
+    String labelText, Icon icon, TextEditingController controller) {
+  return Container(
+    padding: EdgeInsets.symmetric(horizontal: 20),
+    child: TextFormField(
+      controller: controller,
+      decoration: InputDecoration(
+        border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+        labelText: labelText,
+        icon: icon,
+      ),
+    ),
+  );
+}
+
+Future insertData(
+  String firstname,
+  String lastname,
+  String year,
+  String email,
+  String password,
+) async {
+  var timestamp = DateTime.now().millisecondsSinceEpoch;
+  print(timestamp);
+
+  final conn = await MySqlConnection.connect(ConnectionSettings(
+    host: '18.139.38.227',
+    port: 3306,
+    user: 'username',
+    password: 'password',
+    db: 'dbphradabos',
+  ));
+  try {
+    final result = await conn.query(
+        'INSERT INTO users (first_name, last_name, email, password, user_year, role_id, date_added) '
+        'VALUES (?, ?, ?, ?, ?, ?, ?)',
+        [firstname, lastname, email, password, year, 2, timestamp]);
+    print('Inserted ${result.affectedRows} row(s)');
+  } finally {
+    await conn.close();
   }
 }
