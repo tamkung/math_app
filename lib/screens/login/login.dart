@@ -1,13 +1,20 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:math_app/config/constant.dart';
+import 'package:http/http.dart' as http;
 
 class LoginScreen extends StatelessWidget {
   const LoginScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final emailController = TextEditingController();
+    final passwordController = TextEditingController();
+    GetStorage box = GetStorage();
     return Scaffold(
       body: Container(
         child: Column(
@@ -37,6 +44,7 @@ class LoginScreen extends StatelessWidget {
                   margin: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                   padding: EdgeInsets.symmetric(horizontal: 10),
                   child: TextFormField(
+                    controller: emailController,
                     decoration: InputDecoration(
                         hintText: 'อีเมล',
                         icon: Icon(
@@ -100,7 +108,7 @@ class LoginScreen extends StatelessWidget {
             //         border: OutlineInputBorder(borderSide: BorderSide.none)),
             //   ),
             // ),
-            SizedBox(
+            const SizedBox(
               height: 5,
             ),
             //-----------------------test--------
@@ -113,10 +121,13 @@ class LoginScreen extends StatelessWidget {
                 Container(
                   decoration: BoxDecoration(
                       border: Border.all(width: 2),
-                      borderRadius: BorderRadius.all(Radius.circular(25))),
-                  margin: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                  padding: EdgeInsets.symmetric(horizontal: 10),
+                      borderRadius:
+                          const BorderRadius.all(Radius.circular(25))),
+                  margin:
+                      const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                  padding: const EdgeInsets.symmetric(horizontal: 10),
                   child: TextFormField(
+                    controller: passwordController,
                     decoration: InputDecoration(
                         hintText: 'รหัสผ่าน',
                         icon: Container(
@@ -127,7 +138,7 @@ class LoginScreen extends StatelessWidget {
                           //         BorderRadius.all(Radius.circular(25))),
                           padding: EdgeInsets.all(10),
                           color: pColor,
-                          child: Icon(
+                          child: const Icon(
                             Icons.lock,
                             color: Colors.white,
                           ),
@@ -155,11 +166,11 @@ class LoginScreen extends StatelessWidget {
             ),
 
             Container(
-              padding: EdgeInsets.only(right: 20),
+              padding: const EdgeInsets.only(right: 20),
               alignment: Alignment.centerRight,
               child: TextButton(
                 onPressed: () {},
-                child: Text(
+                child: const Text(
                   'ลืมรหัสผ่าน',
                   style: TextStyle(
                     color: pColor,
@@ -167,7 +178,7 @@ class LoginScreen extends StatelessWidget {
                 ),
               ),
             ),
-            SizedBox(
+            const SizedBox(
               height: 10,
             ),
             ElevatedButton(
@@ -179,8 +190,62 @@ class LoginScreen extends StatelessWidget {
                   borderRadius: BorderRadius.circular(10),
                 ),
               ),
-              onPressed: () {
-                Navigator.pushNamed(context, 'Home');
+              onPressed: () async {
+                //Navigator.pushNamed(context, 'Home');
+                if (emailController.text != '' &&
+                    passwordController.text != '') {
+                  var url = Uri.parse('${API_URL}auth/signin');
+                  try {
+                    var response = await http.post(url, body: {
+                      'email': emailController.text,
+                      'password': passwordController.text,
+                    });
+                    if (response.statusCode == 200) {
+                      var result = jsonDecode(response.body);
+                      if (result['status'] == 'OK') {
+                        box.write('isLogin', true);
+                        // ignore: use_build_context_synchronously
+                        showDialog(
+                          context: context,
+                          builder: (context) => AlertDialog(
+                            title: Text('เข้าสู่ระบบสำเร็จ'),
+                            content: Text(result['message']),
+                            actions: [
+                              TextButton(
+                                onPressed: () {
+                                  Navigator.pop(context);
+                                  Navigator.pushNamed(context, 'Home');
+                                },
+                                child: Text('ตกลง'),
+                              ),
+                            ],
+                          ),
+                        );
+                      } else {
+                        print(result['message']);
+                      }
+                    } else {
+                      print(response.body);
+
+                      // ignore: use_build_context_synchronously
+                      showDialog(
+                        context: context,
+                        builder: (context) => AlertDialog(
+                          title: Text('เกิดข้อผิดพลาด'),
+                          content: Text(response.body),
+                          actions: [
+                            TextButton(
+                              onPressed: () => Navigator.pop(context),
+                              child: Text('ปิด'),
+                            ),
+                          ],
+                        ),
+                      );
+                    }
+                  } catch (error) {
+                    print(error);
+                  }
+                }
               },
               child: Padding(
                 padding: EdgeInsets.all(10),

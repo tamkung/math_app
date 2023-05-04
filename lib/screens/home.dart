@@ -1,5 +1,7 @@
+import 'dart:convert';
 import 'dart:ffi';
 
+import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
@@ -11,10 +13,30 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var size = MediaQuery.of(context).size;
+    List data = [];
+
+    Future getData() async {
+      var url = Uri.parse('${API_URL}course');
+      var response = await http.get(url);
+      if (response.statusCode == 200) {
+        data = json.decode(response.body);
+        print(response.body);
+      }
+    }
+
     return Scaffold(
       backgroundColor: pColor,
       endDrawer: NavDrawer(),
       appBar: AppBar(
+        actions: [
+          IconButton(
+              onPressed: () async {
+                await getData();
+                print("data = " + data.toString());
+              },
+              icon: Icon(Icons.search))
+        ],
         backgroundColor: Colors.white,
         foregroundColor: Colors.black,
         automaticallyImplyLeading: false,
@@ -64,6 +86,7 @@ class HomeScreen extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.center,
                     mainAxisSize: MainAxisSize.max,
                     children: [
+                      
                       menuContainer("รูปเลขาคณิตสองมิติและสามมิติ",
                           "assets/images/menu1.png", "Learn1", context),
                       menuContainer("การหาพื้นที่", "assets/images/menu2.png",

@@ -8,12 +8,17 @@ void main() async {
 
 Future connectDB() async {
   final conn = await MySqlConnection.connect(ConnectionSettings(
-    host: '178.128.31.129',
+    host: '143.198.198.227',
     port: 3306,
-    user: 'phradabos',
-    password: 'GJQPg29zWvZu3vXW',
+    user: 'phradabos_user',
+    password: 'Admin1234-',
     db: 'dbphradabos',
   ));
+
+  // await conn.query(
+  //     'INSERT INTO users (first_name, last_name, email, password, user_year, date_added) '
+  //     'VALUES (?, ?, ?, ?, ?, ?, ?)',
+  //     ['John', 'Doe', 'asdasd', '123456', '1', 2, 1234567890]);
 
   var results = await conn.query('SELECT * FROM users');
   for (var row in results) {

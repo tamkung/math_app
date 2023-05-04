@@ -6,6 +6,7 @@ import 'package:math_app/screens/index.dart';
 import 'package:math_app/screens/learning/learn1.dart';
 import 'package:math_app/screens/profile.dart';
 import 'package:splashscreen/splashscreen.dart';
+import 'package:get_storage/get_storage.dart';
 
 import 'config/constant.dart';
 import 'screens/home.dart';
@@ -15,7 +16,8 @@ import 'screens/game.dart';
 import 'screens/video/videoscreen.dart';
 import 'testTime/test.dart';
 
-void main() {
+void main() async {
+  await GetStorage.init();
   runApp(const MyApp());
 }
 
@@ -24,6 +26,7 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final box = GetStorage();
     return MaterialApp(
       title: 'Math App',
       theme: ThemeData(
@@ -34,7 +37,8 @@ class MyApp extends StatelessWidget {
         seconds: 5,
         image: Image.asset('assets/images/index-logo.png'),
         imageBackground: AssetImage('assets/images/intro-bg.png'),
-        navigateAfterSeconds: const LoginScreen(),
+        navigateAfterSeconds:
+            box.read('isLogin') == true ? HomeScreen() : LoginScreen(),
         backgroundColor: Colors.white,
         photoSize: 100.0,
         loaderColor: Colors.red,

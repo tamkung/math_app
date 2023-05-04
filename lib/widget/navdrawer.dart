@@ -1,12 +1,14 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:flutter/material.dart';
+import 'package:get_storage/get_storage.dart';
 
 class NavDrawer extends StatelessWidget {
   const NavDrawer({super.key});
 
   @override
   Widget build(BuildContext context) {
+    GetStorage box = GetStorage();
     return Drawer(
       child: ListView(
         padding: EdgeInsets.zero,
@@ -34,7 +36,11 @@ class NavDrawer extends StatelessWidget {
           ListTile(
             leading: Icon(Icons.exit_to_app),
             title: Text('Logout'),
-            onTap: () => Navigator.pushNamed(context, 'Login'),
+            onTap: () {
+              print(box.getValues());
+              box.write('isLogin', false);
+              Navigator.pushNamed(context, 'Login');
+            },
           ),
           ListTile(
             leading: Icon(Icons.settings),

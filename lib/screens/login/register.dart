@@ -31,8 +31,7 @@ class RegisterScreen extends StatelessWidget {
           padding: const EdgeInsets.only(top: 20),
           child: Column(
             children: [
-              buildTextField(
-                  "ชื่อผู้ใช้", Icon(Icons.person), firstnameController),
+              buildTextField("ชื่อ", Icon(Icons.person), firstnameController),
               SizedBox(
                 height: 10,
               ),
@@ -78,8 +77,30 @@ class RegisterScreen extends StatelessWidget {
                   final confirmPassword = confirmPasswordController.text;
                   print(
                       '$firstname $lastName $year $phoneNumber $email $password $confirmPassword');
-                  await insertData(
-                      firstname, lastName, year, email, confirmPassword);
+                  if (password == confirmPassword) {
+                    var url = Uri.parse('${API_URL}auth/signup');
+                    try {
+                      var response = await http.post(url, body: {
+                        'fname': firstname,
+                        'lname': lastName,
+                        'year': year,
+                        'phone': phoneNumber,
+                        'email': email,
+                        'password': confirmPassword,
+                      });
+                      if (response.statusCode == 200) {
+                        Map<String, dynamic> user = jsonDecode(response.body);
+                        print(user['token']);
+                        Navigator.pushNamed(context, 'Login');
+                      } else {
+                        print(response.body);
+                      }
+                    } catch (e) {
+                      print(e);
+                    }
+                  } else {
+                    print('password not match');
+                  }
                   //Navigator.pushNamed(context, 'Home');
                 },
                 child: Text('สมัครใช้งาน'),
