@@ -204,6 +204,7 @@ class LoginScreen extends StatelessWidget {
                       var result = jsonDecode(response.body);
                       if (result['status'] == 'OK') {
                         box.write('isLogin', true);
+                        box.write('user', result);
                         // ignore: use_build_context_synchronously
                         showDialog(
                           context: context,

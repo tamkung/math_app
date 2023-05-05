@@ -6,37 +6,46 @@ import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:math_app/config/constant.dart';
+import 'package:math_app/screens/learning/lesson.dart';
 import 'package:math_app/widget/navdrawer.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
+
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  List _items = [];
+  bool chk = false;
+  dynamic txt_id, txt_title, txt_course_id, txt_order;
+
+  Future<void> readSection() async {
+    var url = Uri.parse('${API_URL}section');
+    final response = await http.get(url);
+    final data = await json.decode(utf8.decode(response.bodyBytes));
+
+    setState(() {
+      _items = data;
+    });
+    chk = true;
+    print(_items);
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    readSection();
+  }
 
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
-    List data = [];
-
-    Future getData() async {
-      var url = Uri.parse('${API_URL}course');
-      var response = await http.get(url);
-      if (response.statusCode == 200) {
-        data = json.decode(response.body);
-        print(response.body);
-      }
-    }
-
     return Scaffold(
       backgroundColor: pColor,
       endDrawer: NavDrawer(),
       appBar: AppBar(
-        actions: [
-          IconButton(
-              onPressed: () async {
-                await getData();
-                print("data = " + data.toString());
-              },
-              icon: Icon(Icons.search))
-        ],
         backgroundColor: Colors.white,
         foregroundColor: Colors.black,
         automaticallyImplyLeading: false,
@@ -68,6 +77,7 @@ class HomeScreen extends StatelessWidget {
             ),
             Positioned(
               child: Container(
+                height: size.height * 1,
                 decoration: const BoxDecoration(
                   shape: BoxShape.rectangle,
                   color: pColor,
@@ -80,26 +90,24 @@ class HomeScreen extends StatelessWidget {
                   ),
                 ),
                 alignment: Alignment.center,
-                child: Padding(
-                  padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    mainAxisSize: MainAxisSize.max,
-                    children: [
-                      
-                      menuContainer("รูปเลขาคณิตสองมิติและสามมิติ",
-                          "assets/images/menu1.png", "Learn1", context),
-                      menuContainer("การหาพื้นที่", "assets/images/menu2.png",
-                          "Learn", context),
-                      menuContainer("การหาปริมาตร", "assets/images/menu3.png",
-                          "Learn", context),
-                      menuContainer("การหาพื้นที่ผิว",
-                          "assets/images/menu4.png", "Learn", context),
-                      menuContainer("การหาความยาวรอบรูป",
-                          "assets/images/menu5.png", "Learn", context),
-                    ],
-                  ),
-                ),
+                child: chk
+                    ? Padding(
+                        padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
+                        child: ListView.builder(
+                          itemCount: _items.length,
+                          itemBuilder: (context, index) {
+                            txt_id = _items[index]['id'];
+                            txt_title = _items[index]["title"];
+                            txt_course_id = _items[index]['course_id'];
+                            txt_order = _items[index]['order'];
+                            return menuContainer(txt_title, 'image', txt_id,
+                                txt_course_id, context);
+                          },
+                        ),
+                      )
+                    : const Center(
+                        child: Text("Loading"),
+                      ),
               ),
             ),
           ],
@@ -120,10 +128,19 @@ Widget txtStyle(String text, double size) {
   );
 }
 
-Widget menuContainer(text, image, nav, context) {
+Widget menuContainer(title, image, section_id, course_id, context) {
   return TextButton(
     onPressed: () {
-      Navigator.pushNamed(context, nav);
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (_) => LessonScreen(
+            title: title.toString(),
+            course_id: course_id.toString(),
+            section_id: section_id.toString(),
+          ),
+        ),
+      );
     },
     child: Container(
       padding: EdgeInsets.all(10),
@@ -144,8 +161,8 @@ Widget menuContainer(text, image, nav, context) {
               height: 80,
               //color: Colors.red,
               child: Text(
-                text,
-                style: TextStyle(
+                title,
+                style: const TextStyle(
                   color: Colors.black,
                   fontSize: 18,
                   fontWeight: FontWeight.bold,

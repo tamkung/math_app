@@ -7,23 +7,31 @@ import '../../config/constant.dart';
 import '../../widget/navdrawer.dart';
 
 class VideoScreen extends StatefulWidget {
-  const VideoScreen({super.key});
+  final dynamic title, video_title, video_url, quiz_id;
+  const VideoScreen(
+      {super.key,
+      required this.title,
+      this.video_title,
+      this.video_url,
+      this.quiz_id});
 
   @override
   State<VideoScreen> createState() => _VideoScreenState();
 }
 
 class _VideoScreenState extends State<VideoScreen> {
-  final YoutubePlayerController _controller = YoutubePlayerController(
-    initialVideoId: 'EXhrAhqmYf4',
-    flags: const YoutubePlayerFlags(
-      autoPlay: true,
-      mute: false,
-    ),
-  );
-
   @override
   Widget build(BuildContext context) {
+    String? videoId = YoutubePlayer.convertUrlToId(widget.video_url);
+    print(videoId); // BBAyRBTfsOU
+
+    final YoutubePlayerController _controller = YoutubePlayerController(
+      initialVideoId: videoId.toString(),
+      flags: const YoutubePlayerFlags(
+        autoPlay: true,
+        mute: false,
+      ),
+    );
     var size = MediaQuery.of(context).size;
     return Scaffold(
       endDrawer: NavDrawer(),
@@ -74,7 +82,7 @@ class _VideoScreenState extends State<VideoScreen> {
             flex: 3,
             child: Padding(
               padding: const EdgeInsets.only(
-                bottom: 100,
+                bottom: 50,
               ),
               child: Container(
                 decoration: const BoxDecoration(
@@ -90,12 +98,12 @@ class _VideoScreenState extends State<VideoScreen> {
                     fit: BoxFit.fill,
                   ),
                 ),
-                height: 100,
+                //height: size.height * 0.1,
                 width: size.width,
                 child: Container(
                   margin: EdgeInsets.fromLTRB(20, 70, 20, 70),
                   padding: EdgeInsets.fromLTRB(20, 20, 20, 20),
-                  decoration: BoxDecoration(
+                  decoration: const BoxDecoration(
                     color: Colors.white,
                     borderRadius: BorderRadius.only(
                       topLeft: Radius.circular(30),
@@ -103,9 +111,52 @@ class _VideoScreenState extends State<VideoScreen> {
                       bottomRight: Radius.circular(30),
                     ),
                   ),
-                  child: YoutubePlayer(
-                    controller: _controller,
-                    liveUIColor: Colors.amber,
+                  child: Column(
+                    children: [
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          const Icon(
+                            Icons.play_circle_filled,
+                            color: Colors.red,
+                          ),
+                          Text(widget.video_title)
+                        ],
+                      ),
+                      heightBox(10),
+                      YoutubePlayer(
+                        controller: _controller,
+                        liveUIColor: Colors.amber,
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ),
+          Text('data'),
+          Padding(
+            padding: const EdgeInsets.only(
+              bottom: 20,
+              top: 20,
+            ),
+            child: ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                backgroundColor: MaterialStateColor.resolveWith(
+                  (states) => pColor,
+                ),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+              ),
+              onPressed: () async {},
+              child: const Padding(
+                padding: EdgeInsets.all(10),
+                child: Text(
+                  'แบบทดสอบ',
+                  style: TextStyle(
+                    fontSize: 20,
                   ),
                 ),
               ),
