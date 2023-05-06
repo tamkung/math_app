@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
+import 'package:math_app/screens/quiz/quizscreen.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
 import '../../config/constant.dart';
@@ -23,7 +24,8 @@ class _VideoScreenState extends State<VideoScreen> {
   @override
   Widget build(BuildContext context) {
     String? videoId = YoutubePlayer.convertUrlToId(widget.video_url);
-    print(videoId); // BBAyRBTfsOU
+    print(videoId);
+    print(widget.quiz_id);
 
     final YoutubePlayerController _controller = YoutubePlayerController(
       initialVideoId: videoId.toString(),
@@ -150,7 +152,17 @@ class _VideoScreenState extends State<VideoScreen> {
                   borderRadius: BorderRadius.circular(10),
                 ),
               ),
-              onPressed: () async {},
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (_) => QuizScreen(
+                      id: widget.quiz_id,
+                      title: widget.title,
+                    ),
+                  ),
+                );
+              },
               child: const Padding(
                 padding: EdgeInsets.all(10),
                 child: Text(
