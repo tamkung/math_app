@@ -15,6 +15,7 @@ class QuizScreen extends StatefulWidget {
 
 class _QuizScreenState extends State<QuizScreen> {
   List _items = [];
+  List _exams = [];
   bool chk = false;
   dynamic txt_id, txt_title, type, number, options, answers;
   // REQUIRED: USED TO CONTROL THE STEPPER.
@@ -33,6 +34,7 @@ class _QuizScreenState extends State<QuizScreen> {
 
     setState(() {
       _items = data;
+      // _exams = data["options"];
     });
     chk = true;
     print(_items);
@@ -51,93 +53,113 @@ class _QuizScreenState extends State<QuizScreen> {
       appBar: AppBar(
         title: Text(widget.title),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Column(
-          children: [
-            DotStepper(
-              // direction: Axis.vertical,
-              dotCount: dotCount,
-              dotRadius: 15,
+      body: chk
+          ? Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Column(
+                children: [
+                  DotStepper(
+                    // direction: Axis.vertical,
+                    dotCount: _items.length,
+                    dotRadius: 15,
 
-              /// THIS MUST BE SET. SEE HOW IT IS CHANGED IN NEXT/PREVIOUS BUTTONS AND JUMP BUTTONS.
-              activeStep: activeStep,
-              shape: Shape.pipe,
-              spacing: 10,
-              indicator: Indicator.slide,
+                    /// THIS MUST BE SET. SEE HOW IT IS CHANGED IN NEXT/PREVIOUS BUTTONS AND JUMP BUTTONS.
+                    activeStep: activeStep,
+                    shape: Shape.pipe,
+                    spacing: 10,
+                    indicator: Indicator.slide,
 
-              /// TAPPING WILL NOT FUNCTION PROPERLY WITHOUT THIS PIECE OF CODE.
-              onDotTapped: (tappedDotIndex) {
-                setState(() {
-                  activeStep = tappedDotIndex;
-                });
-              },
+                    /// TAPPING WILL NOT FUNCTION PROPERLY WITHOUT THIS PIECE OF CODE.
+                    onDotTapped: (tappedDotIndex) {
+                      setState(() {
+                        activeStep = tappedDotIndex;
+                      });
+                    },
 
-              // DOT-STEPPER DECORATIONS
-              fixedDotDecoration: const FixedDotDecoration(
-                color: Colors.black,
-              ),
+                    // DOT-STEPPER DECORATIONS
+                    fixedDotDecoration: const FixedDotDecoration(
+                      color: Colors.black,
+                    ),
 
-              indicatorDecoration: const IndicatorDecoration(
-                  // style: PaintingStyle.stroke,
-                  // strokeWidth: 8,
-                  color: pColor),
-              lineConnectorDecoration: const LineConnectorDecoration(
-                color: Colors.black,
-                strokeWidth: 0,
-              ),
-            ),
+                    indicatorDecoration: const IndicatorDecoration(
+                        // style: PaintingStyle.stroke,
+                        // strokeWidth: 8,
+                        color: pColor),
+                    lineConnectorDecoration: const LineConnectorDecoration(
+                      color: Colors.black,
+                      strokeWidth: 0,
+                    ),
+                  ),
 
-            // Next and Previous buttons.
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [previousButton(), nextButton()],
-            ),
-            Container(
-              color: Colors.amber,
-              height: 100,
-              child: ListView.builder(
-                itemCount: activeStep + 1,
-                itemBuilder: (context, index) {
-                  return Container(
-                    child: Text('${activeStep + 1}'),
-                  );
-                },
+                  // Next and Previous buttons.
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [previousButton(), nextButton()],
+                  ),
+                  Container(
+                    color: Colors.amber,
+                    height: 400,
+                    child: ListView.builder(
+                      itemCount: activeStep + 1,
+                      itemBuilder: (context, index) {
+                        txt_id = _items[index]["id"];
+                        txt_title = _items[index]["title"];
+                        options = _items[index]["options"];
+                        // List op = [];
+                        // setState(() {
+                        //   op = _items[index]["options"];
+                        // });
+
+                        return Container(
+                          child: Column(
+                            children: [
+                              Text(txt_title),
+                              heightBox(20),
+                              Column(
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.all(20),
+                                    child: Container(
+                                      color: Colors.amberAccent,
+                                      height: 300,
+                                      child: ListView.builder(
+                                          itemCount: 4,
+                                          itemBuilder: (context, index) {
+                                            return Card(
+                                              child: ListTile(
+                                                title: Text(options),
+                                              ),
+                                            );
+                                          }),
+                                    ),
+                                  ),
+                                ],
+                              )
+                            ],
+                          ),
+                        );
+                      },
+                    ),
+                  )
+                ],
               ),
             )
-          ],
-        ),
-      ),
+          : const Center(
+              child: Text("Loading..."),
+            ),
     );
   }
 
-  /// Generates jump steps for dotCount number of steps, and returns them in a row.
-  Row steps() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: List.generate(dotCount, (index) {
-        return ElevatedButton(
-          child: Text('${index + 1}'),
-          onPressed: () {
-            setState(() {
-              activeStep = index;
-            });
-          },
-        );
-      }),
-    );
-  }
-
-  Row exam() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: List.generate(dotCount, (index) {
-        return Container(
-          child: Text('${index + 1}'),
-        );
-      }),
-    );
-  }
+  // Row exam() {
+  //   return Row(
+  //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+  //     children: List.generate(dotCount, (index) {
+  //       return Container(
+  //         child: Text('${index + 1}'),
+  //       );
+  //     }),
+  //   );
+  // }
 
   /// Returns the next button widget.
   Widget nextButton() {
@@ -145,7 +167,7 @@ class _QuizScreenState extends State<QuizScreen> {
       child: Text('Next'),
       onPressed: () {
         /// ACTIVE STEP MUST BE CHECKED FOR (dotCount - 1) AND NOT FOR dotCount To PREVENT Overflow ERROR.
-        if (activeStep < dotCount - 1) {
+        if (activeStep < _items.length - 1) {
           setState(() {
             activeStep++;
           });
