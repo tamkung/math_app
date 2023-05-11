@@ -153,6 +153,8 @@ class _VideoScreenState extends State<VideoScreen> {
                 ),
               ),
               onPressed: () {
+                // Navigator.pushNamed(context, 'Test');
+
                 Navigator.push(
                   context,
                   MaterialPageRoute(

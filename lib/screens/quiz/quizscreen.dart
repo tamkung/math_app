@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:math';
 
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
@@ -15,13 +16,11 @@ class QuizScreen extends StatefulWidget {
 
 class _QuizScreenState extends State<QuizScreen> {
   List _items = [];
-  List _exams = [];
   bool chk = false;
   dynamic txt_id, txt_title, type, number, options, answers;
-  // REQUIRED: USED TO CONTROL THE STEPPER.
-  int activeStep = 0; // Initial step set to 0.
-  // OPTIONAL: can be set directly.
+  int activeStep = 0;
   int dotCount = 5;
+  int score = 0;
 
   Future<void> readQuiz() async {
     var url = Uri.parse('${API_URL}question');
@@ -34,9 +33,11 @@ class _QuizScreenState extends State<QuizScreen> {
 
     setState(() {
       _items = data;
-      // _exams = data["options"];
     });
-    chk = true;
+    if (_items.isNotEmpty) {
+      chk = true;
+    }
+
     print(_items);
     print(widget.title);
   }
@@ -49,6 +50,7 @@ class _QuizScreenState extends State<QuizScreen> {
 
   @override
   Widget build(BuildContext context) {
+    var size = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.title),
@@ -59,114 +61,137 @@ class _QuizScreenState extends State<QuizScreen> {
               child: Column(
                 children: [
                   DotStepper(
-                    // direction: Axis.vertical,
                     dotCount: _items.length,
                     dotRadius: 15,
-
-                    /// THIS MUST BE SET. SEE HOW IT IS CHANGED IN NEXT/PREVIOUS BUTTONS AND JUMP BUTTONS.
                     activeStep: activeStep,
                     shape: Shape.pipe,
                     spacing: 10,
                     indicator: Indicator.slide,
-
-                    /// TAPPING WILL NOT FUNCTION PROPERLY WITHOUT THIS PIECE OF CODE.
                     onDotTapped: (tappedDotIndex) {
                       setState(() {
                         activeStep = tappedDotIndex;
                       });
                     },
-
-                    // DOT-STEPPER DECORATIONS
                     fixedDotDecoration: const FixedDotDecoration(
                       color: Colors.black,
                     ),
-
-                    indicatorDecoration: const IndicatorDecoration(
-                        // style: PaintingStyle.stroke,
-                        // strokeWidth: 8,
-                        color: pColor),
+                    indicatorDecoration:
+                        const IndicatorDecoration(color: pColor),
                     lineConnectorDecoration: const LineConnectorDecoration(
                       color: Colors.black,
                       strokeWidth: 0,
                     ),
                   ),
-
-                  // Next and Previous buttons.
+                  Text("${activeStep + 1}/${_items.length}"),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [previousButton(), nextButton()],
                   ),
-                  Container(
-                    color: Colors.amber,
-                    height: 400,
-                    child: ListView.builder(
-                      itemCount: activeStep + 1,
-                      itemBuilder: (context, index) {
-                        txt_id = _items[index]["id"];
-                        txt_title = _items[index]["title"];
-                        options = _items[index]["options"];
-                        // List op = [];
-                        // setState(() {
-                        //   op = _items[index]["options"];
-                        // });
+                  Column(
+                    children: List.generate(1, (index) {
+                      txt_id = _items[activeStep]["id"];
+                      txt_title = _items[activeStep]["title"];
+                      options = _items[activeStep]["options"];
+                      answers =
+                          jsonDecode(_items[activeStep]["correct_answers"]);
+                      List opList = jsonDecode(options);
 
-                        return Container(
-                          child: Column(
-                            children: [
-                              Text(txt_title),
-                              heightBox(20),
-                              Column(
-                                children: [
-                                  Padding(
-                                    padding: const EdgeInsets.all(20),
-                                    child: Container(
-                                      color: Colors.amberAccent,
-                                      height: 300,
-                                      child: ListView.builder(
-                                          itemCount: 4,
-                                          itemBuilder: (context, index) {
-                                            return Card(
-                                              child: ListTile(
-                                                title: Text(options),
-                                              ),
-                                            );
-                                          }),
-                                    ),
-                                  ),
-                                ],
-                              )
-                            ],
+                      return Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.only(
+                              left: 20,
+                              top: 20,
+                            ),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text("โจทย์ข้อที่ ${activeStep + 1}"),
+                                heightBox(10),
+                                Text(txt_title, style: TextStyle(fontSize: 20)),
+                              ],
+                            ),
                           ),
-                        );
-                      },
-                    ),
+                          heightBox(20),
+                          Column(
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.all(20),
+                                child: Column(
+                                  children:
+                                      List.generate(opList.length, (index) {
+                                    return Card(
+                                      elevation: 3,
+                                      margin: EdgeInsets.only(bottom: 20),
+                                      clipBehavior: Clip.antiAlias,
+                                      shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(10)),
+                                      child: ListTile(
+                                        tileColor: pColor,
+                                        textColor: Colors.white,
+                                        title: Text(opList[index]),
+                                        onTap: () {
+                                          if (index + 1 ==
+                                              int.parse(answers[0])) {
+                                            print("True");
+                                            score++;
+                                          } else {
+                                            print("False");
+                                          }
+                                          print("Score : $score");
+                                          if (activeStep < _items.length - 1) {
+                                            setState(() {
+                                              activeStep++;
+                                            });
+                                          } else {
+                                            print("End");
+                                            showDialog(
+                                              context: context,
+                                              builder: (context) {
+                                                return AlertDialog(
+                                                  title: Text("Score"),
+                                                  content: Text(
+                                                      "Score : $score / ${_items.length}"),
+                                                  actions: [
+                                                    TextButton(
+                                                      onPressed: () {
+                                                        Navigator.pop(context);
+                                                      },
+                                                      child: Text("OK"),
+                                                    ),
+                                                  ],
+                                                );
+                                              },
+                                            );
+                                          }
+                                        },
+                                      ),
+                                    );
+                                  }),
+                                ),
+                              ),
+                            ],
+                          )
+                        ],
+                      );
+                    }),
                   )
                 ],
               ),
             )
           : const Center(
-              child: Text("Loading..."),
+              child: CircularProgressIndicator(),
             ),
     );
   }
 
-  // Row exam() {
-  //   return Row(
-  //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-  //     children: List.generate(dotCount, (index) {
-  //       return Container(
-  //         child: Text('${index + 1}'),
-  //       );
-  //     }),
-  //   );
-  // }
-
-  /// Returns the next button widget.
   Widget nextButton() {
     return ElevatedButton(
       child: Text('Next'),
       onPressed: () {
-        /// ACTIVE STEP MUST BE CHECKED FOR (dotCount - 1) AND NOT FOR dotCount To PREVENT Overflow ERROR.
         if (activeStep < _items.length - 1) {
           setState(() {
             activeStep++;
@@ -176,12 +201,10 @@ class _QuizScreenState extends State<QuizScreen> {
     );
   }
 
-  /// Returns the previous button widget.
   Widget previousButton() {
     return ElevatedButton(
       child: Text('Prev'),
       onPressed: () {
-        // activeStep MUST BE GREATER THAN 0 TO PREVENT OVERFLOW.
         if (activeStep > 0) {
           setState(() {
             activeStep--;

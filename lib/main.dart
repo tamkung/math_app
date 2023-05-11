@@ -1,10 +1,12 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:flutter/material.dart';
+import 'package:im_stepper/main.dart';
 import 'package:math_app/screens/login/changepassword.dart';
 import 'package:math_app/screens/index.dart';
 import 'package:math_app/screens/learning/lesson.dart';
 import 'package:math_app/screens/profile.dart';
+import 'package:math_app/screens/quiz/test.dart';
 import 'package:splashscreen/splashscreen.dart';
 import 'package:get_storage/get_storage.dart';
 
@@ -55,6 +57,7 @@ class MyApp extends StatelessWidget {
         'Game': (context) => Game(
               title: '',
             ),
+        'Test': (context) => DotStepperDemo(),
       },
     );
   }
