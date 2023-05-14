@@ -12,6 +12,7 @@ class RegisterScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var size = MediaQuery.of(context).size;
     final firstnameController = TextEditingController();
     final lastnameController = TextEditingController();
     final yearController = TextEditingController();
@@ -31,36 +32,27 @@ class RegisterScreen extends StatelessWidget {
           padding: const EdgeInsets.only(top: 20),
           child: Column(
             children: [
-              buildTextField("ชื่อ", Icon(Icons.person), firstnameController),
-              SizedBox(
-                height: 10,
-              ),
-              buildTextField("นามสกุล", Icon(Icons.person), lastnameController),
-              SizedBox(
-                height: 10,
-              ),
-              buildTextField("ชั้นปี", Icon(Icons.school), yearController),
-              SizedBox(
-                height: 10,
-              ),
               buildTextField(
-                  "เบอร์โทรศัพท์", Icon(Icons.phone), phoneNumberController),
-              SizedBox(
-                height: 10,
-              ),
-              buildTextField("อีเมล", Icon(Icons.email), emailController),
-              SizedBox(
-                height: 10,
-              ),
-              buildTextField("รหัสผ่าน", Icon(Icons.lock), passwordController),
-              SizedBox(
-                height: 10,
-              ),
+                  "ชื่อ", Icon(Icons.person), firstnameController, false),
+              heightBox(size.height * 0.02),
+              buildTextField(
+                  "นามสกุล", Icon(Icons.person), lastnameController, false),
+              heightBox(size.height * 0.02),
+              buildTextField(
+                  "ชั้นปี", Icon(Icons.school), yearController, false),
+              heightBox(size.height * 0.02),
+              buildTextField("เบอร์โทรศัพท์", Icon(Icons.phone),
+                  phoneNumberController, false),
+              heightBox(size.height * 0.02),
+              buildTextField(
+                  "อีเมล", Icon(Icons.email), emailController, false),
+              heightBox(size.height * 0.02),
+              buildTextField(
+                  "รหัสผ่าน", Icon(Icons.lock), passwordController, true),
+              heightBox(size.height * 0.02),
               buildTextField("ยืนยันรหัสผ่าน", Icon(Icons.lock),
-                  confirmPasswordController),
-              SizedBox(
-                height: 10,
-              ),
+                  confirmPasswordController, true),
+              heightBox(size.height * 0.02),
               ElevatedButton(
                 style: ButtonStyle(
                   backgroundColor: MaterialStateColor.resolveWith(
@@ -105,16 +97,14 @@ class RegisterScreen extends StatelessWidget {
                 },
                 child: Text('สมัครใช้งาน'),
               ),
-              SizedBox(
-                height: 10,
-              ),
+              heightBox(size.height * 0.02),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text('มีบัญชีผู้ใช้แล้ว?'),
+                  const Text('มีบัญชีผู้ใช้แล้ว?'),
                   TextButton(
                     onPressed: () => Navigator.pop(context),
-                    child: Text(
+                    child: const Text(
                       'เข้าสู่ระบบ',
                       style: TextStyle(
                         color: pColor,
@@ -131,18 +121,18 @@ class RegisterScreen extends StatelessWidget {
   }
 }
 
-Widget buildTextField(
-    String labelText, Icon icon, TextEditingController controller) {
+Widget buildTextField(String labelText, Icon icon,
+    TextEditingController controller, bool obscureText) {
   return Container(
-    padding: EdgeInsets.symmetric(horizontal: 20),
+    padding: const EdgeInsets.symmetric(horizontal: 20),
     child: TextFormField(
-      controller: controller,
-      decoration: InputDecoration(
-        border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
-        labelText: labelText,
-        icon: icon,
-      ),
-    ),
+        controller: controller,
+        decoration: InputDecoration(
+          border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+          labelText: labelText,
+          icon: icon,
+        ),
+        obscureText: obscureText),
   );
 }
 
