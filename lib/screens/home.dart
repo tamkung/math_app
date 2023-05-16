@@ -8,6 +8,7 @@ import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:math_app/config/constant.dart';
 import 'package:math_app/screens/learning/lesson.dart';
 import 'package:math_app/widget/navdrawer.dart';
+import 'package:get_storage/get_storage.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -18,8 +19,18 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   List _items = [];
+  List _items2 = [];
   bool chk = false;
   dynamic txt_id, txt_title, txt_course_id, txt_order;
+  GetStorage box = GetStorage();
+
+  dynamic u_id, firstname, lastname;
+
+  Future<void> setUser() async {
+    u_id = box.read('u_id');
+    firstname = box.read('firstname');
+    lastname = box.read('lastname');
+  }
 
   Future<void> readSection() async {
     var url = Uri.parse('${API_URL}section');
@@ -37,6 +48,7 @@ class _HomeScreenState extends State<HomeScreen> {
   void initState() {
     super.initState();
     readSection();
+    setUser();
   }
 
   @override
@@ -59,7 +71,7 @@ class _HomeScreenState extends State<HomeScreen> {
         title: Column(
           children: [
             txtStyle("สวัสดี", 20),
-            txtStyle("ชื่อผู้ใช้" + " นามสกุล", 15),
+            txtStyle("$firstname " + "$lastname", 15),
           ],
         ),
       ),

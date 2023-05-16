@@ -38,8 +38,8 @@ class NavDrawer extends StatelessWidget {
             title: Text('Logout'),
             onTap: () {
               print(box.getValues());
+              box.erase();
               box.write('isLogin', false);
-              box.remove('user');
               Navigator.pushNamed(context, 'Login');
             },
           ),

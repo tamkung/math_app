@@ -47,9 +47,15 @@ class LoginScreen extends StatelessWidget {
                     controller: emailController,
                     decoration: InputDecoration(
                         hintText: 'อีเมล',
-                        icon: Icon(
-                          Icons.email,
-                          color: tColor,
+                        icon: Container(
+                          // : ShapeDecoration(shape: CircleBorder()),
+                          // decoration: BoxDecoration(
+                          //     border: Border.all(width: 2),
+                          //     borderRadius:
+                          //         BorderRadius.all(Radius.circular(25))),
+                          padding: EdgeInsets.all(10),
+
+                          child: const Icon(Icons.email, color: pColor),
                         ),
                         border:
                             OutlineInputBorder(borderSide: BorderSide.none)),
@@ -127,6 +133,7 @@ class LoginScreen extends StatelessWidget {
                       const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                   padding: const EdgeInsets.symmetric(horizontal: 10),
                   child: TextFormField(
+                    obscureText: true,
                     controller: passwordController,
                     decoration: InputDecoration(
                         hintText: 'รหัสผ่าน',
@@ -137,11 +144,8 @@ class LoginScreen extends StatelessWidget {
                           //     borderRadius:
                           //         BorderRadius.all(Radius.circular(25))),
                           padding: EdgeInsets.all(10),
-                          color: pColor,
-                          child: const Icon(
-                            Icons.lock,
-                            color: Colors.white,
-                          ),
+
+                          child: const Icon(Icons.lock, color: pColor),
                         ),
                         border:
                             OutlineInputBorder(borderSide: BorderSide.none)),
@@ -204,7 +208,10 @@ class LoginScreen extends StatelessWidget {
                       var result = jsonDecode(response.body);
                       if (result['status'] == 'OK') {
                         box.write('isLogin', true);
-                        box.write('user', result);
+                        box.write('u_id', result['u_id']);
+                        box.write('email', result['email']);
+                        box.write('firstname', result['firstname']);
+                        box.write('lastname', result['lastname']);
                         // ignore: use_build_context_synchronously
                         showDialog(
                           context: context,

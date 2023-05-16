@@ -7,20 +7,27 @@ import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:math_app/config/constant.dart';
 import 'package:mysql1/mysql1.dart';
 
-class RegisterScreen extends StatelessWidget {
-  const RegisterScreen({super.key});
+class RegisterScreen extends StatefulWidget {
+  @override
+  _RegisterScreenState createState() => _RegisterScreenState();
+}
 
+class _RegisterScreenState extends State<RegisterScreen> {
+  final firstnameController = TextEditingController();
+  final lastnameController = TextEditingController();
+  final yearController = TextEditingController();
+  final phoneNumberController = TextEditingController();
+  final emailController = TextEditingController();
+  final passwordController = TextEditingController();
+  final confirmPasswordController = TextEditingController();
+  List<String> _province = [
+    'ช่างอุตสาหกรรม',
+    'เคหะบริบาร',
+  ];
+  String? _selectedProvince;
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
-    final firstnameController = TextEditingController();
-    final lastnameController = TextEditingController();
-    final yearController = TextEditingController();
-    final phoneNumberController = TextEditingController();
-    final emailController = TextEditingController();
-    final passwordController = TextEditingController();
-    final confirmPasswordController = TextEditingController();
-
     return Scaffold(
       appBar: AppBar(
         backgroundColor: pColor,
@@ -40,6 +47,43 @@ class RegisterScreen extends StatelessWidget {
               heightBox(size.height * 0.02),
               buildTextField(
                   "ชั้นปี", Icon(Icons.school), yearController, false),
+              heightBox(size.height * 0.02),
+              Row(
+                children: [
+                  const Padding(
+                    padding: EdgeInsets.only(left: 20),
+                    child: Icon(Icons.school, color: Color(0XFF898989)),
+                  ),
+                  Container(
+                    margin: const EdgeInsets.only(left: 15),
+                    padding: const EdgeInsets.symmetric(horizontal: 30),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      border: Border.all(color: Colors.grey),
+                    ),
+                    width: size.width * 0.8,
+                    child: DropdownButton(
+                      iconEnabledColor: Colors.white,
+                      hint: const Text(
+                        'กลุ่มผู้เรียน',
+                        style: TextStyle(color: Colors.grey),
+                      ),
+                      value: _selectedProvince,
+                      onChanged: (newValue) {
+                        setState(() {
+                          _selectedProvince = newValue.toString();
+                        });
+                      },
+                      items: _province.map((type) {
+                        return DropdownMenuItem(
+                          child: new Text(type),
+                          value: type,
+                        );
+                      }).toList(),
+                    ),
+                  ),
+                ],
+              ),
               heightBox(size.height * 0.02),
               buildTextField("เบอร์โทรศัพท์", Icon(Icons.phone),
                   phoneNumberController, false),

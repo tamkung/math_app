@@ -93,6 +93,58 @@ class _LessonScreenState extends State<LessonScreen> {
                     ),
                   ),
                 ),
+                Positioned(
+                  top: 15,
+                  left: 40,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        widget.title.toString(),
+                        style: TextStyle(
+                          fontSize: 24,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      Text(
+                        "คำอธิบาย",
+                        style: TextStyle(
+                          fontSize: 16,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Positioned(
+                  bottom: 20,
+                  left: 50,
+                  child: ElevatedButton(
+                    onPressed: () {},
+                    child: Row(
+                      children: [
+                        Icon(Icons.play_arrow),
+                        Text("ดูสรุปสูตร"),
+                      ],
+                    ),
+                    style: ElevatedButton.styleFrom(
+                      primary: pColor,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                    ),
+                  ),
+                ),
+                Positioned(
+                  top: 25,
+                  right: 70,
+                  child: Container(
+                    alignment: Alignment.center,
+                    width: 75,
+                    height: 75,
+                    color: Colors.lightGreen,
+                    child: Text("Image"),
+                  ),
+                ),
               ],
             ),
           ),
