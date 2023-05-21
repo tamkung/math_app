@@ -14,33 +14,56 @@ class Profile extends StatefulWidget {
 class _ProfileState extends State<Profile> {
   @override
   Widget build(BuildContext context) {
+    var size = MediaQuery.of(context).size;
     return Scaffold(
-      endDrawer: NavDrawer(),
       backgroundColor: pColor,
-      appBar: AppBar(
-        centerTitle: true,
-        title: Text(
-          'ประวัติ',
-          style: TextStyle(fontSize: 40),
-        ),
-        backgroundColor: Color.fromARGB(255, 255, 255, 255),
-        foregroundColor: Colors.black,
-        elevation: 0,
-        shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.only(
-            bottomLeft: Radius.circular(30),
+      appBar: PreferredSize(
+        preferredSize: Size.fromHeight(size.height * 0.11),
+        child: AppBar(
+          centerTitle: true,
+          flexibleSpace: const Center(
+            child: Padding(
+              padding: EdgeInsets.only(top: 60),
+              child: Text(
+                'ประวัติ',
+                style: TextStyle(fontSize: 40),
+              ),
+            ),
+          ),
+          leading: Builder(
+            builder: (BuildContext context) {
+              return IconButton(
+                splashRadius: 20,
+                icon: const Icon(
+                  Icons.arrow_back_ios,
+                  color: pColor,
+                ),
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+              );
+            },
+          ),
+          backgroundColor: Color.fromARGB(255, 255, 255, 255),
+          foregroundColor: Colors.black,
+          elevation: 0,
+          automaticallyImplyLeading: false,
+          shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.only(
+              bottomLeft: Radius.circular(30),
+            ),
           ),
         ),
-        toolbarHeight: 100,
       ),
       body: SingleChildScrollView(
         physics: NeverScrollableScrollPhysics(),
         child: Container(
-          height: MediaQuery.of(context).size.height,
-          width: MediaQuery.of(context).size.width,
+          height: size.height * 1,
+          width: size.width * 1,
           decoration: const BoxDecoration(
             shape: BoxShape.rectangle,
             color: pColor,
+            border: Border(),
             borderRadius: BorderRadius.only(
               topRight: Radius.circular(30),
             ),
@@ -58,12 +81,7 @@ class _ProfileState extends State<Profile> {
                   decoration: const BoxDecoration(
                     shape: BoxShape.rectangle,
                     color: Color.fromARGB(255, 255, 255, 255),
-                    borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(30),
-                      topRight: Radius.circular(30),
-                      bottomLeft: Radius.circular(30),
-                      bottomRight: Radius.circular(30),
-                    ),
+                    borderRadius: BorderRadius.all(Radius.circular(30)),
                   ),
                   width: 325,
                   height: 450,
@@ -148,8 +166,18 @@ class _ProfileState extends State<Profile> {
                     width: 175,
                     height: 175,
                     decoration: const BoxDecoration(
+                      border: BorderDirectional(
+                        top: BorderSide(width: 5.0, color: Colors.white),
+                        bottom: BorderSide(width: 5.0, color: Colors.white),
+                        start: BorderSide(width: 5.0, color: Colors.white),
+                        end: BorderSide(width: 5.0, color: Colors.white),
+                      ),
                       shape: BoxShape.circle,
-                      color: Color.fromARGB(255, 167, 13, 13),
+                      color: Color.fromARGB(255, 202, 202, 202),
+                      image: DecorationImage(
+                        image: AssetImage("assets/images/login-logo.png"),
+                        fit: BoxFit.fill,
+                      ),
                     ),
                   ),
                 ),

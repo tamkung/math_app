@@ -29,76 +29,139 @@ class _RegisterScreenState extends State<RegisterScreen> {
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: pColor,
-        centerTitle: true,
-        title: Text("สมัครสมาชิก"),
-      ),
       body: SingleChildScrollView(
         child: Padding(
-          padding: const EdgeInsets.only(top: 20),
+          padding: const EdgeInsets.only(
+            top: 60,
+            bottom: 10,
+          ),
           child: Column(
             children: [
-              buildTextField(
-                  "ชื่อ", Icon(Icons.person), firstnameController, false),
-              heightBox(size.height * 0.02),
-              buildTextField(
-                  "นามสกุล", Icon(Icons.person), lastnameController, false),
-              heightBox(size.height * 0.02),
-              buildTextField(
-                  "ชั้นปี", Icon(Icons.school), yearController, false),
-              heightBox(size.height * 0.02),
-              Row(
-                children: [
-                  const Padding(
-                    padding: EdgeInsets.only(left: 20),
-                    child: Icon(Icons.school, color: Color(0XFF898989)),
-                  ),
-                  Container(
-                    margin: const EdgeInsets.only(left: 15),
-                    padding: const EdgeInsets.symmetric(horizontal: 30),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
-                      border: Border.all(color: Colors.grey),
-                    ),
-                    width: size.width * 0.8,
-                    child: DropdownButton(
-                      iconEnabledColor: Colors.white,
-                      hint: const Text(
-                        'กลุ่มผู้เรียน',
-                        style: TextStyle(color: Colors.grey),
+              Container(
+                width: double.infinity,
+                child: Stack(
+                  children: [
+                    Positioned(
+                      child: IconButton(
+                        onPressed: () => Navigator.pop(context),
+                        icon: const Icon(
+                          Icons.arrow_back_ios_new,
+                          color: pColor,
+                        ),
                       ),
-                      value: _selectedProvince,
-                      onChanged: (newValue) {
-                        setState(() {
-                          _selectedProvince = newValue.toString();
-                        });
-                      },
-                      items: _province.map((type) {
-                        return DropdownMenuItem(
-                          child: new Text(type),
-                          value: type,
-                        );
-                      }).toList(),
+                    ),
+                    Positioned(
+                      child: Padding(
+                        padding: const EdgeInsets.only(
+                          top: 15,
+                          bottom: 20,
+                        ),
+                        child: Container(
+                          alignment: Alignment.center,
+                          child: const Text(
+                            'สมัครสมาชิก',
+                            style: TextStyle(
+                                fontSize: 30, fontWeight: FontWeight.bold),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              buildTextField("ชื่อ", Icons.person, firstnameController, false),
+              buildTextField(
+                  "นามสกุล", Icons.person, lastnameController, false),
+              buildTextField("ชั้นปี", Icons.school, yearController, false),
+              Stack(
+                children: [
+                  Container(
+                    decoration: BoxDecoration(
+                        border: Border.all(width: 2),
+                        borderRadius:
+                            const BorderRadius.all(Radius.circular(40))),
+                    margin: const EdgeInsets.symmetric(
+                        horizontal: 20, vertical: 10),
+                    padding: const EdgeInsets.symmetric(horizontal: 10),
+                    child: Row(
+                      children: [
+                        Container(
+                          decoration: const BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: pColor,
+                          ),
+                          padding: const EdgeInsets.all(10),
+                          child: const Icon(
+                            Icons.school,
+                            color: Colors.white,
+                          ),
+                        ),
+                        Container(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 30, vertical: 5),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          child: DropdownButton(
+                            iconEnabledColor: Colors.white,
+                            hint: const Text(
+                              'กลุ่มผู้เรียน',
+                              style: TextStyle(color: Colors.grey),
+                            ),
+                            value: _selectedProvince,
+                            onChanged: (newValue) {
+                              setState(() {
+                                _selectedProvince = newValue.toString();
+                              });
+                            },
+                            items: _province.map((type) {
+                              return DropdownMenuItem(
+                                child: new Text(type),
+                                value: type,
+                              );
+                            }).toList(),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Positioned(
+                    top: 0,
+                    left: 70,
+                    child: Container(
+                      color: Colors.white,
+                      padding: const EdgeInsets.symmetric(horizontal: 10),
+                      child: Text(
+                        'กลุ่มผู้เรียน',
+                        style: TextStyle(
+                            fontSize: 14,
+                            backgroundColor: Colors.white,
+                            color: Colors.grey[700]),
+                      ),
                     ),
                   ),
                 ],
               ),
-              heightBox(size.height * 0.02),
-              buildTextField("เบอร์โทรศัพท์", Icon(Icons.phone),
-                  phoneNumberController, false),
-              heightBox(size.height * 0.02),
               buildTextField(
-                  "อีเมล", Icon(Icons.email), emailController, false),
-              heightBox(size.height * 0.02),
-              buildTextField(
-                  "รหัสผ่าน", Icon(Icons.lock), passwordController, true),
-              heightBox(size.height * 0.02),
-              buildTextField("ยืนยันรหัสผ่าน", Icon(Icons.lock),
+                  "เบอร์โทรศัพท์", Icons.phone, phoneNumberController, false),
+              buildTextField("อีเมล", Icons.email, emailController, false),
+              buildTextField("รหัสผ่าน", Icons.lock, passwordController, true),
+              buildTextField("ยืนยันรหัสผ่าน", Icons.lock,
                   confirmPasswordController, true),
               heightBox(size.height * 0.02),
               ElevatedButton(
                 style: ButtonStyle(
+                  padding: MaterialStateProperty.all(
+                    const EdgeInsets.symmetric(
+                      horizontal: 40,
+                      vertical: 10,
+                    ),
+                  ),
+                  shape: MaterialStateProperty.all(
+                    RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                  ),
                   backgroundColor: MaterialStateColor.resolveWith(
                     (states) => pColor,
                   ),
@@ -139,7 +202,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   }
                   //Navigator.pushNamed(context, 'Home');
                 },
-                child: Text('สมัครใช้งาน'),
+                child: Text(
+                  'สมัครใช้งาน',
+                  style: TextStyle(
+                    fontSize: 18,
+                  ),
+                ),
               ),
               heightBox(size.height * 0.02),
               Row(
@@ -165,8 +233,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
   }
 }
 
-Widget buildTextField(String labelText, Icon icon,
-    TextEditingController controller, bool obscureText) {
+Widget txtField(String labelText, Icon icon, TextEditingController controller,
+    bool obscureText) {
   return Container(
     padding: const EdgeInsets.symmetric(horizontal: 20),
     child: TextFormField(
@@ -180,30 +248,102 @@ Widget buildTextField(String labelText, Icon icon,
   );
 }
 
-Future insertData(
-  String firstname,
-  String lastname,
-  String year,
-  String email,
-  String password,
-) async {
-  var timestamp = DateTime.now().millisecondsSinceEpoch;
-  print(timestamp);
+Widget buildTextField(text, icon, controller, obscureText) {
+  return Stack(
+    children: [
+      Container(
+        decoration: BoxDecoration(
+            border: Border.all(width: 2),
+            borderRadius: const BorderRadius.all(Radius.circular(40))),
+        margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+        padding: const EdgeInsets.symmetric(horizontal: 10),
+        child: TextFormField(
+          obscureText: obscureText,
+          controller: controller,
+          decoration: InputDecoration(
+            hintText: text,
+            icon: Container(
+              decoration: const BoxDecoration(
+                shape: BoxShape.circle,
+                color: pColor,
+              ),
+              padding: const EdgeInsets.all(10),
+              child: Icon(
+                icon,
+                color: Colors.white,
+              ),
+            ),
+            border: const OutlineInputBorder(
+              borderSide: BorderSide.none,
+            ),
+          ),
+        ),
+      ),
+      Positioned(
+        top: 0,
+        left: 70,
+        child: Container(
+          color: Colors.white,
+          padding: const EdgeInsets.symmetric(horizontal: 10),
+          child: Text(
+            text,
+            style: TextStyle(
+                fontSize: 14,
+                backgroundColor: Colors.white,
+                color: Colors.grey[700]),
+          ),
+        ),
+      ),
+    ],
+  );
+}
 
-  final conn = await MySqlConnection.connect(ConnectionSettings(
-    host: '18.139.38.227',
-    port: 3306,
-    user: 'username',
-    password: 'password',
-    db: 'dbphradabos',
-  ));
-  try {
-    final result = await conn.query(
-        'INSERT INTO users (first_name, last_name, email, password, user_year, role_id, date_added) '
-        'VALUES (?, ?, ?, ?, ?, ?, ?)',
-        [firstname, lastname, email, password, year, 2, timestamp]);
-    print('Inserted ${result.affectedRows} row(s)');
-  } finally {
-    await conn.close();
-  }
+Widget buildSelect(text, icon, controller, obscureText) {
+  return Stack(
+    children: [
+      Container(
+        decoration: BoxDecoration(
+            border: Border.all(width: 2),
+            borderRadius: const BorderRadius.all(Radius.circular(40))),
+        margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+        padding: const EdgeInsets.symmetric(horizontal: 10),
+        child: TextFormField(
+          obscureText: obscureText,
+          controller: controller,
+          decoration: InputDecoration(
+            hintText: text,
+            icon: Container(
+              decoration: const BoxDecoration(
+                shape: BoxShape.circle,
+                color: pColor,
+              ),
+              padding: const EdgeInsets.all(10),
+              child: Icon(
+                icon,
+                color: Colors.white,
+              ),
+            ),
+            border: const OutlineInputBorder(
+              borderSide: BorderSide.none,
+            ),
+          ),
+        ),
+      ),
+      Positioned(
+        top: 0,
+        left: 70,
+        child: Container(
+          color: Colors.white,
+          padding: const EdgeInsets.symmetric(horizontal: 10),
+          child: Text(
+            text,
+            style: TextStyle(
+                fontSize: 14,
+                backgroundColor: Colors.white,
+                color: Colors.grey[700]),
+          ),
+        ),
+      ),
+    ],
+  );
 }

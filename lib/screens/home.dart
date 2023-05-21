@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:ffi';
 
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
@@ -20,6 +19,13 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   List _items = [];
   List _items2 = [];
+  List _image = [
+    'assets/images/menu1.png',
+    'assets/images/menu2.png',
+    'assets/images/menu3.png',
+    'assets/images/menu4.png',
+    'assets/images/menu5.png'
+  ];
   bool chk = false;
   dynamic txt_id, txt_title, txt_course_id, txt_order;
   GetStorage box = GetStorage();
@@ -56,23 +62,33 @@ class _HomeScreenState extends State<HomeScreen> {
     var size = MediaQuery.of(context).size;
     return Scaffold(
       backgroundColor: pColor,
-      endDrawer: NavDrawer(),
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        foregroundColor: Colors.black,
-        automaticallyImplyLeading: false,
-        elevation: 0,
-        shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.only(
-            bottomLeft: Radius.circular(30),
+      endDrawer: const NavDrawer(),
+      appBar: PreferredSize(
+        preferredSize: Size.fromHeight(size.height * 0.11),
+        child: AppBar(
+          backgroundColor: Colors.white,
+          foregroundColor: Colors.black,
+          automaticallyImplyLeading: false,
+          elevation: 0,
+          shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.only(
+              bottomLeft: Radius.circular(30),
+            ),
           ),
-        ),
-        toolbarHeight: 100,
-        title: Column(
-          children: [
-            txtStyle("สวัสดี", 20),
-            txtStyle("$firstname " + "$lastname", 15),
-          ],
+          flexibleSpace: Padding(
+            padding: const EdgeInsets.only(
+              top: 68,
+              left: 30,
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                txtStyle("สวัสดี", 26),
+                heightBox(size.height * 0.002),
+                txtStyle("$firstname " + " $lastname", 18),
+              ],
+            ),
+          ),
         ),
       ),
       body: SingleChildScrollView(
@@ -112,8 +128,8 @@ class _HomeScreenState extends State<HomeScreen> {
                             txt_title = _items[index]["title"];
                             txt_course_id = _items[index]['course_id'];
                             txt_order = _items[index]['order'];
-                            return menuContainer(txt_title, 'image', txt_id,
-                                txt_course_id, context);
+                            return menuContainer(txt_title, _image[index],
+                                txt_id, txt_course_id, context);
                           },
                         ),
                       )
@@ -150,6 +166,7 @@ Widget menuContainer(title, image, section_id, course_id, context) {
             title: title.toString(),
             course_id: course_id.toString(),
             section_id: section_id.toString(),
+            image_url: image.toString(),
           ),
         ),
       );

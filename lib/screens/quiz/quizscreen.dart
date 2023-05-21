@@ -54,6 +54,7 @@ class _QuizScreenState extends State<QuizScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.title),
+        backgroundColor: pColor,
       ),
       body: chk
           ? Padding(
@@ -190,6 +191,9 @@ class _QuizScreenState extends State<QuizScreen> {
 
   Widget nextButton() {
     return ElevatedButton(
+      style: ButtonStyle(
+        backgroundColor: MaterialStateProperty.all<Color>(pColor),
+      ),
       child: Text('Next'),
       onPressed: () {
         if (activeStep < _items.length - 1) {
@@ -203,6 +207,9 @@ class _QuizScreenState extends State<QuizScreen> {
 
   Widget previousButton() {
     return ElevatedButton(
+      style: ButtonStyle(
+        backgroundColor: MaterialStateProperty.all<Color>(pColor),
+      ),
       child: Text('Prev'),
       onPressed: () {
         if (activeStep > 0) {
