@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
-const API_URL = 'http://192.168.43.23:8080/api/';
+//const API_URL = 'http://192.168.43.23:8080/api/';
+const API_URL = 'https://mathapp-api-production.up.railway.app/api/';
 
 const pColor = Color(0xFF8159FB);
 
@@ -21,3 +22,36 @@ Widget widthBox(double width) {
     width: width,
   );
 }
+
+void showPopUp(BuildContext context, String title, String content) {
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        title: Text(
+          title,
+          style: const TextStyle(
+            fontSize: 20,
+          ),
+        ),
+        content: Container(
+          width: 250,
+          height: 250,
+          child: Image.asset(
+            "assets/images/$content.png",
+            fit: BoxFit.fill,
+          ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            child: const Text("OK"),
+          ),
+        ],
+      );
+    },
+  );
+}
+

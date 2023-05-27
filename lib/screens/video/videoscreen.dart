@@ -1,3 +1,8 @@
+import 'dart:convert';
+
+import 'package:get_storage/get_storage.dart';
+import 'package:http/http.dart' as http;
+
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
@@ -22,6 +27,43 @@ class VideoScreen extends StatefulWidget {
 }
 
 class _VideoScreenState extends State<VideoScreen> {
+  String? score, total_score;
+  String txt_score = 'loading...';
+  bool chk = false;
+  dynamic user_id;
+  GetStorage box = GetStorage();
+
+  Future<void> getScore() async {
+    user_id = box.read('u_id');
+    var url = Uri.parse('${API_URL}get-score');
+    final response = await http.post(url,
+        body: jsonEncode(<String, String>{
+          'user_id': user_id.toString(),
+          'quiz_id': widget.quiz_id.toString(),
+        }),
+        headers: {"Content-type": "application/json"});
+    final data = await json.decode(utf8.decode(response.bodyBytes));
+    print(data.length);
+    if (data.length > 0) {
+      setState(() {
+        score = data[0]['score'].toString();
+        total_score = data[0]['total_score'].toString();
+        txt_score = '$score  / $total_score คะแนน';
+      });
+      chk = true;
+    } else {
+      setState(() {
+        txt_score = 'ยังไม่มีคะแนน';
+      });
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    getScore();
+  }
+
   @override
   Widget build(BuildContext context) {
     String? videoId = YoutubePlayer.convertUrlToId(widget.video_url);
@@ -82,8 +124,8 @@ class _VideoScreenState extends State<VideoScreen> {
                   Positioned(
                     left: 0,
                     child: Container(
-                      height: 167,
-                      width: 370,
+                      height: size.height * 0.222,
+                      width: size.width * 0.93,
                       decoration: const BoxDecoration(
                         shape: BoxShape.rectangle,
                         color: Colors.white,
@@ -102,7 +144,7 @@ class _VideoScreenState extends State<VideoScreen> {
                           flex: 0,
                           child: SizedBox(
                             width: size.width * 0.56,
-                            height: size.height * 0.13,
+                            height: size.height * 0.15,
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
@@ -139,7 +181,9 @@ class _VideoScreenState extends State<VideoScreen> {
                     bottom: 10,
                     left: 30,
                     child: ElevatedButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        showPopUp(context, 'สูตร \n${widget.title}', 'image');
+                      },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: pColor,
                         shape: RoundedRectangleBorder(
@@ -166,61 +210,63 @@ class _VideoScreenState extends State<VideoScreen> {
               flex: 3,
               child: Column(
                 children: [
-                  Padding(
-                    padding: const EdgeInsets.only(
-                      bottom: 50,
+                  Container(
+                    decoration: const BoxDecoration(
+                      shape: BoxShape.rectangle,
+                      color: pColor,
+                      borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(30),
+                        bottomLeft: Radius.circular(30),
+                        bottomRight: Radius.circular(30),
+                      ),
+                      image: DecorationImage(
+                        image: AssetImage("assets/images/bg-home.png"),
+                        fit: BoxFit.fill,
+                      ),
                     ),
+                    //height: size.height * 0.1,
+                    width: size.width,
                     child: Container(
+                      margin: const EdgeInsets.fromLTRB(20, 50, 20, 40),
+                      padding: const EdgeInsets.fromLTRB(20, 20, 20, 20),
                       decoration: const BoxDecoration(
-                        shape: BoxShape.rectangle,
-                        color: pColor,
+                        color: Colors.white,
                         borderRadius: BorderRadius.only(
                           topLeft: Radius.circular(30),
                           bottomLeft: Radius.circular(30),
                           bottomRight: Radius.circular(30),
                         ),
-                        image: DecorationImage(
-                          image: AssetImage("assets/images/bg-home.png"),
-                          fit: BoxFit.fill,
-                        ),
                       ),
-                      //height: size.height * 0.1,
-                      width: size.width,
-                      child: Container(
-                        margin: const EdgeInsets.fromLTRB(20, 50, 20, 40),
-                        padding: const EdgeInsets.fromLTRB(20, 20, 20, 20),
-                        decoration: const BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.only(
-                            topLeft: Radius.circular(30),
-                            bottomLeft: Radius.circular(30),
-                            bottomRight: Radius.circular(30),
+                      child: Column(
+                        children: [
+                          Row(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              const Icon(
+                                Icons.play_circle_filled,
+                                color: Colors.red,
+                              ),
+                              Text(widget.video_title)
+                            ],
                           ),
-                        ),
-                        child: Column(
-                          children: [
-                            Row(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                const Icon(
-                                  Icons.play_circle_filled,
-                                  color: Colors.red,
-                                ),
-                                Text(widget.video_title)
-                              ],
-                            ),
-                            heightBox(10),
-                            YoutubePlayer(
-                              controller: _controller,
-                              liveUIColor: Colors.amber,
-                            ),
-                          ],
-                        ),
+                          heightBox(10),
+                          YoutubePlayer(
+                            controller: _controller,
+                            liveUIColor: Colors.amber,
+                          ),
+                        ],
                       ),
                     ),
                   ),
-                  const Text('ยังไม่ได้ทำแบบทดสอบ'),
+                  heightBox(size.height * 0.03),
+                  Text(
+                    txt_score,
+                    style: const TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
                   Padding(
                     padding: const EdgeInsets.only(
                       bottom: 20,

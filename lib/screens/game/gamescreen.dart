@@ -68,14 +68,14 @@ class _GameScreenState extends State<GameScreen> {
         preferredSize: Size.fromHeight(size.height * 0.2),
         child: AppBar(
           flexibleSpace: Padding(
-            padding: const EdgeInsets.only(top: 50),
+            padding: const EdgeInsets.only(top: 20),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Padding(
                   padding: const EdgeInsets.only(
-                    top: 10,
+                    top: 4,
                     left: 20,
                     right: 25,
                   ),
@@ -83,7 +83,7 @@ class _GameScreenState extends State<GameScreen> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       const Padding(
-                        padding: EdgeInsets.only(top: 30, left: 35),
+                        padding: EdgeInsets.only(top: 30, left: 20),
                         child: Text(
                           'เกม',
                           style: TextStyle(fontSize: 32),

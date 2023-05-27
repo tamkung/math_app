@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:math_app/widget/navdrawer.dart';
 import 'package:math_app/config/constant.dart';
 
@@ -12,6 +13,22 @@ class Profile extends StatefulWidget {
 }
 
 class _ProfileState extends State<Profile> {
+  GetStorage box = GetStorage();
+  dynamic firstname, lastname, email;
+
+  Future<void> getUser() async {
+    firstname = box.read('firstname');
+    lastname = box.read('lastname');
+    email = box.read('email');
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getUser();
+  }
+
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
@@ -56,9 +73,8 @@ class _ProfileState extends State<Profile> {
         ),
       ),
       body: SingleChildScrollView(
-        physics: NeverScrollableScrollPhysics(),
+        //physics: const NeverScrollableScrollPhysics(),
         child: Container(
-          height: size.height * 1,
           width: size.width * 1,
           decoration: const BoxDecoration(
             shape: BoxShape.rectangle,
@@ -76,86 +92,51 @@ class _ProfileState extends State<Profile> {
             alignment: Alignment.topCenter,
             children: [
               Padding(
-                padding: const EdgeInsets.fromLTRB(0, 125, 0, 0),
+                padding: const EdgeInsets.fromLTRB(0, 125, 0, 25),
                 child: Container(
                   decoration: const BoxDecoration(
                     shape: BoxShape.rectangle,
                     color: Color.fromARGB(255, 255, 255, 255),
                     borderRadius: BorderRadius.all(Radius.circular(30)),
                   ),
-                  width: 325,
-                  height: 450,
-                  child: Container(
-                    child: Column(
-                      children: [
-                        SizedBox(
-                          height: 100,
-                        ),
-                        Container(
-                          padding: EdgeInsets.symmetric(horizontal: 20),
-                          child: TextFormField(
-                            decoration: InputDecoration(
-                              border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(25)),
-                              labelText: 'ชื่อผู้ใช้',
-                              icon: Icon(Icons.person),
-                            ),
-                          ),
-                        ),
-                        SizedBox(
-                          height: 30,
-                        ),
-                        Container(
-                          padding: EdgeInsets.symmetric(horizontal: 20),
-                          child: TextFormField(
-                            decoration: InputDecoration(
-                              border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(25)),
-                              labelText: 'นามสกุล',
-                              icon: Icon(Icons.person),
-                            ),
-                          ),
-                        ),
-                        SizedBox(
-                          height: 30,
-                        ),
-                        Container(
-                          padding: EdgeInsets.symmetric(horizontal: 20),
-                          child: TextFormField(
-                            decoration: InputDecoration(
-                              border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(25)),
-                              labelText: 'อีเมล',
-                              icon: Icon(Icons.email),
-                            ),
-                          ),
-                        ),
-                        SizedBox(
-                          height: 30,
-                        ),
-                        Container(
-                          height: 45,
-                          child: ElevatedButton(
-                            style: ButtonStyle(
-                              backgroundColor: MaterialStateColor.resolveWith(
-                                (states) => pColor,
+                  width: size.width * 0.87,
+                  height: size.height * 0.6,
+                  child: Column(
+                    children: [
+                      heightBox(size.height * 0.11),
+                      txtField(
+                          'ชื่อผู้ใช้', firstname, Icons.person_2_outlined),
+                      heightBox(size.height * 0.01),
+                      txtField('นามสกุล', lastname, Icons.person_2_outlined),
+                      heightBox(size.height * 0.01),
+                      txtField('อีเมล', email, Icons.email),
+                      heightBox(size.height * 0.03),
+                      SizedBox(
+                        height: size.height * 0.06,
+                        child: ElevatedButton(
+                          style: ButtonStyle(
+                            shape: MaterialStateProperty.all(
+                              RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10.0),
                               ),
                             ),
-                            onPressed: () {
-                              Navigator.pushNamed(context, 'ChangePassword');
-                            },
-                            child: Text('เปลี่ยนรหัสผ่าน',
-                                style: TextStyle(
-                                  fontSize: 20,
-                                  color: Colors.white,
-                                )),
+                            backgroundColor: MaterialStateColor.resolveWith(
+                              (states) => pColor,
+                            ),
+                          ),
+                          onPressed: () {
+                            Navigator.pushNamed(context, 'ChangePassword');
+                          },
+                          child: const Text(
+                            'เปลี่ยนรหัสผ่าน',
+                            style: TextStyle(
+                              fontSize: 20,
+                              color: Colors.white,
+                            ),
                           ),
                         ),
-                        SizedBox(
-                          height: 30,
-                        ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
                 ),
               ),
@@ -188,4 +169,56 @@ class _ProfileState extends State<Profile> {
       ),
     );
   }
+}
+
+Widget txtField(text, value, icon) {
+  return Stack(
+    children: [
+      Container(
+        decoration: BoxDecoration(
+            border: Border.all(width: 2),
+            borderRadius: const BorderRadius.all(Radius.circular(40))),
+        margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+        padding: const EdgeInsets.symmetric(horizontal: 10),
+        child: TextFormField(
+          readOnly: true,
+          showCursor: false,
+          enableInteractiveSelection: false,
+          initialValue: value,
+          decoration: InputDecoration(
+            //hintText: text,
+            icon: Container(
+              decoration: const BoxDecoration(
+                shape: BoxShape.circle,
+                color: pColor,
+              ),
+              padding: const EdgeInsets.all(10),
+              child: Icon(
+                icon,
+                color: Colors.white,
+              ),
+            ),
+            border: const OutlineInputBorder(
+              borderSide: BorderSide.none,
+            ),
+          ),
+        ),
+      ),
+      Positioned(
+        top: 0,
+        left: 70,
+        child: Container(
+          color: Colors.white,
+          padding: const EdgeInsets.symmetric(horizontal: 10),
+          child: Text(
+            text,
+            style: TextStyle(
+                fontSize: 14,
+                backgroundColor: Colors.white,
+                color: Colors.grey[700]),
+          ),
+        ),
+      ),
+    ],
+  );
 }

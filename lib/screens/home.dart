@@ -19,7 +19,7 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   List _items = [];
   List _items2 = [];
-  List _image = [
+  final List _image = [
     'assets/images/menu1.png',
     'assets/images/menu2.png',
     'assets/images/menu3.png',
@@ -32,7 +32,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   dynamic u_id, firstname, lastname;
 
-  Future<void> setUser() async {
+  Future<void> getUser() async {
     u_id = box.read('u_id');
     firstname = box.read('firstname');
     lastname = box.read('lastname');
@@ -48,13 +48,14 @@ class _HomeScreenState extends State<HomeScreen> {
     });
     chk = true;
     print(_items);
+    print(u_id);
   }
 
   @override
   void initState() {
     super.initState();
     readSection();
-    setUser();
+    getUser();
   }
 
   @override
@@ -64,7 +65,7 @@ class _HomeScreenState extends State<HomeScreen> {
       backgroundColor: pColor,
       endDrawer: const NavDrawer(),
       appBar: PreferredSize(
-        preferredSize: Size.fromHeight(size.height * 0.11),
+        preferredSize: Size.fromHeight(size.height * 0.12),
         child: AppBar(
           backgroundColor: Colors.white,
           foregroundColor: Colors.black,
@@ -77,7 +78,7 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
           flexibleSpace: Padding(
             padding: const EdgeInsets.only(
-              top: 68,
+              top: 40,
               left: 30,
             ),
             child: Column(

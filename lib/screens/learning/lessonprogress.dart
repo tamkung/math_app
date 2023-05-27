@@ -19,7 +19,6 @@ class LessonProgressScreen extends StatefulWidget {
 
 class _LessonProgressScreenState extends State<LessonProgressScreen> {
   List _items = [];
-  List _items2 = [];
   List _image = [
     'assets/images/menu1.png',
     'assets/images/menu2.png',
@@ -28,34 +27,33 @@ class _LessonProgressScreenState extends State<LessonProgressScreen> {
     'assets/images/menu5.png'
   ];
   bool chk = false;
-  dynamic txt_id, txt_title, txt_course_id, txt_order;
+  dynamic txt_id, txt_title, avg_percent;
   GetStorage box = GetStorage();
 
-  dynamic u_id, firstname, lastname;
-
-  Future<void> setUser() async {
-    u_id = box.read('u_id');
-    firstname = box.read('firstname');
-    lastname = box.read('lastname');
-  }
+  dynamic user_id;
 
   Future<void> readSection() async {
-    var url = Uri.parse('${API_URL}section');
-    final response = await http.get(url);
+    user_id = box.read('u_id');
+    var url = Uri.parse('${API_URL}percent-section');
+    final response = await http.post(url,
+        body: jsonEncode(<String, String>{
+          'user_id': user_id.toString(),
+          'course_id': '1',
+        }),
+        headers: {"Content-type": "application/json"});
     final data = await json.decode(utf8.decode(response.bodyBytes));
 
     setState(() {
       _items = data;
     });
     chk = true;
-    print(_items);
+    print(data);
   }
 
   @override
   void initState() {
     super.initState();
     readSection();
-    setUser();
   }
 
   @override
@@ -68,14 +66,14 @@ class _LessonProgressScreenState extends State<LessonProgressScreen> {
         preferredSize: Size.fromHeight(size.height * 0.2),
         child: AppBar(
           flexibleSpace: Padding(
-            padding: const EdgeInsets.only(top: 50),
+            padding: const EdgeInsets.only(top: 20),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Padding(
                   padding: const EdgeInsets.only(
-                    top: 10,
+                    top: 4,
                     left: 20,
                     right: 25,
                   ),
@@ -83,7 +81,7 @@ class _LessonProgressScreenState extends State<LessonProgressScreen> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       const Padding(
-                        padding: EdgeInsets.only(top: 40, left: 20),
+                        padding: EdgeInsets.only(top: 30, left: 20),
                         child: Text(
                           'ผลทดสอบ',
                           style: TextStyle(fontSize: 32),
@@ -101,7 +99,7 @@ class _LessonProgressScreenState extends State<LessonProgressScreen> {
               ],
             ),
           ),
-          backgroundColor: Color.fromARGB(255, 255, 255, 255),
+          backgroundColor: Colors.white,
           foregroundColor: Colors.black,
           elevation: 0,
           automaticallyImplyLeading: true,
@@ -130,6 +128,7 @@ class _LessonProgressScreenState extends State<LessonProgressScreen> {
         ),
       ),
       body: SingleChildScrollView(
+        physics: const NeverScrollableScrollPhysics(),
         child: Stack(
           children: [
             Positioned(
@@ -159,12 +158,11 @@ class _LessonProgressScreenState extends State<LessonProgressScreen> {
                         child: ListView.builder(
                           itemCount: _items.length,
                           itemBuilder: (context, index) {
-                            txt_id = _items[index]['id'];
                             txt_title = _items[index]["title"];
-                            txt_course_id = _items[index]['course_id'];
-                            txt_order = _items[index]['order'];
-                            return menuProgressContainer(txt_title,
-                                _image[index], txt_id, txt_course_id, context);
+                            avg_percent = _items[index]['avg_percent'];
+
+                            return menuProgressContainer(
+                                txt_title, avg_percent, context);
                           },
                         ),
                       )
@@ -180,12 +178,12 @@ class _LessonProgressScreenState extends State<LessonProgressScreen> {
   }
 }
 
-Widget menuProgressContainer(title, image, section_id, course_id, context) {
+Widget menuProgressContainer(title, percent, context) {
   return Stack(
     alignment: Alignment.centerRight,
     children: [
       Container(
-        margin: EdgeInsets.only(right: 50),
+        margin: const EdgeInsets.only(right: 50),
         padding: const EdgeInsets.only(
           left: 10,
           right: 20,
@@ -203,7 +201,7 @@ Widget menuProgressContainer(title, image, section_id, course_id, context) {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Container(
-                  padding: EdgeInsets.all(10),
+                  padding: const EdgeInsets.all(10),
                   alignment: Alignment.centerLeft,
                   height: 65,
                   width: 250,
@@ -217,13 +215,13 @@ Widget menuProgressContainer(title, image, section_id, course_id, context) {
                   ),
                 ),
                 Container(
-                  margin: EdgeInsets.only(left: 10),
+                  margin: const EdgeInsets.only(left: 10),
                   color: pColor,
                   width: 230,
-                  child: const LinearProgressIndicator(
+                  child: LinearProgressIndicator(
                     backgroundColor: Colors.white,
                     valueColor: AlwaysStoppedAnimation<Color>(pColor),
-                    value: 0.7,
+                    value: double.parse(percent) / 100,
                     minHeight: 6,
                   ),
                 )
@@ -233,7 +231,7 @@ Widget menuProgressContainer(title, image, section_id, course_id, context) {
         ),
       ),
       Padding(
-        padding: EdgeInsets.only(top: 5, bottom: 5),
+        padding: const EdgeInsets.only(top: 5, bottom: 5),
         child: Container(
           width: 98,
           height: 98,
@@ -248,10 +246,10 @@ Widget menuProgressContainer(title, image, section_id, course_id, context) {
             shape: BoxShape.circle,
             color: Colors.white,
           ),
-          child: const Center(
+          child: Center(
             child: Text(
-              "75 %",
-              style: TextStyle(
+              "$percent %",
+              style: const TextStyle(
                 fontSize: 20,
                 fontWeight: FontWeight.bold,
               ),

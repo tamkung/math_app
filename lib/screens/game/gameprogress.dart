@@ -68,14 +68,14 @@ class _GameProgressScreenState extends State<GameProgressScreen> {
         preferredSize: Size.fromHeight(size.height * 0.2),
         child: AppBar(
           flexibleSpace: Padding(
-            padding: const EdgeInsets.only(top: 50),
+            padding: const EdgeInsets.only(top: 20),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Padding(
                   padding: const EdgeInsets.only(
-                    top: 10,
+                    top: 4,
                     left: 20,
                     right: 25,
                   ),
@@ -83,7 +83,7 @@ class _GameProgressScreenState extends State<GameProgressScreen> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       const Padding(
-                        padding: EdgeInsets.only(top: 40, left: 20),
+                        padding: EdgeInsets.only(top: 30, left: 20),
                         child: Text(
                           'ผลคะแนน',
                           style: TextStyle(fontSize: 32),
@@ -101,7 +101,7 @@ class _GameProgressScreenState extends State<GameProgressScreen> {
               ],
             ),
           ),
-          backgroundColor: Color.fromARGB(255, 255, 255, 255),
+          backgroundColor: Colors.white,
           foregroundColor: Colors.black,
           elevation: 0,
           automaticallyImplyLeading: true,

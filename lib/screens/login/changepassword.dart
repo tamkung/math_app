@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:math_app/widget/navdrawer.dart';
 import 'package:math_app/config/constant.dart';
 
@@ -12,124 +13,129 @@ class Changepassword extends StatefulWidget {
 }
 
 class _ChangepasswordState extends State<Changepassword> {
+  final old_password = TextEditingController();
+  final new_password = TextEditingController();
+  final conf_new_password = TextEditingController();
+
+  dynamic firstname, lastname, email, id;
+  GetStorage box = GetStorage();
+
+  Future<void> getUser() async {
+    firstname = box.read('firstname');
+    lastname = box.read('lastname');
+    email = box.read('email');
+    id = box.read('u_id');
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    getUser();
+  }
+
   @override
   Widget build(BuildContext context) {
+    var size = MediaQuery.of(context).size;
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: AppBar(
-        centerTitle: true,
-        title: Text(
-          'เปลี่ยนรหัสผ่าน',
-          style: TextStyle(fontSize: 40),
-        ),
-        backgroundColor: Color.fromARGB(255, 255, 255, 255),
-        foregroundColor: Colors.black,
-        elevation: 0,
-        shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.only(
-            bottomLeft: Radius.circular(30),
+      appBar: PreferredSize(
+        preferredSize: Size.fromHeight(size.height * 0.10),
+        child: AppBar(
+          centerTitle: true,
+          flexibleSpace: const Center(
+            child: Padding(
+              padding: EdgeInsets.only(top: 60),
+              child: Text(
+                'เปลี่ยนรหัสผ่าน',
+                style: TextStyle(fontSize: 36),
+              ),
+            ),
+          ),
+          leading: Builder(
+            builder: (BuildContext context) {
+              return IconButton(
+                splashRadius: 20,
+                icon: const Icon(
+                  Icons.arrow_back_ios,
+                  color: pColor,
+                ),
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+              );
+            },
+          ),
+          backgroundColor: Color.fromARGB(255, 255, 255, 255),
+          foregroundColor: Colors.black,
+          elevation: 0,
+          automaticallyImplyLeading: false,
+          shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.only(
+              bottomLeft: Radius.circular(30),
+            ),
           ),
         ),
-        toolbarHeight: 100,
       ),
       body: SingleChildScrollView(
-        physics: NeverScrollableScrollPhysics(),
+        //physics: const NeverScrollableScrollPhysics(),
         child: Container(
-          height: MediaQuery.of(context).size.height,
-          width: MediaQuery.of(context).size.width,
+          width: size.width * 1,
           decoration: const BoxDecoration(
             shape: BoxShape.rectangle,
-            color: Colors.white,
-            borderRadius: BorderRadius.only(
-              topRight: Radius.circular(30),
+            border: Border(),
+            image: DecorationImage(
+              image: AssetImage("assets/images/bg-change-pass.png"),
+              fit: BoxFit.fill,
             ),
           ),
           child: Stack(
             alignment: Alignment.topCenter,
             children: [
               Padding(
-                padding: const EdgeInsets.fromLTRB(0, 125, 0, 0),
+                padding: const EdgeInsets.fromLTRB(0, 150, 0, 0),
                 child: Container(
                   decoration: const BoxDecoration(
                     shape: BoxShape.rectangle,
-                    color: Color.fromARGB(255, 255, 255, 255),
-                    borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(30),
-                      topRight: Radius.circular(30),
-                      bottomLeft: Radius.circular(30),
-                      bottomRight: Radius.circular(30),
-                    ),
+                    borderRadius: BorderRadius.all(Radius.circular(30)),
                   ),
-                  width: 325,
-                  height: 450,
+                  width: size.width * 0.87,
+                  height: size.height * 0.6,
                   child: Container(
                     child: Column(
                       children: [
+                        heightBox(size.height * 0.13),
+                        txtField(
+                            'รหัสผ่านเก่า', Icons.lock_outline, old_password),
+                        txtField(
+                            'รหัสผ่านใหม่', Icons.lock_outline, new_password),
+                        txtField(
+                            'รหัสผ่านใหม่', Icons.lock_outline, new_password),
+                        heightBox(size.height * 0.05),
                         SizedBox(
-                          height: 100,
-                        ),
-                        Container(
-                          padding: EdgeInsets.symmetric(horizontal: 20),
-                          child: TextFormField(
-                            decoration: InputDecoration(
-                              border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(25)),
-                              labelText: 'รหัสผ่านเก่า',
-                              icon: Icon(Icons.person),
-                            ),
-                          ),
-                        ),
-                        SizedBox(
-                          height: 30,
-                        ),
-                        Container(
-                          padding: EdgeInsets.symmetric(horizontal: 20),
-                          child: TextFormField(
-                            decoration: InputDecoration(
-                              border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(25)),
-                              labelText: 'รหัสผ่านใหม่',
-                              icon: Icon(Icons.person),
-                            ),
-                          ),
-                        ),
-                        SizedBox(
-                          height: 30,
-                        ),
-                        Container(
-                          padding: EdgeInsets.symmetric(horizontal: 20),
-                          child: TextFormField(
-                            decoration: InputDecoration(
-                              border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(25)),
-                              labelText: 'ยืนยันรหัสผ่านใหม่',
-                              icon: Icon(Icons.email),
-                            ),
-                          ),
-                        ),
-                        SizedBox(
-                          height: 30,
-                        ),
-                        Container(
-                          height: 45,
+                          height: size.height * 0.06,
                           child: ElevatedButton(
                             style: ButtonStyle(
+                              padding: MaterialStateProperty.all(
+                                  const EdgeInsets.symmetric(
+                                      horizontal: 50, vertical: 10)),
+                              shape: MaterialStateProperty.all(
+                                RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10.0),
+                                ),
+                              ),
                               backgroundColor: MaterialStateColor.resolveWith(
                                 (states) => pColor,
                               ),
                             ),
-                            onPressed: () {
-                              //Navigator.pushNamed(context, 'changepassword');
-                            },
-                            child: Text('บันทึก',
-                                style: TextStyle(
-                                  fontSize: 20,
-                                  color: Colors.white,
-                                )),
+                            onPressed: () {},
+                            child: const Text(
+                              'บันทึก',
+                              style: TextStyle(
+                                fontSize: 20,
+                                color: Colors.white,
+                              ),
+                            ),
                           ),
-                        ),
-                        SizedBox(
-                          height: 30,
                         ),
                       ],
                     ),
@@ -137,16 +143,14 @@ class _ChangepasswordState extends State<Changepassword> {
                 ),
               ),
               Positioned(
-                child: Padding(
-                  padding: const EdgeInsets.all(30.0),
-                  child: Container(
-                    width: 175,
-                    height: 175,
-                    decoration: const BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: Color.fromARGB(255, 167, 13, 13),
-                    ),
+                child: Container(
+                  margin: const EdgeInsets.only(top: 30),
+                  width: size.width * 0.5,
+                  height: size.height * 0.25,
+                  decoration: const BoxDecoration(
+                    shape: BoxShape.circle,
                   ),
+                  child: Image.asset('assets/images/change-pass.png'),
                 ),
               ),
             ],
@@ -155,4 +159,58 @@ class _ChangepasswordState extends State<Changepassword> {
       ),
     );
   }
+}
+
+Widget txtField(text, icon, controller) {
+  return Stack(
+    children: [
+      Container(
+        decoration: BoxDecoration(
+          color: Colors.white,
+          border: Border.all(width: 2),
+          borderRadius: const BorderRadius.all(
+            Radius.circular(40),
+          ),
+        ),
+        margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+        padding: const EdgeInsets.symmetric(horizontal: 10),
+        child: TextFormField(
+          obscureText: true,
+          controller: controller,
+          decoration: InputDecoration(
+            //hintText: text,
+            icon: Container(
+              decoration: const BoxDecoration(
+                shape: BoxShape.circle,
+                color: pColor,
+              ),
+              padding: const EdgeInsets.all(10),
+              child: Icon(
+                icon,
+                color: Colors.white,
+              ),
+            ),
+            border: const OutlineInputBorder(
+              borderSide: BorderSide.none,
+            ),
+          ),
+        ),
+      ),
+      Positioned(
+        top: 0,
+        left: 70,
+        child: Container(
+          color: Colors.white,
+          padding: const EdgeInsets.symmetric(horizontal: 10),
+          child: Text(
+            text,
+            style: TextStyle(
+                fontSize: 14,
+                backgroundColor: Colors.white,
+                color: Colors.grey[700]),
+          ),
+        ),
+      ),
+    ],
+  );
 }

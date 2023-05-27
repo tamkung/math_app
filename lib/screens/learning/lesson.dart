@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:ffi';
 
+import 'package:get_storage/get_storage.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
@@ -24,10 +25,17 @@ class LessonScreen extends StatefulWidget {
 
 class _LessonScreenState extends State<LessonScreen> {
   List _items = [];
+  List _percent = [];
+  List _quiz_id = [];
   bool chk = false;
+  GetStorage box = GetStorage();
+  dynamic user_id;
   dynamic txt_id, txt_title, txt_course_id, txt_section_id, video_url;
 
-  Future<void> readSection() async {
+  dynamic percent = 0;
+
+  Future<void> getSection() async {
+    user_id = box.read('u_id');
     var url = Uri.parse('${API_URL}lesson');
     final response = await http.post(url,
         body: jsonEncode(<String, String>{
@@ -36,21 +44,35 @@ class _LessonScreenState extends State<LessonScreen> {
         }),
         headers: {"Content-type": "application/json"});
     final data = await json.decode(utf8.decode(response.bodyBytes));
-
     setState(() {
       _items = data;
     });
+    for (var i = 0; i < _items.length; i++) {
+      _quiz_id.add(_items[i]['id']);
+    }
     chk = true;
-    print(_items);
-    print(widget.title);
-    print("course id : " + widget.course_id);
-    print("section id : " + widget.section_id);
+    getPercent();
+  }
+
+  Future<void> getPercent() async {
+    var url = Uri.parse('${API_URL}percent-lesson');
+    final response = await http.post(url,
+        body: jsonEncode(<String, String>{
+          'user_id': user_id.toString(),
+          'quiz_id': _quiz_id.toString().replaceAll('[', '').replaceAll(']', '')
+        }),
+        headers: {"Content-type": "application/json"});
+    final data = await json.decode(utf8.decode(response.bodyBytes));
+
+    setState(() {
+      _percent = data;
+    });
   }
 
   @override
   void initState() {
     super.initState();
-    readSection();
+    getSection();
   }
 
   @override
@@ -101,11 +123,11 @@ class _LessonScreenState extends State<LessonScreen> {
                 Positioned(
                   left: 0,
                   child: Container(
-                    height: 167,
-                    width: 370,
+                    height: size.height * 0.222,
+                    width: size.width * 0.93,
                     decoration: const BoxDecoration(
                       shape: BoxShape.rectangle,
-                      color: Colors.white,
+                      color: Color.fromARGB(255, 255, 255, 255),
                       borderRadius: BorderRadius.only(
                         bottomRight: Radius.circular(30),
                       ),
@@ -121,7 +143,7 @@ class _LessonScreenState extends State<LessonScreen> {
                         flex: 0,
                         child: Container(
                           width: size.width * 0.56,
-                          height: size.height * 0.13,
+                          height: size.height * 0.15,
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
@@ -158,7 +180,9 @@ class _LessonScreenState extends State<LessonScreen> {
                   bottom: 10,
                   left: 30,
                   child: ElevatedButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      showPopUp(context, 'สูตร \n${widget.title}', 'image');
+                    },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: pColor,
                       shape: RoundedRectangleBorder(
@@ -218,12 +242,19 @@ class _LessonScreenState extends State<LessonScreen> {
                                   txt_course_id = _items[index]['course_id'];
                                   txt_section_id = _items[index]['section_id'];
                                   video_url = _items[index]['video_url'];
-                                  print(_items);
+
+                                  _percent.forEach((element) {
+                                    if (element['quiz_id'] ==
+                                        _items[index]['id']) {
+                                      percent = element['percent_score'];
+                                    }
+                                  });
+
                                   return cardItem(
                                     txt_id.toString(),
                                     txt_title,
                                     video_url,
-                                    '0 %',
+                                    percent.toString(),
                                   );
                                 },
                               ),
@@ -260,7 +291,7 @@ class _LessonScreenState extends State<LessonScreen> {
           // ),
           leading: const Icon(Icons.play_circle_outline),
           title: Text(title),
-          trailing: Text(progress),
+          trailing: Text("$progress %"),
           onTap: () {
             Navigator.push(
               context,
