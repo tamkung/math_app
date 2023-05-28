@@ -8,22 +8,29 @@ import 'package:math_app/config/constant.dart';
 import 'package:http/http.dart' as http;
 import 'package:math_app/screens/home.dart';
 
-class LoginScreen extends StatelessWidget {
-  const LoginScreen({super.key});
+class LoginScreen extends StatefulWidget {
+  @override
+  _LoginScreenState createState() => _LoginScreenState();
+}
 
+class _LoginScreenState extends State<LoginScreen> {
+  final emailController = TextEditingController();
+  final passwordController = TextEditingController();
   @override
   Widget build(BuildContext context) {
-    final emailController = TextEditingController();
-    final passwordController = TextEditingController();
     GetStorage box = GetStorage();
     var size = MediaQuery.of(context).size;
     return Scaffold(
       body: SingleChildScrollView(
         child: Container(
+          height: size.height,
           decoration: const BoxDecoration(
+            shape: BoxShape.rectangle,
+            color: Colors.white,
+            border: Border(),
             image: DecorationImage(
-              image: AssetImage("assets/images/bg-home.png"),
-              fit: BoxFit.cover,
+              image: AssetImage("assets/images/bg-change-pass.png"),
+              fit: BoxFit.fill,
             ),
           ),
           padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -81,8 +88,9 @@ class LoginScreen extends StatelessWidget {
                         'email': emailController.text,
                         'password': passwordController.text,
                       });
+
+                      var result = jsonDecode(response.body);
                       if (response.statusCode == 200) {
-                        var result = jsonDecode(response.body);
                         if (result['status'] == 'OK') {
                           box.write('isLogin', true);
                           box.write('u_id', result['u_id']);
@@ -122,7 +130,7 @@ class LoginScreen extends StatelessWidget {
                           context: context,
                           builder: (context) => AlertDialog(
                             title: Text('เกิดข้อผิดพลาด'),
-                            content: Text(response.body),
+                            content: Text(result['message']),
                             actions: [
                               TextButton(
                                 onPressed: () => Navigator.pop(context),

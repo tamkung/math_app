@@ -26,9 +26,9 @@ class _QuizScreenState extends State<QuizScreen> {
   List _user_answers = [];
   List _correct_answers = [];
 
-  bool selected = false;
-  bool complete = false;
-  List<bool> isSeleted = [];
+  List isSeleted = [];
+  List<bool> isChk = [];
+  bool isCorrect = false;
 
   Future<void> getQuiz() async {
     user_id = box.read('u_id');
@@ -45,8 +45,15 @@ class _QuizScreenState extends State<QuizScreen> {
     });
     if (_items.isNotEmpty) {
       chk = true;
-      isSeleted =
-          List.generate(_items.length, (index) => false, growable: false);
+
+      isSeleted.add({
+        for (var i = 0; i < _items.length; i++)
+          i + 1: [
+            for (var j = 0; j < jsonDecode(_items[i]["options"]).length; j++)
+              false
+          ],
+      });
+      print(isSeleted);
     }
   }
 
@@ -163,10 +170,12 @@ class _QuizScreenState extends State<QuizScreen> {
 
                       List opList = jsonDecode(options);
 
-                      List<bool> isChk = List.generate(
-                          opList.length, (index) => false,
-                          growable: false);
-                      print(isChk);
+                      List<bool> isChk = isSeleted[0][activeStep + 1];
+
+                      // List<bool> isChk = List.generate(
+                      //     opList.length, (index) => false,
+                      //     growable: false);
+                      // print(isChk);
 
                       return Column(
                         mainAxisAlignment: MainAxisAlignment.start,
@@ -210,10 +219,11 @@ class _QuizScreenState extends State<QuizScreen> {
                                               BorderRadius.circular(10)),
                                       child: ListTile(
                                         tileColor: isChk[index]
-                                            ? Colors.purple
+                                            ? Colors.green
                                             : pColor,
                                         textColor: Colors.white,
                                         title: Text(opList[index]),
+                                        enabled: !isChk[index],
                                         onTap: () async {
                                           _user_answers.add({
                                             txt_id: index + 1,
@@ -224,10 +234,12 @@ class _QuizScreenState extends State<QuizScreen> {
                                           print(_user_answers);
                                           print(_correct_answers);
                                           print("index : $index");
+                                          //print(isSeleted[0][index]);
+
                                           setState(() {
                                             isChk[index] = true;
-                                            print(isChk);
                                           });
+                                          print(isChk);
                                           if (index + 1 ==
                                               int.parse(answers[0])) {
                                             print("True");

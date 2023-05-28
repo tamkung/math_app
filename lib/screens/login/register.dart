@@ -5,7 +5,6 @@ import 'package:http/http.dart' as http;
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:math_app/config/constant.dart';
-import 'package:mysql1/mysql1.dart';
 
 class RegisterScreen extends StatefulWidget {
   @override
@@ -20,212 +19,267 @@ class _RegisterScreenState extends State<RegisterScreen> {
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
   final confirmPasswordController = TextEditingController();
-  List<String> _province = [
+  List<String> _user_type = [
     'ช่างอุตสาหกรรม',
     'เคหะบริบาร',
   ];
-  String? _selectedProvince;
+  String? _selectedUserType;
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
     return Scaffold(
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.only(
-            top: 60,
-            bottom: 10,
+      appBar: PreferredSize(
+        preferredSize: Size.fromHeight(size.height * 0.10),
+        child: AppBar(
+          flexibleSpace: Padding(
+            padding: const EdgeInsets.only(top: 20),
+            child: Container(
+              decoration: const BoxDecoration(
+                shape: BoxShape.rectangle,
+                color: Colors.white,
+                border: Border(),
+                image: DecorationImage(
+                  image: AssetImage("assets/images/bg-change-pass.png"),
+                  fit: BoxFit.cover,
+                ),
+              ),
+              alignment: Alignment.center,
+              child: const Text(
+                'สมัครสมาชิก',
+                style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
+              ),
+            ),
           ),
-          child: Column(
-            children: [
-              Container(
-                width: double.infinity,
-                child: Stack(
+          backgroundColor: Colors.white,
+          foregroundColor: Colors.black,
+          elevation: 0,
+          automaticallyImplyLeading: true,
+          leading: Builder(
+            builder: (BuildContext context) {
+              return IconButton(
+                splashRadius: 20,
+                icon: const Icon(
+                  Icons.arrow_back_ios,
+                  color: pColor,
+                ),
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+              );
+            },
+          ),
+        ),
+      ),
+      body: SingleChildScrollView(
+        child: Container(
+          decoration: const BoxDecoration(
+            shape: BoxShape.rectangle,
+            color: Colors.white,
+            border: Border(),
+            image: DecorationImage(
+              image: AssetImage("assets/images/bg-change-pass.png"),
+              fit: BoxFit.fill,
+            ),
+          ),
+          child: Padding(
+            padding: const EdgeInsets.only(
+              bottom: 10,
+            ),
+            child: Column(
+              children: [
+                buildTextField(
+                    "ชื่อ", Icons.person, firstnameController, false),
+                buildTextField(
+                    "นามสกุล", Icons.person, lastnameController, false),
+                buildTextField("ชั้นปี", Icons.school, yearController, false),
+                Stack(
                   children: [
-                    Positioned(
-                      child: IconButton(
-                        onPressed: () => Navigator.pop(context),
-                        icon: const Icon(
-                          Icons.arrow_back_ios_new,
-                          color: pColor,
-                        ),
+                    Container(
+                      decoration: BoxDecoration(
+                          border: Border.all(width: 2),
+                          borderRadius:
+                              const BorderRadius.all(Radius.circular(40))),
+                      margin: const EdgeInsets.symmetric(
+                          horizontal: 20, vertical: 10),
+                      padding: const EdgeInsets.symmetric(horizontal: 10),
+                      child: Row(
+                        children: [
+                          Container(
+                            decoration: const BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: pColor,
+                            ),
+                            padding: const EdgeInsets.all(10),
+                            child: const Icon(
+                              Icons.school,
+                              color: Colors.white,
+                            ),
+                          ),
+                          Container(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 30, vertical: 5),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            child: DropdownButton(
+                              iconEnabledColor: Colors.white,
+                              hint: const Text(
+                                'กลุ่มผู้เรียน',
+                                style: TextStyle(color: Colors.grey),
+                              ),
+                              value: _selectedUserType,
+                              onChanged: (newValue) {
+                                setState(() {
+                                  _selectedUserType = newValue.toString();
+                                });
+
+                                print(_selectedUserType);
+                              },
+                              items: _user_type.map((type) {
+                                return DropdownMenuItem(
+                                  child: new Text(type),
+                                  value: type,
+                                );
+                              }).toList(),
+                            ),
+                          ),
+                        ],
                       ),
                     ),
                     Positioned(
-                      child: Padding(
-                        padding: const EdgeInsets.only(
-                          top: 15,
-                          bottom: 20,
-                        ),
-                        child: Container(
-                          alignment: Alignment.center,
-                          child: const Text(
-                            'สมัครสมาชิก',
-                            style: TextStyle(
-                                fontSize: 30, fontWeight: FontWeight.bold),
-                          ),
+                      top: 0,
+                      left: 70,
+                      child: Container(
+                        color: Colors.white,
+                        padding: const EdgeInsets.symmetric(horizontal: 10),
+                        child: Text(
+                          'กลุ่มผู้เรียน',
+                          style: TextStyle(
+                              fontSize: 14,
+                              backgroundColor: Colors.white,
+                              color: Colors.grey[700]),
                         ),
                       ),
                     ),
                   ],
                 ),
-              ),
-              buildTextField("ชื่อ", Icons.person, firstnameController, false),
-              buildTextField(
-                  "นามสกุล", Icons.person, lastnameController, false),
-              buildTextField("ชั้นปี", Icons.school, yearController, false),
-              Stack(
-                children: [
-                  Container(
-                    decoration: BoxDecoration(
-                        border: Border.all(width: 2),
-                        borderRadius:
-                            const BorderRadius.all(Radius.circular(40))),
-                    margin: const EdgeInsets.symmetric(
-                        horizontal: 20, vertical: 10),
-                    padding: const EdgeInsets.symmetric(horizontal: 10),
-                    child: Row(
-                      children: [
-                        Container(
-                          decoration: const BoxDecoration(
-                            shape: BoxShape.circle,
-                            color: pColor,
-                          ),
-                          padding: const EdgeInsets.all(10),
-                          child: const Icon(
-                            Icons.school,
-                            color: Colors.white,
-                          ),
-                        ),
-                        Container(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 30, vertical: 5),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          child: DropdownButton(
-                            iconEnabledColor: Colors.white,
-                            hint: const Text(
-                              'กลุ่มผู้เรียน',
-                              style: TextStyle(color: Colors.grey),
+                buildTextField(
+                    "เบอร์โทรศัพท์", Icons.phone, phoneNumberController, false),
+                buildTextField("อีเมล", Icons.email, emailController, false),
+                buildTextField(
+                    "รหัสผ่าน", Icons.lock, passwordController, true),
+                buildTextField("ยืนยันรหัสผ่าน", Icons.lock,
+                    confirmPasswordController, true),
+                heightBox(size.height * 0.02),
+                ElevatedButton(
+                  style: ButtonStyle(
+                    padding: MaterialStateProperty.all(
+                      const EdgeInsets.symmetric(
+                        horizontal: 40,
+                        vertical: 10,
+                      ),
+                    ),
+                    shape: MaterialStateProperty.all(
+                      RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                    ),
+                    backgroundColor: MaterialStateColor.resolveWith(
+                      (states) => pColor,
+                    ),
+                  ),
+                  onPressed: () async {
+                    final firstname = firstnameController.text;
+                    final lastName = lastnameController.text;
+                    final year = yearController.text;
+                    final phoneNumber = phoneNumberController.text;
+                    final email = emailController.text;
+                    final password = passwordController.text;
+                    final confirmPassword = confirmPasswordController.text;
+                    if (firstname.isEmpty ||
+                        lastName.isEmpty ||
+                        year.isEmpty ||
+                        phoneNumber.isEmpty ||
+                        email.isEmpty ||
+                        password.isEmpty ||
+                        confirmPassword.isEmpty) {
+                      showDialog(
+                        context: context,
+                        builder: (context) => AlertDialog(
+                          title: const Text('กรุณากรอกข้อมูลให้ครบ'),
+                          actions: [
+                            TextButton(
+                              onPressed: () => Navigator.pop(context),
+                              child: const Text('ตกลง'),
                             ),
-                            value: _selectedProvince,
-                            onChanged: (newValue) {
-                              setState(() {
-                                _selectedProvince = newValue.toString();
-                              });
-                            },
-                            items: _province.map((type) {
-                              return DropdownMenuItem(
-                                child: new Text(type),
-                                value: type,
-                              );
-                            }).toList(),
-                          ),
+                          ],
                         ),
-                      ],
-                    ),
-                  ),
-                  Positioned(
-                    top: 0,
-                    left: 70,
-                    child: Container(
-                      color: Colors.white,
-                      padding: const EdgeInsets.symmetric(horizontal: 10),
-                      child: Text(
-                        'กลุ่มผู้เรียน',
-                        style: TextStyle(
-                            fontSize: 14,
-                            backgroundColor: Colors.white,
-                            color: Colors.grey[700]),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              buildTextField(
-                  "เบอร์โทรศัพท์", Icons.phone, phoneNumberController, false),
-              buildTextField("อีเมล", Icons.email, emailController, false),
-              buildTextField("รหัสผ่าน", Icons.lock, passwordController, true),
-              buildTextField("ยืนยันรหัสผ่าน", Icons.lock,
-                  confirmPasswordController, true),
-              heightBox(size.height * 0.02),
-              ElevatedButton(
-                style: ButtonStyle(
-                  padding: MaterialStateProperty.all(
-                    const EdgeInsets.symmetric(
-                      horizontal: 40,
-                      vertical: 10,
-                    ),
-                  ),
-                  shape: MaterialStateProperty.all(
-                    RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                  ),
-                  backgroundColor: MaterialStateColor.resolveWith(
-                    (states) => pColor,
-                  ),
-                ),
-                onPressed: () async {
-                  final firstname = firstnameController.text;
-                  final lastName = lastnameController.text;
-                  final year = yearController.text;
-                  final phoneNumber = phoneNumberController.text;
-                  final email = emailController.text;
-                  final password = passwordController.text;
-                  final confirmPassword = confirmPasswordController.text;
-                  print(
-                      '$firstname $lastName $year $phoneNumber $email $password $confirmPassword');
-                  if (password == confirmPassword) {
-                    var url = Uri.parse('${API_URL}auth/signup');
-                    try {
-                      var response = await http.post(url, body: {
-                        'fname': firstname,
-                        'lname': lastName,
-                        'year': year,
-                        'phone': phoneNumber,
-                        'email': email,
-                        'password': confirmPassword,
-                      });
-                      if (response.statusCode == 200) {
-                        Map<String, dynamic> user = jsonDecode(response.body);
-                        print(user['token']);
-                        Navigator.pushNamed(context, 'Login');
-                      } else {
-                        print(response.body);
+                      );
+                      return;
+                    } else if (password != confirmPassword) {
+                      showDialog(
+                        context: context,
+                        builder: (context) => AlertDialog(
+                          title: const Text('รหัสผ่านไม่ตรงกัน'),
+                          content: const Text('กรุณากรอกรหัสผ่านให้ตรงกัน'),
+                          actions: [
+                            TextButton(
+                              onPressed: () => Navigator.pop(context),
+                              child: const Text('ตกลง'),
+                            ),
+                          ],
+                        ),
+                      );
+                    } else {
+                      var url = Uri.parse('${API_URL}auth/signup');
+                      try {
+                        var response = await http.post(url, body: {
+                          'fname': firstname,
+                          'lname': lastName,
+                          'year': year,
+                          'type': _selectedUserType,
+                          'phone': phoneNumber,
+                          'email': email,
+                          'password': confirmPassword,
+                        });
+                        if (response.statusCode == 200) {
+                          Map<String, dynamic> user = jsonDecode(response.body);
+                          print(user['token']);
+                          Navigator.pushNamed(context, 'Login');
+                        } else {
+                          print(response.body);
+                        }
+                      } catch (e) {
+                        print(e);
                       }
-                    } catch (e) {
-                      print(e);
                     }
-                  } else {
-                    print('password not match');
-                  }
-                  //Navigator.pushNamed(context, 'Home');
-                },
-                child: Text(
-                  'สมัครใช้งาน',
-                  style: TextStyle(
-                    fontSize: 18,
-                  ),
-                ),
-              ),
-              heightBox(size.height * 0.02),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const Text('มีบัญชีผู้ใช้แล้ว?'),
-                  TextButton(
-                    onPressed: () => Navigator.pop(context),
-                    child: const Text(
-                      'เข้าสู่ระบบ',
-                      style: TextStyle(
-                        color: pColor,
-                      ),
+                    //Navigator.pushNamed(context, 'Home');
+                  },
+                  child: const Text(
+                    'สมัครใช้งาน',
+                    style: TextStyle(
+                      fontSize: 18,
                     ),
                   ),
-                ],
-              ),
-            ],
+                ),
+                heightBox(size.height * 0.02),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Text('มีบัญชีผู้ใช้แล้ว?'),
+                    TextButton(
+                      onPressed: () => Navigator.pop(context),
+                      child: const Text(
+                        'เข้าสู่ระบบ',
+                        style: TextStyle(
+                          color: pColor,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
           ),
         ),
       ),
