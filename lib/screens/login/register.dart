@@ -216,6 +216,36 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         ),
                       );
                       return;
+                    } else if (!email.contains('@')) {
+                      showDialog(
+                        context: context,
+                        builder: (context) => AlertDialog(
+                          title: const Text('อีเมลไม่ถูกต้อง'),
+                          content: const Text('กรุณากรอกอีเมลให้ถูกต้อง'),
+                          actions: [
+                            TextButton(
+                              onPressed: () => Navigator.pop(context),
+                              child: const Text('ตกลง'),
+                            ),
+                          ],
+                        ),
+                      );
+                    } else if (password.length < 8 &&
+                        confirmPassword.length < 8) {
+                      showDialog(
+                        context: context,
+                        builder: (context) => AlertDialog(
+                          title: const Text('รหัสผ่านไม่ถูกต้อง'),
+                          content: const Text(
+                              'กรุณากรอกรหัสผ่านให้มีความยาวมากกว่า 8 ตัวอักษร'),
+                          actions: [
+                            TextButton(
+                              onPressed: () => Navigator.pop(context),
+                              child: const Text('ตกลง'),
+                            ),
+                          ],
+                        ),
+                      );
                     } else if (password != confirmPassword) {
                       showDialog(
                         context: context,
@@ -237,17 +267,47 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           'fname': firstname,
                           'lname': lastName,
                           'year': year,
-                          'type': _selectedUserType,
+                          'user_type': _selectedUserType,
                           'phone': phoneNumber,
                           'email': email,
                           'password': confirmPassword,
                         });
                         if (response.statusCode == 200) {
-                          Map<String, dynamic> user = jsonDecode(response.body);
-                          print(user['token']);
-                          Navigator.pushNamed(context, 'Login');
+                          // ignore: use_build_context_synchronously
+                          showDialog(
+                            context: context,
+                            builder: (context) => AlertDialog(
+                              title: const Text('สมัครสมาชิกสำเร็จ'),
+                              actions: [
+                                TextButton(
+                                  onPressed: () {
+                                    Map<String, dynamic> user =
+                                        jsonDecode(response.body);
+                                    print(user['token']);
+                                    Navigator.pop(context);
+                                    Navigator.pop(context);
+                                  },
+                                  child: const Text('ตกลง'),
+                                ),
+                              ],
+                            ),
+                          );
                         } else {
-                          print(response.body);
+                          response.body == '{"message":"Email already exists"}'
+                              // ignore: use_build_context_synchronously
+                              ? showDialog(
+                                  context: context,
+                                  builder: (context) => AlertDialog(
+                                    title: const Text('อีเมลนี้มีผู้ใช้แล้ว'),
+                                    actions: [
+                                      TextButton(
+                                        onPressed: () => Navigator.pop(context),
+                                        child: const Text('ตกลง'),
+                                      ),
+                                    ],
+                                  ),
+                                )
+                              : print(response.body);
                         }
                       } catch (e) {
                         print(e);
@@ -285,21 +345,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
       ),
     );
   }
-}
-
-Widget txtField(String labelText, Icon icon, TextEditingController controller,
-    bool obscureText) {
-  return Container(
-    padding: const EdgeInsets.symmetric(horizontal: 20),
-    child: TextFormField(
-        controller: controller,
-        decoration: InputDecoration(
-          border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
-          labelText: labelText,
-          icon: icon,
-        ),
-        obscureText: obscureText),
-  );
 }
 
 Widget buildTextField(text, icon, controller, obscureText) {

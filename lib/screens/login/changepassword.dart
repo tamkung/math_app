@@ -1,6 +1,9 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
+import 'package:http/http.dart' as http;
 import 'package:get_storage/get_storage.dart';
 import 'package:math_app/widget/navdrawer.dart';
 import 'package:math_app/config/constant.dart';
@@ -17,14 +20,12 @@ class _ChangepasswordState extends State<Changepassword> {
   final new_password = TextEditingController();
   final conf_new_password = TextEditingController();
 
-  dynamic firstname, lastname, email, id;
+  dynamic email, user_id;
   GetStorage box = GetStorage();
 
   Future<void> getUser() async {
-    firstname = box.read('firstname');
-    lastname = box.read('lastname');
     email = box.read('email');
-    id = box.read('u_id');
+    user_id = box.read('u_id');
   }
 
   @override
@@ -65,7 +66,7 @@ class _ChangepasswordState extends State<Changepassword> {
               );
             },
           ),
-          backgroundColor: Color.fromARGB(255, 255, 255, 255),
+          backgroundColor: Colors.white,
           foregroundColor: Colors.black,
           elevation: 0,
           automaticallyImplyLeading: false,
@@ -108,8 +109,8 @@ class _ChangepasswordState extends State<Changepassword> {
                             'รหัสผ่านเก่า', Icons.lock_outline, old_password),
                         txtField(
                             'รหัสผ่านใหม่', Icons.lock_outline, new_password),
-                        txtField(
-                            'รหัสผ่านใหม่', Icons.lock_outline, new_password),
+                        txtField('รหัสผ่านใหม่', Icons.lock_outline,
+                            conf_new_password),
                         heightBox(size.height * 0.05),
                         SizedBox(
                           height: size.height * 0.06,
@@ -127,7 +128,51 @@ class _ChangepasswordState extends State<Changepassword> {
                                 (states) => pColor,
                               ),
                             ),
-                            onPressed: () {},
+                            onPressed: () {
+                              if (old_password.text.isNotEmpty &&
+                                  new_password.text.isNotEmpty &&
+                                  conf_new_password.text.isNotEmpty) {
+                                if (new_password.text ==
+                                    conf_new_password.text) {
+                                  addQuizResult(
+                                      old_password.text, new_password.text);
+                                } else {
+                                  showDialog(
+                                    context: context,
+                                    builder: (context) => AlertDialog(
+                                      title: const Text('แจ้งเตือน'),
+                                      content: const Text(
+                                          'รหัสผ่านใหม่ไม่ตรงกัน กรุณากรอกใหม่อีกครั้ง'),
+                                      actions: [
+                                        TextButton(
+                                          onPressed: () {
+                                            Navigator.pop(context);
+                                          },
+                                          child: const Text('ตกลง'),
+                                        ),
+                                      ],
+                                    ),
+                                  );
+                                }
+                              } else {
+                                showDialog(
+                                  context: context,
+                                  builder: (context) => AlertDialog(
+                                    title: const Text('แจ้งเตือน'),
+                                    content:
+                                        const Text('กรุณากรอกข้อมูลให้ครบถ้วน'),
+                                    actions: [
+                                      TextButton(
+                                        onPressed: () {
+                                          Navigator.pop(context);
+                                        },
+                                        child: const Text('ตกลง'),
+                                      ),
+                                    ],
+                                  ),
+                                );
+                              }
+                            },
                             child: const Text(
                               'บันทึก',
                               style: TextStyle(
@@ -159,58 +204,109 @@ class _ChangepasswordState extends State<Changepassword> {
       ),
     );
   }
-}
 
-Widget txtField(text, icon, controller) {
-  return Stack(
-    children: [
-      Container(
-        decoration: BoxDecoration(
-          color: Colors.white,
-          border: Border.all(width: 2),
-          borderRadius: const BorderRadius.all(
-            Radius.circular(40),
-          ),
-        ),
-        margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-        padding: const EdgeInsets.symmetric(horizontal: 10),
-        child: TextFormField(
-          obscureText: true,
-          controller: controller,
-          decoration: InputDecoration(
-            //hintText: text,
-            icon: Container(
-              decoration: const BoxDecoration(
-                shape: BoxShape.circle,
-                color: pColor,
-              ),
-              padding: const EdgeInsets.all(10),
-              child: Icon(
-                icon,
-                color: Colors.white,
-              ),
+  Future<void> addQuizResult(old_pass, new_pass) async {
+    var url = Uri.parse('${API_URL}auth/changepass');
+    final response = await http.post(url,
+        body: jsonEncode({
+          "u_id": user_id,
+          "email": email,
+          "old_pass": old_pass,
+          "new_pass": new_pass,
+        }),
+        headers: {"Content-type": "application/json"});
+    final data = await json.decode(utf8.decode(response.bodyBytes));
+    print(data);
+    if (response.statusCode == 200) {
+      // ignore: use_build_context_synchronously
+      print(data);
+      showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: const Text('แจ้งเตือน'),
+          content: const Text('เปลี่ยนรหัสผ่านสำเร็จ'),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context);
+                Navigator.pop(context);
+              },
+              child: const Text('ตกลง'),
             ),
-            border: const OutlineInputBorder(
-              borderSide: BorderSide.none,
+          ],
+        ),
+      );
+    } else {
+      // ignore: use_build_context_synchronously
+      showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: const Text('แจ้งเตือน'),
+          content: const Text('รหัสผ่านเก่าไม่ถูกต้อง'),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: const Text('ตกลง'),
+            ),
+          ],
+        ),
+      );
+    }
+  }
+
+  Widget txtField(text, icon, controller) {
+    return Stack(
+      children: [
+        Container(
+          decoration: BoxDecoration(
+            color: Colors.white,
+            border: Border.all(width: 2),
+            borderRadius: const BorderRadius.all(
+              Radius.circular(40),
             ),
           ),
-        ),
-      ),
-      Positioned(
-        top: 0,
-        left: 70,
-        child: Container(
-          color: Colors.white,
+          margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
           padding: const EdgeInsets.symmetric(horizontal: 10),
-          child: Text(
-            text,
-            style: TextStyle(
-                fontSize: 14,
-                backgroundColor: Colors.white,
-                color: Colors.grey[700]),
+          child: TextFormField(
+            obscureText: true,
+            controller: controller,
+            decoration: InputDecoration(
+              //hintText: text,
+              icon: Container(
+                decoration: const BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: pColor,
+                ),
+                padding: const EdgeInsets.all(10),
+                child: Icon(
+                  icon,
+                  color: Colors.white,
+                ),
+              ),
+              border: const OutlineInputBorder(
+                borderSide: BorderSide.none,
+              ),
+            ),
           ),
         ),
-      ),
-    ],
-  );
+        Positioned(
+          top: 0,
+          left: 70,
+          child: Container(
+            color: Colors.white,
+            padding: const EdgeInsets.symmetric(horizontal: 10),
+            child: Text(
+              text,
+              style: TextStyle(
+                  fontSize: 14,
+                  backgroundColor: Colors.white,
+                  color: Colors.grey[700]),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
 }

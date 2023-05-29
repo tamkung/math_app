@@ -207,7 +207,7 @@ class _QuizScreenState extends State<QuizScreen> {
                                       List.generate(opList.length, (index) {
                                     return Card(
                                       elevation: 3,
-                                      margin: const EdgeInsets.only(bottom: 20),
+                                      margin: EdgeInsets.only(bottom: 20),
                                       clipBehavior: Clip.antiAlias,
                                       shape: RoundedRectangleBorder(
                                           borderRadius:
@@ -220,69 +220,36 @@ class _QuizScreenState extends State<QuizScreen> {
                                         title: Text(opList[index]),
                                         enabled: !isChk[index],
                                         onTap: () async {
-                                          setState(() {
-                                            isChk[index] = true;
-                                          });
-                                          for (int i = 0;
-                                              i < isChk.length;
-                                              i++) {
-                                            if (i != index) {
-                                              isChk[i] = false;
-                                            }
-                                          }
-                                          print(isChk);
-
-                                          _user_answers.removeWhere((element) =>
-                                              element.keys.first == txt_id);
                                           _user_answers.add({
                                             txt_id: index + 1,
                                           });
-
-                                          _correct_answers.removeWhere(
-                                              (element) =>
-                                                  element.keys.first == txt_id);
                                           _correct_answers.add({
                                             txt_id: answers[0],
                                           });
+                                          print(_user_answers);
+                                          print(_correct_answers);
+                                          print("index : $index");
+                                          //print(isSeleted[0][index]);
 
+                                          setState(() {
+                                            isChk[index] = true;
+                                          });
+                                          print(isChk);
+                                          if (index + 1 ==
+                                              int.parse(answers[0])) {
+                                            print("True");
+                                            score++;
+                                          } else {
+                                            print("False");
+                                          }
+                                          print("Score : $score");
                                           if (activeStep < _items.length - 1) {
                                             setState(() {
                                               activeStep++;
                                             });
                                           } else {
-                                            _user_answers.sort((a, b) => a
-                                                .keys.first
-                                                .compareTo(b.keys.first));
-                                            _correct_answers.sort((a, b) => a
-                                                .keys.first
-                                                .compareTo(b.keys.first));
-                                            // คำนวณคะแนน
-                                            for (int i = 0;
-                                                i < _user_answers.length;
-                                                i++) {
-                                              var userAnswer = _user_answers[i];
-                                              var correctAnswer =
-                                                  _correct_answers[i];
-
-                                              print(userAnswer.values.first);
-                                              print(correctAnswer.values.first);
-
-                                              // แปลงชนิดข้อมูลของ userAnswer เป็นสตริง
-                                              var userAnswerString = userAnswer
-                                                  .values.first
-                                                  .toString();
-
-                                              if (userAnswerString ==
-                                                  correctAnswer.values.first) {
-                                                score += 1;
-                                                print('score: $score');
-                                              }
-                                            }
-
-                                            print(_user_answers);
-                                            print(_correct_answers);
-
-                                            //addQuizResult();
+                                            print("End");
+                                            addQuizResult();
                                             showDialog(
                                               context: context,
                                               builder: (context) {

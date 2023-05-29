@@ -20,7 +20,6 @@ import 'screens/login/login.dart';
 import 'screens/login/register.dart';
 import 'screens/game.dart';
 import 'screens/video/videoscreen.dart';
-import 'testTime/test.dart';
 
 void main() async {
   await GetStorage.init();

@@ -135,7 +135,7 @@ class _LessonProgressScreenState extends State<LessonProgressScreen> {
               right: 0,
               top: 0,
               child: Container(
-                color: Color.fromARGB(255, 255, 255, 255),
+                color: Colors.white,
                 width: 100,
                 height: 100,
               ),
@@ -159,7 +159,10 @@ class _LessonProgressScreenState extends State<LessonProgressScreen> {
                           itemCount: _items.length,
                           itemBuilder: (context, index) {
                             txt_title = _items[index]["title"];
-                            avg_percent = _items[index]['avg_percent'];
+
+                            _items[index]['avg_percent'] == null
+                                ? avg_percent = '0'
+                                : avg_percent = _items[index]['avg_percent'];
 
                             return menuProgressContainer(
                                 txt_title, avg_percent, context);

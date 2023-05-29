@@ -5,6 +5,8 @@ import 'package:get_storage/get_storage.dart';
 import 'package:math_app/config/constant.dart';
 import 'package:math_app/screens/login/login.dart';
 
+import '../screens/home.dart';
+
 class NavDrawer extends StatelessWidget {
   const NavDrawer({super.key});
 
@@ -49,7 +51,12 @@ class NavDrawer extends StatelessWidget {
                   title: txt('บทเรียน'),
                   onTap: () {
                     Navigator.pop(context);
-                    Navigator.pushNamed(context, 'Home');
+                    Navigator.pushAndRemoveUntil(
+                        context,
+                        MaterialPageRoute(
+                            builder: (BuildContext context) =>
+                                const HomeScreen()),
+                        ModalRoute.withName('Home'));
                   }),
               ListTile(
                 title: txt('ผลทดสอบ'),
