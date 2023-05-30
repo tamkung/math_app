@@ -40,10 +40,10 @@ class _ProfileState extends State<Profile> {
           centerTitle: true,
           flexibleSpace: const Center(
             child: Padding(
-              padding: EdgeInsets.only(top: 60),
+              padding: EdgeInsets.only(top: 30),
               child: Text(
                 'ประวัติ',
-                style: TextStyle(fontSize: 40),
+                style: TextStyle(fontSize: 38),
               ),
             ),
           ),

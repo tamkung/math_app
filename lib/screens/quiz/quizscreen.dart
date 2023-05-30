@@ -6,6 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:im_stepper/stepper.dart';
 import 'package:math_app/config/constant.dart';
 
+import '../home.dart';
+
 class QuizScreen extends StatefulWidget {
   final dynamic id, title;
   const QuizScreen({super.key, required this.id, required this.title});
@@ -282,7 +284,6 @@ class _QuizScreenState extends State<QuizScreen> {
                                             print(_user_answers);
                                             print(_correct_answers);
 
-                                            //addQuizResult();
                                             showDialog(
                                               context: context,
                                               builder: (context) {
@@ -293,7 +294,6 @@ class _QuizScreenState extends State<QuizScreen> {
                                                   actions: [
                                                     TextButton(
                                                       onPressed: () {
-                                                        Navigator.pop(context);
                                                         Navigator.pop(context);
                                                       },
                                                       child: Text("OK"),
@@ -327,12 +327,12 @@ class _QuizScreenState extends State<QuizScreen> {
                       alignment: Alignment.bottomCenter,
                       child: Container(
                         padding: const EdgeInsets.only(
-                          top: 30,
-                          bottom: 30,
-                          left: 130,
-                          right: 130,
+                          top: 18,
+                          bottom: 18,
+                          left: 135,
+                          right: 135,
                         ),
-                        height: size.height * 0.15,
+                        height: size.height * 0.12,
                         width: size.width * 1,
                         decoration: const BoxDecoration(
                           color: pColor,
@@ -346,7 +346,7 @@ class _QuizScreenState extends State<QuizScreen> {
                                 Size(size.width * 0.8, size.height * 0.1)),
                             padding: MaterialStateProperty.all(
                                 const EdgeInsets.symmetric(
-                                    horizontal: 50, vertical: 10)),
+                                    horizontal: 30, vertical: 10)),
                             shape: MaterialStateProperty.all(
                               RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(10.0),
@@ -356,7 +356,55 @@ class _QuizScreenState extends State<QuizScreen> {
                               (states) => Colors.white,
                             ),
                           ),
-                          onPressed: () {},
+                          onPressed: () {
+                            if (_user_answers.length == _items.length) {
+                              addQuizResult();
+
+                              showDialog(
+                                context: context,
+                                builder: (context) {
+                                  return AlertDialog(
+                                    title: const Text("แจ้งเตือน"),
+                                    content: const Text("ส่งคำตอบเรียบร้อย"),
+                                    actions: [
+                                      TextButton(
+                                        onPressed: () {
+                                          Navigator.pop(context);
+                                          Navigator.pushReplacement(
+                                            context,
+                                            MaterialPageRoute(
+                                              builder: (context) =>
+                                                  const HomeScreen(),
+                                            ),
+                                          );
+                                        },
+                                        child: const Text("OK"),
+                                      ),
+                                    ],
+                                  );
+                                },
+                              );
+                            } else {
+                              showDialog(
+                                context: context,
+                                builder: (context) {
+                                  return AlertDialog(
+                                    title: const Text("แจ้งเตือน"),
+                                    content:
+                                        const Text("กรุณาตอบคำถามให้ครบทุกข้อ"),
+                                    actions: [
+                                      TextButton(
+                                        onPressed: () {
+                                          Navigator.pop(context);
+                                        },
+                                        child: const Text("OK"),
+                                      ),
+                                    ],
+                                  );
+                                },
+                              );
+                            }
+                          },
                           child: const Text(
                             'ส่ง',
                             style: TextStyle(

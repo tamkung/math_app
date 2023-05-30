@@ -140,15 +140,39 @@ class NavDrawer extends StatelessWidget {
               ],
             ),
             onTap: () {
-              print(box.getValues());
-              box.erase();
-              box.write('isLogin', false);
-              //Navigator.pushNamed(context, 'Login');
-              Navigator.pushAndRemoveUntil(
-                  context,
-                  MaterialPageRoute(
-                      builder: (BuildContext context) => LoginScreen()),
-                  ModalRoute.withName('Login'));
+              showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return AlertDialog(
+                    title: Text('ออกจากระบบ'),
+                    content: Text('คุณต้องการออกจากระบบใช่หรือไม่'),
+                    actions: [
+                      TextButton(
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
+                        child: Text('ยกเลิก'),
+                      ),
+                      TextButton(
+                        onPressed: () {
+                          print(box.getValues());
+                          box.erase();
+                          box.write('isLogin', false);
+                          //Navigator.pushNamed(context, 'Login');
+                          Navigator.pushAndRemoveUntil(
+                            context,
+                            MaterialPageRoute(
+                                builder: (BuildContext context) =>
+                                    LoginScreen()),
+                            ModalRoute.withName('Login'),
+                          );
+                        },
+                        child: Text('ตกลง'),
+                      ),
+                    ],
+                  );
+                },
+              );
             },
           ),
         ],

@@ -45,7 +45,7 @@ class _ChangepasswordState extends State<Changepassword> {
           centerTitle: true,
           flexibleSpace: const Center(
             child: Padding(
-              padding: EdgeInsets.only(top: 60),
+              padding: EdgeInsets.only(top: 30),
               child: Text(
                 'เปลี่ยนรหัสผ่าน',
                 style: TextStyle(fontSize: 36),
