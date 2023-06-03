@@ -2,7 +2,6 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:im_stepper/main.dart';
 import 'package:math_app/screens/game/gameprogress.dart';
 import 'package:math_app/screens/game/gamescreen.dart';
 import 'package:math_app/screens/learning/lessonprogress.dart';
@@ -25,6 +24,7 @@ import 'screens/video/videoscreen.dart';
 void main() async {
   await GetStorage.init();
   runApp(const MyApp());
+  SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
   WidgetsFlutterBinding.ensureInitialized();
   await SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
