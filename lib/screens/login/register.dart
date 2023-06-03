@@ -19,7 +19,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
   final confirmPasswordController = TextEditingController();
-  List<String> _user_type = [
+  final List<String> _user_type = [
     'ช่างอุตสาหกรรม',
     'เคหะบริบาร',
   ];
@@ -31,23 +31,20 @@ class _RegisterScreenState extends State<RegisterScreen> {
       appBar: PreferredSize(
         preferredSize: Size.fromHeight(size.height * 0.10),
         child: AppBar(
-          flexibleSpace: Padding(
-            padding: const EdgeInsets.only(top: 20),
-            child: Container(
-              decoration: const BoxDecoration(
-                shape: BoxShape.rectangle,
-                color: Colors.white,
-                border: Border(),
-                image: DecorationImage(
-                  image: AssetImage("assets/images/bg-change-pass.png"),
-                  fit: BoxFit.cover,
-                ),
+          flexibleSpace: Container(
+            decoration: const BoxDecoration(
+              shape: BoxShape.rectangle,
+              color: Colors.white,
+              border: Border(),
+              image: DecorationImage(
+                image: AssetImage("assets/images/bg-change-pass.png"),
+                fit: BoxFit.cover,
               ),
-              alignment: Alignment.center,
-              child: const Text(
-                'สมัครสมาชิก',
-                style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
-              ),
+            ),
+            alignment: Alignment.center,
+            child: const Text(
+              'สมัครสมาชิก',
+              style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
             ),
           ),
           backgroundColor: Colors.white,

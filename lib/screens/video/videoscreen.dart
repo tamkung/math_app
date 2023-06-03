@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:flutter/services.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:http/http.dart' as http;
 
@@ -30,7 +31,13 @@ class _VideoScreenState extends State<VideoScreen> {
   bool chk = false;
   dynamic user_id;
   GetStorage box = GetStorage();
-  YoutubePlayerController? _controller;
+  String? videoId;
+
+  late YoutubePlayerController _controller;
+  late PlayerState _playerState;
+  late YoutubeMetaData _videoMetaData;
+  bool _muted = false;
+  bool _isPlayerReady = false;
 
   Future<void> getScore() async {
     user_id = box.read('u_id');
@@ -60,20 +67,79 @@ class _VideoScreenState extends State<VideoScreen> {
   void initState() {
     super.initState();
     getScore();
-    String? videoId = YoutubePlayer.convertUrlToId(widget.video_url);
+    videoId = YoutubePlayer.convertUrlToId(widget.video_url);
     _controller = YoutubePlayerController(
       initialVideoId: videoId.toString(),
       flags: const YoutubePlayerFlags(
-        autoPlay: true,
-        mute: true,
+        mute: false,
+        autoPlay: false,
+        disableDragSeek: false,
+        loop: false,
         isLive: false,
+        forceHD: false,
+        enableCaption: true,
       ),
-    );
+    )..addListener(listener);
+    _videoMetaData = const YoutubeMetaData();
+    _playerState = PlayerState.unknown;
+  }
+
+  void listener() {
+    if (_isPlayerReady && mounted && !_controller.value.isFullScreen) {
+      setState(() {
+        _playerState = _controller.value.playerState;
+        _videoMetaData = _controller.metadata;
+      });
+    }
+  }
+
+  @override
+  void deactivate() {
+    // Pauses video while navigating to next page.
+    _controller.pause();
+    super.deactivate();
+  }
+
+  @override
+  void dispose() {
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+    ]);
+    _controller.dispose();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
+    return WillPopScope(
+      onWillPop: () async {
+        Navigator.pop(context);
+        return true;
+      },
+      child: OrientationBuilder(
+          builder: (BuildContext context, Orientation orientation) {
+        if (orientation == Orientation.portrait) {
+          return newScaffold(size);
+        } else {
+          return Container(
+            color: Colors.black,
+            child: Align(
+              alignment: Alignment.center,
+              child: FittedBox(
+                fit: BoxFit.contain,
+                child: YoutubePlayer(
+                  controller: _controller,
+                ),
+              ),
+            ),
+          );
+        }
+      }),
+    );
+  }
+
+  Widget newScaffold(size) {
     return Scaffold(
       endDrawer: const NavDrawer(),
       appBar: AppBar(
@@ -120,7 +186,7 @@ class _VideoScreenState extends State<VideoScreen> {
                   Positioned(
                     left: 0,
                     child: Container(
-                      height: size.height * 0.222,
+                      height: size.height * 0.234,
                       width: size.width * 0.93,
                       decoration: const BoxDecoration(
                         shape: BoxShape.rectangle,
@@ -243,32 +309,24 @@ class _VideoScreenState extends State<VideoScreen> {
                                 Icons.play_circle_filled,
                                 color: Colors.red,
                               ),
-                              Text(widget.video_title)
+                              widthBox(size.width * 0.02),
+                              Text(widget.video_title),
                             ],
                           ),
                           heightBox(10),
                           YoutubePlayerBuilder(
                             player: YoutubePlayer(
-                              controller: _controller!,
+                              controller: _controller,
                               showVideoProgressIndicator: true,
-                              progressIndicatorColor: Colors.red,
-                              progressColors: const ProgressBarColors(
-                                playedColor: Colors.red,
-                                handleColor: Colors.redAccent,
-                              ),
-                              bottomActions: [
-                                CurrentPosition(),
-                                ProgressBar(isExpanded: true),
-                                RemainingDuration(),
-                                FullScreenButton(),
-                              ],
+                              progressIndicatorColor: Colors.blueAccent,
+                              // onReady: () {
+                              //   _isPlayerReady = true;
+                              // },
                             ),
                             builder: (context, player) {
                               return Column(
                                 children: [
-                                  // some widgets
                                   player,
-                                  //some other widgets
                                 ],
                               );
                             },

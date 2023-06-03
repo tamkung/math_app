@@ -18,7 +18,6 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   List _items = [];
-  List _items2 = [];
   final List _image = [
     'assets/images/menu1.png',
     'assets/images/menu2.png',
@@ -47,8 +46,6 @@ class _HomeScreenState extends State<HomeScreen> {
       _items = data;
     });
     chk = true;
-    print(_items);
-    print(u_id);
   }
 
   @override
@@ -78,7 +75,7 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
           flexibleSpace: Padding(
             padding: const EdgeInsets.only(
-              top: 40,
+              top: 15,
               left: 30,
             ),
             child: Column(
@@ -99,7 +96,7 @@ class _HomeScreenState extends State<HomeScreen> {
               right: 0,
               top: 0,
               child: Container(
-                color: Color.fromARGB(255, 255, 255, 255),
+                color: Colors.white,
                 width: 100,
                 height: 100,
               ),
@@ -121,7 +118,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 alignment: Alignment.center,
                 child: chk
                     ? Padding(
-                        padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
+                        padding: const EdgeInsets.all(10),
                         child: ListView.builder(
                           itemCount: _items.length,
                           itemBuilder: (context, index) {
@@ -175,12 +172,11 @@ Widget menuContainer(title, image, section_id, course_id, context) {
       );
     },
     child: Container(
-      padding: EdgeInsets.all(10),
+      padding: const EdgeInsets.all(10),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(20),
         color: Colors.white,
       ),
-      //color: Colors.blue,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         mainAxisSize: MainAxisSize.max,
@@ -188,10 +184,9 @@ Widget menuContainer(title, image, section_id, course_id, context) {
           Expanded(
             flex: 2,
             child: Container(
-              padding: EdgeInsets.all(10),
+              padding: const EdgeInsets.all(10),
               alignment: Alignment.centerLeft,
               height: 80,
-              //color: Colors.red,
               child: Text(
                 title,
                 style: const TextStyle(
@@ -204,7 +199,7 @@ Widget menuContainer(title, image, section_id, course_id, context) {
           ),
           Expanded(
             flex: 1,
-            child: Container(
+            child: SizedBox(
               height: 80,
               //color: Colors.green,
               child: Image.asset(

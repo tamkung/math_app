@@ -64,43 +64,40 @@ class _GameProgressScreenState extends State<GameProgressScreen> {
     var size = MediaQuery.of(context).size;
     return Scaffold(
       backgroundColor: pColor,
-      endDrawer: NavDrawer(),
+      endDrawer: const NavDrawer(),
       appBar: PreferredSize(
-        preferredSize: Size.fromHeight(size.height * 0.2),
+        preferredSize: Size.fromHeight(size.height * 0.21),
         child: AppBar(
-          flexibleSpace: Padding(
-            padding: const EdgeInsets.only(top: 20),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(
-                    top: 4,
-                    left: 20,
-                    right: 25,
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      const Padding(
-                        padding: EdgeInsets.only(top: 30, left: 20),
-                        child: Text(
-                          'ผลคะแนน',
-                          style: TextStyle(fontSize: 32),
-                        ),
-                      ),
-                      widthBox(size.width * 0.02),
-                      Image.asset(
-                        'assets/images/score-progress.png',
-                        width: size.width * 0.40,
-                        height: size.height * 0.2,
-                      ),
-                    ],
-                  ),
+          flexibleSpace: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(
+                  top: 4,
+                  left: 20,
+                  right: 25,
                 ),
-              ],
-            ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const Padding(
+                      padding: EdgeInsets.only(top: 30, left: 20),
+                      child: Text(
+                        'ผลคะแนน',
+                        style: TextStyle(fontSize: 32),
+                      ),
+                    ),
+                    widthBox(size.width * 0.02),
+                    Image.asset(
+                      'assets/images/score-progress.png',
+                      width: size.width * 0.40,
+                      height: size.height * 0.2,
+                    ),
+                  ],
+                ),
+              ),
+            ],
           ),
           backgroundColor: Colors.white,
           foregroundColor: Colors.black,
@@ -143,7 +140,7 @@ class _GameProgressScreenState extends State<GameProgressScreen> {
               right: 0,
               top: 0,
               child: Container(
-                color: Color.fromARGB(255, 255, 255, 255),
+                color: Colors.white,
                 width: 100,
                 height: 100,
               ),
@@ -162,7 +159,7 @@ class _GameProgressScreenState extends State<GameProgressScreen> {
                 alignment: Alignment.center,
                 child: chk
                     ? Padding(
-                        padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
+                        padding: const EdgeInsets.all(10),
                         child: ListView.builder(
                           itemCount: _items.length,
                           itemBuilder: (context, index) {
@@ -192,7 +189,7 @@ Widget menuProgressContainer(title, image, section_id, course_id, context) {
     alignment: Alignment.centerRight,
     children: [
       Container(
-        margin: EdgeInsets.only(right: 50),
+        margin: const EdgeInsets.only(right: 50),
         padding: const EdgeInsets.only(
           left: 10,
           right: 20,
@@ -230,7 +227,7 @@ Widget menuProgressContainer(title, image, section_id, course_id, context) {
         ),
       ),
       Padding(
-        padding: EdgeInsets.only(top: 5, bottom: 5),
+        padding: const EdgeInsets.only(top: 5, bottom: 5),
         child: Container(
           width: 98,
           height: 98,

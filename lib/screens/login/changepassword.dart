@@ -1,11 +1,8 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:http/http.dart' as http;
 import 'package:get_storage/get_storage.dart';
-import 'package:math_app/widget/navdrawer.dart';
 import 'package:math_app/config/constant.dart';
 
 class Changepassword extends StatefulWidget {
@@ -40,12 +37,12 @@ class _ChangepasswordState extends State<Changepassword> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: PreferredSize(
-        preferredSize: Size.fromHeight(size.height * 0.10),
+        preferredSize: Size.fromHeight(size.height * 0.1),
         child: AppBar(
           centerTitle: true,
           flexibleSpace: const Center(
             child: Padding(
-              padding: EdgeInsets.only(top: 30),
+              padding: EdgeInsets.only(top: 15),
               child: Text(
                 'เปลี่ยนรหัสผ่าน',
                 style: TextStyle(fontSize: 36),

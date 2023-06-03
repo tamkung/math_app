@@ -64,8 +64,6 @@ class MyApp extends StatelessWidget {
         'LessonProgress': (context) => LessonProgressScreen(),
         'Games': (context) => GameScreen(),
         'GameProgress': (context) => GameProgressScreen(),
-        //'Learn1': (context) => Learn1(),
-        //'Video': (context) => VideoScreen(),
         'Gametest': (context) => Game(
               title: '',
             ),

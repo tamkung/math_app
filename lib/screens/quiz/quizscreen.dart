@@ -68,11 +68,11 @@ class _QuizScreenState extends State<QuizScreen> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: PreferredSize(
-        preferredSize: Size.fromHeight(size.height * 0.1),
+        preferredSize: Size.fromHeight(size.height * 0.12),
         child: AppBar(
           centerTitle: true,
           flexibleSpace: Container(
-            padding: const EdgeInsets.only(top: 25),
+            padding: const EdgeInsets.only(top: 15),
             margin: const EdgeInsets.only(left: 60, right: 60),
             alignment: Alignment.center,
             child: Text(
@@ -122,45 +122,42 @@ class _QuizScreenState extends State<QuizScreen> {
                       children: [
                         _items.length <= 1
                             ? Container()
-                            : Container(
-                                //color: Colors.amber,
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: [
-                                    DotStepper(
-                                      dotCount: _items.length,
-                                      dotRadius: 15,
-                                      activeStep: activeStep,
-                                      shape: Shape.pipe,
-                                      spacing: 10,
-                                      indicator: Indicator.slide,
-                                      onDotTapped: (tappedDotIndex) {
-                                        setState(() {
-                                          activeStep = tappedDotIndex;
-                                        });
-                                      },
-                                      fixedDotDecoration:
-                                          const FixedDotDecoration(
-                                        color: Colors.black,
-                                      ),
-                                      indicatorDecoration:
-                                          const IndicatorDecoration(
-                                              color: pColor),
-                                      lineConnectorDecoration:
-                                          const LineConnectorDecoration(
-                                        color: Colors.black,
-                                        strokeWidth: 0,
-                                      ),
+                            : Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  DotStepper(
+                                    dotCount: _items.length,
+                                    dotRadius: 15,
+                                    activeStep: activeStep,
+                                    shape: Shape.pipe,
+                                    spacing: 10,
+                                    indicator: Indicator.slide,
+                                    onDotTapped: (tappedDotIndex) {
+                                      setState(() {
+                                        activeStep = tappedDotIndex;
+                                      });
+                                    },
+                                    fixedDotDecoration:
+                                        const FixedDotDecoration(
+                                      color: Colors.black,
                                     ),
-                                    Text(
-                                      "${activeStep + 1}/${_items.length}",
-                                      style: const TextStyle(
-                                        fontSize: 12,
-                                      ),
+                                    indicatorDecoration:
+                                        const IndicatorDecoration(
+                                            color: pColor),
+                                    lineConnectorDecoration:
+                                        const LineConnectorDecoration(
+                                      color: Colors.black,
+                                      strokeWidth: 0,
                                     ),
-                                  ],
-                                ),
+                                  ),
+                                  Text(
+                                    "${activeStep + 1}/${_items.length}",
+                                    style: const TextStyle(
+                                      fontSize: 12,
+                                    ),
+                                  ),
+                                ],
                               ),
                         Column(
                           children: List.generate(1, (index) {

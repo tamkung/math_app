@@ -57,43 +57,40 @@ class _GameScreenState extends State<GameScreen> {
     var size = MediaQuery.of(context).size;
     return Scaffold(
       backgroundColor: pColor,
-      endDrawer: NavDrawer(),
+      endDrawer: const NavDrawer(),
       appBar: PreferredSize(
-        preferredSize: Size.fromHeight(size.height * 0.2),
+        preferredSize: Size.fromHeight(size.height * 0.21),
         child: AppBar(
-          flexibleSpace: Padding(
-            padding: const EdgeInsets.only(top: 20),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(
-                    top: 4,
-                    left: 20,
-                    right: 25,
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      const Padding(
-                        padding: EdgeInsets.only(top: 30, left: 20),
-                        child: Text(
-                          'เกม',
-                          style: TextStyle(fontSize: 32),
-                        ),
-                      ),
-                      widthBox(size.width * 0.02),
-                      Image.asset(
-                        'assets/images/score-progress.png',
-                        width: size.width * 0.40,
-                        height: size.height * 0.2,
-                      ),
-                    ],
-                  ),
+          flexibleSpace: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(
+                  top: 4,
+                  left: 20,
+                  right: 25,
                 ),
-              ],
-            ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const Padding(
+                      padding: EdgeInsets.only(top: 30, left: 30),
+                      child: Text(
+                        'เกม',
+                        style: TextStyle(fontSize: 32),
+                      ),
+                    ),
+                    widthBox(size.width * 0.02),
+                    Image.asset(
+                      'assets/images/score-progress.png',
+                      width: size.width * 0.40,
+                      height: size.height * 0.2,
+                    ),
+                  ],
+                ),
+              ),
+            ],
           ),
           backgroundColor: Colors.white,
           foregroundColor: Colors.black,
@@ -185,7 +182,7 @@ Widget menuProgressContainer(title, section_id, course_id, context) {
     alignment: Alignment.centerRight,
     children: [
       Container(
-        margin: EdgeInsets.only(right: 50),
+        margin: const EdgeInsets.only(right: 50),
         padding: const EdgeInsets.only(
           left: 10,
           right: 20,
@@ -204,7 +201,7 @@ Widget menuProgressContainer(title, section_id, course_id, context) {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Container(
-                  padding: EdgeInsets.all(10),
+                  padding: const EdgeInsets.all(10),
                   alignment: Alignment.centerLeft,
                   height: 65,
                   width: 250,

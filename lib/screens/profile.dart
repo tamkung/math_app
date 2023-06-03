@@ -35,12 +35,12 @@ class _ProfileState extends State<Profile> {
     return Scaffold(
       backgroundColor: pColor,
       appBar: PreferredSize(
-        preferredSize: Size.fromHeight(size.height * 0.11),
+        preferredSize: Size.fromHeight(size.height * 0.12),
         child: AppBar(
           centerTitle: true,
           flexibleSpace: const Center(
             child: Padding(
-              padding: EdgeInsets.only(top: 30),
+              padding: EdgeInsets.only(top: 15),
               child: Text(
                 'ประวัติ',
                 style: TextStyle(fontSize: 38),

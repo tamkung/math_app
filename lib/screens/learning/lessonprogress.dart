@@ -48,7 +48,6 @@ class _LessonProgressScreenState extends State<LessonProgressScreen> {
       _items = data;
     });
     chk = true;
-    print(data);
   }
 
   @override
@@ -62,43 +61,40 @@ class _LessonProgressScreenState extends State<LessonProgressScreen> {
     var size = MediaQuery.of(context).size;
     return Scaffold(
       backgroundColor: pColor,
-      endDrawer: NavDrawer(),
+      endDrawer: const NavDrawer(),
       appBar: PreferredSize(
-        preferredSize: Size.fromHeight(size.height * 0.2),
+        preferredSize: Size.fromHeight(size.height * 0.21),
         child: AppBar(
-          flexibleSpace: Padding(
-            padding: const EdgeInsets.only(top: 20),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(
-                    top: 4,
-                    left: 20,
-                    right: 25,
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      const Padding(
-                        padding: EdgeInsets.only(top: 30, left: 20),
-                        child: Text(
-                          'ผลทดสอบ',
-                          style: TextStyle(fontSize: 32),
-                        ),
-                      ),
-                      widthBox(size.width * 0.02),
-                      Image.asset(
-                        'assets/images/score-progress.png',
-                        width: size.width * 0.40,
-                        height: size.height * 0.2,
-                      ),
-                    ],
-                  ),
+          flexibleSpace: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(
+                  top: 4,
+                  left: 20,
+                  right: 25,
                 ),
-              ],
-            ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const Padding(
+                      padding: EdgeInsets.only(top: 30, left: 20),
+                      child: Text(
+                        'ผลทดสอบ',
+                        style: TextStyle(fontSize: 32),
+                      ),
+                    ),
+                    widthBox(size.width * 0.02),
+                    Image.asset(
+                      'assets/images/score-progress.png',
+                      width: size.width * 0.40,
+                      height: size.height * 0.2,
+                    ),
+                  ],
+                ),
+              ),
+            ],
           ),
           backgroundColor: Colors.white,
           foregroundColor: Colors.black,
@@ -232,7 +228,7 @@ Widget menuProgressContainer(title, percent, context) {
                   width: 230,
                   child: LinearProgressIndicator(
                     backgroundColor: Colors.white,
-                    valueColor: AlwaysStoppedAnimation<Color>(pColor),
+                    valueColor: const AlwaysStoppedAnimation<Color>(pColor),
                     value: double.parse(percent) / 100,
                     minHeight: 6,
                   ),

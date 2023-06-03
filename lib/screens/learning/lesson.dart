@@ -125,11 +125,11 @@ class _LessonScreenState extends State<LessonScreen> {
                 Positioned(
                   left: 0,
                   child: Container(
-                    height: size.height * 0.222,
+                    height: size.height * 0.234,
                     width: size.width * 0.93,
                     decoration: const BoxDecoration(
                       shape: BoxShape.rectangle,
-                      color: Color.fromARGB(255, 255, 255, 255),
+                      color: Colors.white,
                       borderRadius: BorderRadius.only(
                         bottomRight: Radius.circular(30),
                       ),
@@ -245,15 +245,6 @@ class _LessonScreenState extends State<LessonScreen> {
                                   txt_section_id = _items[index]['section_id'];
                                   video_url = _items[index]['video_url'];
 
-                                  // List percent = [];
-                                  // _percent.forEach((element) {
-                                  //   //print(element['quiz_id']);
-                                  //   if (element['quiz_id'] ==
-                                  //       _items[index]['id']) {
-                                  //     percent.add(element['percent_score']);
-                                  //     // print(percent);
-                                  //   }
-                                  // });
                                   dynamic percent = 0;
                                   _percent.forEach((element) {
                                     //print(element['quiz_id']);
@@ -298,13 +289,6 @@ class _LessonScreenState extends State<LessonScreen> {
           ),
         ),
         child: ListTile(
-          // shape: const RoundedRectangleBorder(
-          //   borderRadius: BorderRadius.only(
-          //     bottomLeft: Radius.circular(20),
-          //     bottomRight: Radius.circular(20),
-          //     topLeft: Radius.circular(20),
-          //   ),
-          // ),
           leading: const Icon(Icons.play_circle_outline),
           title: Text(title),
           trailing: Text("$progress %"),
