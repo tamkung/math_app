@@ -5,7 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:math_app/screens/game/gameprogress.dart';
 import 'package:math_app/screens/game/gamescreen.dart';
 import 'package:math_app/screens/learning/lessonprogress.dart';
-import 'package:math_app/screens/login/changepassword.dart';
+import 'package:math_app/screens/login/Changepassword.dart';
 import 'package:math_app/screens/index.dart';
 import 'package:math_app/screens/learning/lesson.dart';
 import 'package:math_app/screens/login/forgotpassword.dart';
@@ -59,7 +59,7 @@ class MyApp extends StatelessWidget {
         'Register': (context) => RegisterScreen(),
         'Home': (context) => HomeScreen(),
         'Profile': (context) => Profile(),
-        'ChangePassword': (context) => Changepassword(),
+        'ChangePassword': (context) => ChangePassword(),
         'ForgotPassword': (context) => ForgotPassword(),
         'LessonProgress': (context) => LessonProgressScreen(),
         'Games': (context) => GameScreen(),
