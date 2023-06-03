@@ -9,6 +9,7 @@ import 'package:math_app/config/constant.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
 import '../../widget/navdrawer.dart';
+import '../home.dart';
 
 class GameProgressScreen extends StatefulWidget {
   const GameProgressScreen({super.key});
@@ -114,7 +115,13 @@ class _GameProgressScreenState extends State<GameProgressScreen> {
                   color: pColor,
                 ),
                 onPressed: () {
-                  Navigator.pop(context);
+                  Navigator.pushAndRemoveUntil(
+                    context,
+                    MaterialPageRoute(
+                      builder: (BuildContext context) => const HomeScreen(),
+                    ),
+                    ModalRoute.withName('Home'),
+                  );
                 },
               );
             },

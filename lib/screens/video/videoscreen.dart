@@ -4,8 +4,6 @@ import 'package:get_storage/get_storage.dart';
 import 'package:http/http.dart' as http;
 
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:math_app/screens/quiz/quizscreen.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
@@ -32,6 +30,7 @@ class _VideoScreenState extends State<VideoScreen> {
   bool chk = false;
   dynamic user_id;
   GetStorage box = GetStorage();
+  YoutubePlayerController? _controller;
 
   Future<void> getScore() async {
     user_id = box.read('u_id');
@@ -43,7 +42,6 @@ class _VideoScreenState extends State<VideoScreen> {
         }),
         headers: {"Content-type": "application/json"});
     final data = await json.decode(utf8.decode(response.bodyBytes));
-    print(data.length);
     if (data.length > 0) {
       setState(() {
         score = data[0]['score'].toString();
@@ -62,24 +60,22 @@ class _VideoScreenState extends State<VideoScreen> {
   void initState() {
     super.initState();
     getScore();
+    String? videoId = YoutubePlayer.convertUrlToId(widget.video_url);
+    _controller = YoutubePlayerController(
+      initialVideoId: videoId.toString(),
+      flags: const YoutubePlayerFlags(
+        autoPlay: true,
+        mute: true,
+        isLive: false,
+      ),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
-    String? videoId = YoutubePlayer.convertUrlToId(widget.video_url);
-    print(videoId);
-    print(widget.quiz_id);
-
-    final YoutubePlayerController _controller = YoutubePlayerController(
-      initialVideoId: videoId.toString(),
-      flags: const YoutubePlayerFlags(
-        autoPlay: true,
-        mute: false,
-      ),
-    );
     var size = MediaQuery.of(context).size;
     return Scaffold(
-      endDrawer: NavDrawer(),
+      endDrawer: const NavDrawer(),
       appBar: AppBar(
         backgroundColor: Colors.white,
         foregroundColor: Colors.black,
@@ -251,9 +247,31 @@ class _VideoScreenState extends State<VideoScreen> {
                             ],
                           ),
                           heightBox(10),
-                          YoutubePlayer(
-                            controller: _controller,
-                            liveUIColor: Colors.amber,
+                          YoutubePlayerBuilder(
+                            player: YoutubePlayer(
+                              controller: _controller!,
+                              showVideoProgressIndicator: true,
+                              progressIndicatorColor: Colors.red,
+                              progressColors: const ProgressBarColors(
+                                playedColor: Colors.red,
+                                handleColor: Colors.redAccent,
+                              ),
+                              bottomActions: [
+                                CurrentPosition(),
+                                ProgressBar(isExpanded: true),
+                                RemainingDuration(),
+                                FullScreenButton(),
+                              ],
+                            ),
+                            builder: (context, player) {
+                              return Column(
+                                children: [
+                                  // some widgets
+                                  player,
+                                  //some other widgets
+                                ],
+                              );
+                            },
                           ),
                         ],
                       ),

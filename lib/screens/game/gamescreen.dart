@@ -9,6 +9,7 @@ import 'package:math_app/config/constant.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
 import '../../widget/navdrawer.dart';
+import '../home.dart';
 
 class GameScreen extends StatefulWidget {
   const GameScreen({super.key});
@@ -20,13 +21,6 @@ class GameScreen extends StatefulWidget {
 class _GameScreenState extends State<GameScreen> {
   List _items = [];
   List _items2 = [];
-  List _image = [
-    'assets/images/menu1.png',
-    'assets/images/menu2.png',
-    'assets/images/menu3.png',
-    'assets/images/menu4.png',
-    'assets/images/menu5.png'
-  ];
   bool chk = false;
   dynamic txt_id, txt_title, txt_course_id, txt_order;
   GetStorage box = GetStorage();
@@ -101,7 +95,7 @@ class _GameScreenState extends State<GameScreen> {
               ],
             ),
           ),
-          backgroundColor: Color.fromARGB(255, 255, 255, 255),
+          backgroundColor: Colors.white,
           foregroundColor: Colors.black,
           elevation: 0,
           automaticallyImplyLeading: true,
@@ -114,7 +108,13 @@ class _GameScreenState extends State<GameScreen> {
                   color: pColor,
                 ),
                 onPressed: () {
-                  Navigator.pop(context);
+                  Navigator.pushAndRemoveUntil(
+                    context,
+                    MaterialPageRoute(
+                      builder: (BuildContext context) => const HomeScreen(),
+                    ),
+                    ModalRoute.withName('Home'),
+                  );
                 },
               );
             },
@@ -136,7 +136,7 @@ class _GameScreenState extends State<GameScreen> {
               right: 0,
               top: 0,
               child: Container(
-                color: Color.fromARGB(255, 255, 255, 255),
+                color: Colors.white,
                 width: 100,
                 height: 100,
               ),
@@ -163,8 +163,8 @@ class _GameScreenState extends State<GameScreen> {
                             txt_title = _items[index]["title"];
                             txt_course_id = _items[index]['course_id'];
                             txt_order = _items[index]['order'];
-                            return menuProgressContainer(txt_title,
-                                _image[index], txt_id, txt_course_id, context);
+                            return menuProgressContainer(
+                                txt_title, txt_id, txt_course_id, context);
                           },
                         ),
                       )
@@ -180,7 +180,7 @@ class _GameScreenState extends State<GameScreen> {
   }
 }
 
-Widget menuProgressContainer(title, image, section_id, course_id, context) {
+Widget menuProgressContainer(title, section_id, course_id, context) {
   return Stack(
     alignment: Alignment.centerRight,
     children: [

@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:ffi';
 
 import 'package:get_storage/get_storage.dart';
 import 'package:http/http.dart' as http;
@@ -32,7 +31,7 @@ class _LessonScreenState extends State<LessonScreen> {
   dynamic user_id;
   dynamic txt_id, txt_title, txt_course_id, txt_section_id, video_url;
 
-  dynamic percent = 0;
+  //dynamic percent = 0;
 
   Future<void> getSection() async {
     user_id = box.read('u_id');
@@ -67,6 +66,9 @@ class _LessonScreenState extends State<LessonScreen> {
     setState(() {
       _percent = data;
     });
+    // print(_percent.length);
+    // print(_percent);
+    // print(_items);
   }
 
   @override
@@ -243,10 +245,22 @@ class _LessonScreenState extends State<LessonScreen> {
                                   txt_section_id = _items[index]['section_id'];
                                   video_url = _items[index]['video_url'];
 
+                                  // List percent = [];
+                                  // _percent.forEach((element) {
+                                  //   //print(element['quiz_id']);
+                                  //   if (element['quiz_id'] ==
+                                  //       _items[index]['id']) {
+                                  //     percent.add(element['percent_score']);
+                                  //     // print(percent);
+                                  //   }
+                                  // });
+                                  dynamic percent = 0;
                                   _percent.forEach((element) {
+                                    //print(element['quiz_id']);
                                     if (element['quiz_id'] ==
                                         _items[index]['id']) {
                                       percent = element['percent_score'];
+                                      // print(percent);
                                     }
                                   });
 
@@ -260,7 +274,9 @@ class _LessonScreenState extends State<LessonScreen> {
                               ),
                       )
                     : const Center(
-                        child: Text("Loading"),
+                        child: CircularProgressIndicator(
+                          color: Colors.white,
+                        ),
                       ),
               ),
             ),

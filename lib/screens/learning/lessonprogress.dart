@@ -6,6 +6,7 @@ import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:math_app/config/constant.dart';
+import 'package:math_app/screens/home.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
 import '../../widget/navdrawer.dart';
@@ -19,7 +20,7 @@ class LessonProgressScreen extends StatefulWidget {
 
 class _LessonProgressScreenState extends State<LessonProgressScreen> {
   List _items = [];
-  List _image = [
+  final List _image = [
     'assets/images/menu1.png',
     'assets/images/menu2.png',
     'assets/images/menu3.png',
@@ -112,7 +113,13 @@ class _LessonProgressScreenState extends State<LessonProgressScreen> {
                   color: pColor,
                 ),
                 onPressed: () {
-                  Navigator.pop(context);
+                  Navigator.pushAndRemoveUntil(
+                    context,
+                    MaterialPageRoute(
+                      builder: (BuildContext context) => const HomeScreen(),
+                    ),
+                    ModalRoute.withName('Home'),
+                  );
                 },
               );
             },
@@ -170,7 +177,9 @@ class _LessonProgressScreenState extends State<LessonProgressScreen> {
                         ),
                       )
                     : const Center(
-                        child: Text("Loading"),
+                        child: CircularProgressIndicator(
+                          color: Colors.white,
+                        ),
                       ),
               ),
             ),

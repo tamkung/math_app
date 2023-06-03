@@ -135,7 +135,9 @@ class _HomeScreenState extends State<HomeScreen> {
                         ),
                       )
                     : const Center(
-                        child: Text("Loading"),
+                        child: CircularProgressIndicator(
+                          color: Colors.white,
+                        ),
                       ),
               ),
             ),

@@ -3,6 +3,9 @@
 import 'package:flutter/material.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:math_app/config/constant.dart';
+import 'package:math_app/screens/game/gameprogress.dart';
+import 'package:math_app/screens/game/gamescreen.dart';
+import 'package:math_app/screens/learning/lessonprogress.dart';
 import 'package:math_app/screens/login/login.dart';
 
 import '../screens/home.dart';
@@ -50,19 +53,25 @@ class NavDrawer extends StatelessWidget {
               ListTile(
                   title: txt('บทเรียน'),
                   onTap: () {
-                    Navigator.pop(context);
                     Navigator.pushAndRemoveUntil(
-                        context,
-                        MaterialPageRoute(
-                            builder: (BuildContext context) =>
-                                const HomeScreen()),
-                        ModalRoute.withName('Home'));
+                      context,
+                      MaterialPageRoute(
+                        builder: (BuildContext context) => const HomeScreen(),
+                      ),
+                      ModalRoute.withName('Home'),
+                    );
                   }),
               ListTile(
                 title: txt('ผลทดสอบ'),
                 onTap: () {
-                  Navigator.pop(context);
-                  Navigator.pushNamed(context, 'LessonProgress');
+                  Navigator.pushAndRemoveUntil(
+                    context,
+                    MaterialPageRoute(
+                      builder: (BuildContext context) =>
+                          const LessonProgressScreen(),
+                    ),
+                    ModalRoute.withName('LessonProgress'),
+                  );
                 },
               ),
             ],
@@ -94,15 +103,26 @@ class NavDrawer extends StatelessWidget {
               ListTile(
                 title: txt('เล่นเกม'),
                 onTap: () {
-                  Navigator.pop(context);
-                  Navigator.pushNamed(context, 'Games');
+                  Navigator.pushAndRemoveUntil(
+                    context,
+                    MaterialPageRoute(
+                      builder: (BuildContext context) => const GameScreen(),
+                    ),
+                    ModalRoute.withName('Games'),
+                  );
                 },
               ),
               ListTile(
                 title: txt('ผลคะแนน'),
                 onTap: () {
-                  Navigator.pop(context);
-                  Navigator.pushNamed(context, 'GameProgress');
+                  Navigator.pushAndRemoveUntil(
+                    context,
+                    MaterialPageRoute(
+                      builder: (BuildContext context) =>
+                          const GameProgressScreen(),
+                    ),
+                    ModalRoute.withName('GameProgress'),
+                  );
                 },
               ),
             ],
