@@ -1,5 +1,8 @@
 import 'dart:convert';
 
+import 'package:flutter_html/flutter_html.dart';
+import 'package:html/parser.dart' as htmlparser;
+import 'package:html/dom.dart' as dom;
 import 'package:get_storage/get_storage.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
@@ -159,123 +162,190 @@ class _QuizScreenState extends State<QuizScreen> {
                                   ),
                                 ],
                               ),
-                        Column(
-                          children: List.generate(1, (index) {
-                            txt_id = _items[activeStep]["id"];
-                            txt_title = _items[activeStep]["title"];
-                            options = _items[activeStep]["options"];
-                            answers = jsonDecode(
-                                _items[activeStep]["correct_answers"]);
+                        Expanded(
+                          flex: 4,
+                          child: SingleChildScrollView(
+                            child: Container(
+                              width: size.width,
+                              child: Column(
+                                children: [
+                                  Column(
+                                    children: List.generate(1, (index) {
+                                      txt_id = _items[activeStep]["id"];
+                                      txt_title = _items[activeStep]["title"];
+                                      options = _items[activeStep]["options"];
+                                      answers = jsonDecode(_items[activeStep]
+                                          ["correct_answers"]);
 
-                            List opList = jsonDecode(options);
+                                      List opList = jsonDecode(options);
+                                      String htmlData = txt_title;
+                                      dom.Document document =
+                                          htmlparser.parse(htmlData);
+                                      String htmlData2 = document.body!.text;
+                                      dom.Document document2 =
+                                          htmlparser.parse(htmlData2);
 
-                            List<bool> isChk = isSeleted[0][activeStep + 1];
+                                      List<bool> isChk =
+                                          isSeleted[0][activeStep + 1];
 
-                            return Column(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Padding(
-                                  padding: const EdgeInsets.only(
-                                    left: 20,
-                                    top: 20,
-                                  ),
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        "โจทย์ข้อที่ ${activeStep + 1}",
-                                        style: const TextStyle(
-                                          fontSize: 18,
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                      ),
-                                      heightBox(10),
-                                      Text(txt_title,
-                                          style: const TextStyle(fontSize: 16)),
-                                    ],
-                                  ),
-                                ),
-                                heightBox(20),
-                                Column(
-                                  children: [
-                                    Padding(
-                                      padding: const EdgeInsets.all(20),
-                                      child: Column(
-                                        children: List.generate(opList.length,
-                                            (index) {
-                                          return Card(
-                                            elevation: 3,
-                                            margin: const EdgeInsets.only(
-                                                bottom: 20),
-                                            clipBehavior: Clip.antiAlias,
-                                            shape: RoundedRectangleBorder(
-                                                borderRadius:
-                                                    BorderRadius.circular(10)),
-                                            child: ListTile(
-                                              tileColor: isChk[index]
-                                                  ? Colors.green
-                                                  : pColor,
-                                              textColor: Colors.white,
-                                              title: Text(opList[index]),
-                                              enabled: !isChk[index],
-                                              onTap: () async {
-                                                setState(() {
-                                                  isChk[index] = true;
-                                                });
-                                                for (int i = 0;
-                                                    i < isChk.length;
-                                                    i++) {
-                                                  if (i != index) {
-                                                    isChk[i] = false;
-                                                  }
-                                                }
-                                                print(isChk);
-
-                                                _user_answers.removeWhere(
-                                                    (element) =>
-                                                        element.keys.first ==
-                                                        txt_id);
-                                                _user_answers.add({
-                                                  txt_id: index + 1,
-                                                });
-
-                                                _correct_answers.removeWhere(
-                                                    (element) =>
-                                                        element.keys.first ==
-                                                        txt_id);
-                                                _correct_answers.add({
-                                                  txt_id: answers[0],
-                                                });
-
-                                                if (activeStep <
-                                                    _items.length - 1) {
-                                                  setState(() {
-                                                    activeStep++;
-                                                  });
-                                                } else {
-                                                  submit();
-                                                }
-                                              },
+                                      return Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.start,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Padding(
+                                            padding: const EdgeInsets.only(
+                                              left: 20,
+                                              top: 20,
                                             ),
-                                          );
-                                        }),
-                                      ),
-                                    ),
-                                  ],
-                                )
-                              ],
-                            );
-                          }),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 20),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [previousButton(), nextButton()],
+                                            child: Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                Text(
+                                                  "โจทย์ข้อที่ ${activeStep + 1}",
+                                                  style: const TextStyle(
+                                                    fontSize: 18,
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
+                                                ),
+                                                heightBox(10),
+                                                Html(
+                                                  data:
+                                                      document2.body!.text != ''
+                                                          ? document2.body!.text
+                                                          : document.body!.text,
+                                                  style: {
+                                                    '*': Style(
+                                                      margin: EdgeInsets.zero,
+                                                      fontSize: FontSize(18),
+                                                      color: Color(0xFF000000),
+                                                    ),
+                                                    'span': Style(
+                                                        backgroundColor:
+                                                            Color(0xFFFFFFFF)),
+                                                  },
+                                                ),
+                                                // Text(txt_title,
+                                                //     style: const TextStyle(
+                                                //         fontSize: 16)),
+                                              ],
+                                            ),
+                                          ),
+                                          heightBox(20),
+                                          Column(
+                                            children: [
+                                              Padding(
+                                                padding:
+                                                    const EdgeInsets.all(20),
+                                                child: Column(
+                                                  children: List.generate(
+                                                      opList.length, (index) {
+                                                    return Card(
+                                                      elevation: 3,
+                                                      margin:
+                                                          const EdgeInsets.only(
+                                                              bottom: 20),
+                                                      clipBehavior:
+                                                          Clip.antiAlias,
+                                                      shape:
+                                                          RoundedRectangleBorder(
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                          10)),
+                                                      child: ListTile(
+                                                        tileColor: isChk[index]
+                                                            ? Colors.green
+                                                            : pColor,
+                                                        textColor: Colors.white,
+                                                        title: Html(
+                                                          data: opList[index],
+                                                          style: {
+                                                            '*': Style(
+                                                              margin: EdgeInsets
+                                                                  .zero,
+                                                              fontSize:
+                                                                  FontSize(17),
+                                                              color:
+                                                                  Colors.white,
+                                                            ),
+                                                          },
+                                                        ),
+                                                        enabled: !isChk[index],
+                                                        onTap: () async {
+                                                          setState(() {
+                                                            isChk[index] = true;
+                                                          });
+                                                          for (int i = 0;
+                                                              i < isChk.length;
+                                                              i++) {
+                                                            if (i != index) {
+                                                              isChk[i] = false;
+                                                            }
+                                                          }
+                                                          print(isChk);
+
+                                                          _user_answers
+                                                              .removeWhere(
+                                                                  (element) =>
+                                                                      element
+                                                                          .keys
+                                                                          .first ==
+                                                                      txt_id);
+                                                          _user_answers.add({
+                                                            txt_id: index + 1,
+                                                          });
+
+                                                          _correct_answers
+                                                              .removeWhere(
+                                                                  (element) =>
+                                                                      element
+                                                                          .keys
+                                                                          .first ==
+                                                                      txt_id);
+                                                          _correct_answers.add({
+                                                            txt_id: answers[0],
+                                                          });
+
+                                                          if (activeStep <
+                                                              _items.length -
+                                                                  1) {
+                                                            setState(() {
+                                                              activeStep++;
+                                                            });
+                                                          } else {
+                                                            submit();
+                                                          }
+                                                        },
+                                                      ),
+                                                    );
+                                                  }),
+                                                ),
+                                              ),
+                                            ],
+                                          )
+                                        ],
+                                      );
+                                    }),
+                                  ),
+                                ],
+                              ),
+                            ),
                           ),
                         ),
+                        _items.length > 1
+                            ? Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 20),
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [previousButton(), nextButton()],
+                                ),
+                              )
+                            : Container(),
                         Expanded(
                           child: Align(
                             alignment: Alignment.bottomCenter,
