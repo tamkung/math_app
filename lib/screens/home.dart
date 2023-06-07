@@ -26,7 +26,7 @@ class _HomeScreenState extends State<HomeScreen> {
     'assets/images/menu5.png'
   ];
   bool chk = false;
-  dynamic txt_id, txt_title, txt_course_id, txt_order;
+  dynamic txt_id, txt_title, txt_course_id, txt_order, section_img;
   GetStorage box = GetStorage();
 
   dynamic u_id, firstname, lastname;
@@ -126,8 +126,13 @@ class _HomeScreenState extends State<HomeScreen> {
                             txt_title = _items[index]["title"];
                             txt_course_id = _items[index]['course_id'];
                             txt_order = _items[index]['order'];
+                            section_img =
+                                _items[index]['section_images'] != null
+                                    ? _items[index]['section_images']
+                                    : '';
+
                             return menuContainer(txt_title, _image[index],
-                                txt_id, txt_course_id, context);
+                                section_img, txt_id, txt_course_id, context);
                           },
                         ),
                       )
@@ -156,7 +161,8 @@ Widget txtStyle(String text, double size) {
   );
 }
 
-Widget menuContainer(title, image, section_id, course_id, context) {
+Widget menuContainer(
+    title, image, section_img, section_id, course_id, context) {
   return TextButton(
     onPressed: () {
       Navigator.push(
@@ -167,6 +173,7 @@ Widget menuContainer(title, image, section_id, course_id, context) {
             course_id: course_id.toString(),
             section_id: section_id.toString(),
             image_url: image.toString(),
+            section_img: section_img,
           ),
         ),
       );

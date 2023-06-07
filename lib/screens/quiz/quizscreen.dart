@@ -223,8 +223,9 @@ class _QuizScreenState extends State<QuizScreen> {
                                                       color: Color(0xFF000000),
                                                     ),
                                                     'span': Style(
-                                                        backgroundColor:
-                                                            Color(0xFFFFFFFF)),
+                                                      backgroundColor:
+                                                          Color(0xFFFFFFFF),
+                                                    ),
                                                   },
                                                 ),
                                                 // Text(txt_title,
@@ -242,6 +243,7 @@ class _QuizScreenState extends State<QuizScreen> {
                                                 child: Column(
                                                   children: List.generate(
                                                       opList.length, (index) {
+                                                    print(opList[index]);
                                                     return Card(
                                                       elevation: 3,
                                                       margin:
@@ -262,6 +264,26 @@ class _QuizScreenState extends State<QuizScreen> {
                                                         textColor: Colors.white,
                                                         title: Html(
                                                           data: opList[index],
+                                                          customRender: {
+                                                            "img":
+                                                                (RenderContext
+                                                                        context,
+                                                                    Widget
+                                                                        child) {
+                                                              String imgUrl =
+                                                                  context
+                                                                      .tree
+                                                                      .element!
+                                                                      .attributes[
+                                                                          'src']
+                                                                      .toString();
+                                                              return Image
+                                                                  .network(
+                                                                imgUrl,
+                                                                scale: 2.6,
+                                                              );
+                                                            },
+                                                          },
                                                           style: {
                                                             '*': Style(
                                                               margin: EdgeInsets
@@ -351,8 +373,8 @@ class _QuizScreenState extends State<QuizScreen> {
                             alignment: Alignment.bottomCenter,
                             child: Container(
                               padding: const EdgeInsets.only(
-                                top: 18,
-                                bottom: 18,
+                                top: 25,
+                                bottom: 25,
                                 left: 135,
                                 right: 135,
                               ),
@@ -368,9 +390,9 @@ class _QuizScreenState extends State<QuizScreen> {
                                 style: ButtonStyle(
                                   fixedSize: MaterialStateProperty.all(Size(
                                       size.width * 0.8, size.height * 0.1)),
-                                  padding: MaterialStateProperty.all(
-                                      const EdgeInsets.symmetric(
-                                          horizontal: 30, vertical: 10)),
+                                  // padding: MaterialStateProperty.all(
+                                  //     const EdgeInsets.symmetric(
+                                  //         horizontal: 30, vertical: 10)),
                                   shape: MaterialStateProperty.all(
                                     RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(10.0),

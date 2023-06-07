@@ -10,13 +10,14 @@ import 'package:math_app/screens/video/videoscreen.dart';
 import 'package:math_app/widget/navdrawer.dart';
 
 class LessonScreen extends StatefulWidget {
-  final dynamic title, course_id, section_id, image_url;
+  final dynamic title, course_id, section_id, image_url, section_img;
   const LessonScreen(
       {super.key,
       required this.title,
       this.course_id,
       this.section_id,
-      this.image_url});
+      this.image_url,
+      this.section_img});
 
   @override
   State<LessonScreen> createState() => _LessonScreenState();
@@ -183,7 +184,13 @@ class _LessonScreenState extends State<LessonScreen> {
                   left: 30,
                   child: ElevatedButton(
                     onPressed: () {
-                      showPopUp(context, 'สูตร \n${widget.title}', 'image');
+                      showPopUp(
+                        context,
+                        'สูตร \n${widget.title}',
+                        widget.section_img,
+                        size.width * 0.7,
+                        size.height * 0.5,
+                      );
                     },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: pColor,
@@ -302,6 +309,7 @@ class _LessonScreenState extends State<LessonScreen> {
                   video_url: url.toString(),
                   quiz_id: id.toString(),
                   image_url: widget.image_url.toString(),
+                  section_img: widget.section_img,
                 ),
               ),
             );

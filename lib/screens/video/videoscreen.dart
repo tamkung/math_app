@@ -12,14 +12,15 @@ import '../../config/constant.dart';
 import '../../widget/navdrawer.dart';
 
 class VideoScreen extends StatefulWidget {
-  final dynamic title, video_title, video_url, quiz_id, image_url;
+  final dynamic title, video_title, video_url, quiz_id, image_url, section_img;
   const VideoScreen(
       {super.key,
       required this.title,
       this.video_title,
       this.video_url,
       this.quiz_id,
-      this.image_url});
+      this.image_url,
+      this.section_img});
 
   @override
   State<VideoScreen> createState() => _VideoScreenState();
@@ -244,7 +245,13 @@ class _VideoScreenState extends State<VideoScreen> {
                     left: 30,
                     child: ElevatedButton(
                       onPressed: () {
-                        showPopUp(context, 'สูตร \n${widget.title}', 'image');
+                        showPopUp(
+                          context,
+                          'สูตร \n${widget.title}',
+                          widget.section_img,
+                          size.width * 0.7,
+                          size.height * 0.5,
+                        );
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: pColor,

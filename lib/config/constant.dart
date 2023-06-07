@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
 
 //const API_URL = 'http://192.168.43.23:8080/api/';
@@ -23,7 +25,8 @@ Widget widthBox(double width) {
   );
 }
 
-void showPopUp(BuildContext context, String title, String content) {
+void showPopUp(BuildContext context, String title, String content, double width,
+    double height) {
   showDialog(
     context: context,
     builder: (BuildContext context) {
@@ -35,10 +38,10 @@ void showPopUp(BuildContext context, String title, String content) {
           ),
         ),
         content: Container(
-          width: 250,
-          height: 250,
-          child: Image.asset(
-            "assets/images/$content.png",
+          width: width,
+          height: height,
+          child: Image.network(
+            content,
             fit: BoxFit.fill,
           ),
         ),
@@ -54,4 +57,3 @@ void showPopUp(BuildContext context, String title, String content) {
     },
   );
 }
-
