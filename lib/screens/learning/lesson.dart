@@ -37,6 +37,7 @@ class _LessonScreenState extends State<LessonScreen> {
   Future<void> getSection() async {
     user_id = box.read('u_id');
     var url = Uri.parse('${API_URL}lesson');
+    var url2 = Uri.parse('${API_URL}lesson-question');
     final response = await http.post(url,
         body: jsonEncode(<String, String>{
           'course_id': widget.course_id,
@@ -48,7 +49,15 @@ class _LessonScreenState extends State<LessonScreen> {
       _items = data;
     });
     for (var i = 0; i < _items.length; i++) {
-      _quiz_id.add(_items[i]['id']);
+      final responseQuiz = await http.post(url2,
+          body: jsonEncode(<String, String>{
+            'course_id': widget.course_id,
+            'section_id': widget.section_id,
+            'title': _items[i]['title'],
+          }),
+          headers: {"Content-type": "application/json"});
+      final dataQuiz = await json.decode(utf8.decode(responseQuiz.bodyBytes));
+      _quiz_id.add(dataQuiz[0]['id']);
     }
     chk = true;
     getPercent();
@@ -254,11 +263,8 @@ class _LessonScreenState extends State<LessonScreen> {
 
                                   dynamic percent = 0;
                                   _percent.forEach((element) {
-                                    //print(element['quiz_id']);
-                                    if (element['quiz_id'] ==
-                                        _items[index]['id']) {
+                                    if (element['quiz_id'] == _quiz_id[index]) {
                                       percent = element['percent_score'];
-                                      // print(percent);
                                     }
                                   });
 
@@ -310,6 +316,8 @@ class _LessonScreenState extends State<LessonScreen> {
                   quiz_id: id.toString(),
                   image_url: widget.image_url.toString(),
                   section_img: widget.section_img,
+                  course_id: widget.course_id.toString(),
+                  section_id: widget.section_id.toString(),
                 ),
               ),
             );

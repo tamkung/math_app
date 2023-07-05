@@ -187,7 +187,7 @@ class _QuizScreenState extends State<QuizScreen> {
 
                                       List<bool> isChk =
                                           isSeleted[0][activeStep + 1];
-
+                                      //print(htmlData);
                                       return Column(
                                         mainAxisAlignment:
                                             MainAxisAlignment.start,
@@ -196,7 +196,8 @@ class _QuizScreenState extends State<QuizScreen> {
                                         children: [
                                           Padding(
                                             padding: const EdgeInsets.only(
-                                              left: 20,
+                                              left: 10,
+                                              right: 10,
                                               top: 20,
                                             ),
                                             child: Column(
@@ -243,7 +244,7 @@ class _QuizScreenState extends State<QuizScreen> {
                                                 child: Column(
                                                   children: List.generate(
                                                       opList.length, (index) {
-                                                    print(opList[index]);
+                                                    //print(opList[index]);
                                                     return Card(
                                                       elevation: 3,
                                                       margin:
@@ -277,10 +278,24 @@ class _QuizScreenState extends State<QuizScreen> {
                                                                       .attributes[
                                                                           'src']
                                                                       .toString();
-                                                              return Image
-                                                                  .network(
-                                                                imgUrl,
-                                                                scale: 2.6,
+                                                              //print(imgUrl);
+                                                              return Container(
+                                                                height:
+                                                                    size.height *
+                                                                        0.07,
+                                                                decoration:
+                                                                    BoxDecoration(
+                                                                  image:
+                                                                      DecorationImage(
+                                                                    alignment:
+                                                                        Alignment
+                                                                            .topLeft,
+                                                                    image: NetworkImage(
+                                                                        imgUrl),
+                                                                    fit: BoxFit
+                                                                        .contain,
+                                                                  ),
+                                                                ),
                                                               );
                                                             },
                                                           },
@@ -307,7 +322,7 @@ class _QuizScreenState extends State<QuizScreen> {
                                                               isChk[i] = false;
                                                             }
                                                           }
-                                                          print(isChk);
+                                                          //print(isChk);
 
                                                           _user_answers
                                                               .removeWhere(
@@ -337,8 +352,6 @@ class _QuizScreenState extends State<QuizScreen> {
                                                             setState(() {
                                                               activeStep++;
                                                             });
-                                                          } else {
-                                                            submit();
                                                           }
                                                         },
                                                       ),
@@ -405,14 +418,15 @@ class _QuizScreenState extends State<QuizScreen> {
                                 ),
                                 onPressed: () {
                                   if (_user_answers.length == _items.length) {
+                                    submit();
                                     addQuizResult();
                                     showDialog(
                                       context: context,
                                       builder: (context) {
                                         return AlertDialog(
                                           title: const Text("แจ้งเตือน"),
-                                          content:
-                                              const Text("ส่งคำตอบเรียบร้อย"),
+                                          content: Text(
+                                              "ส่งคำตอบเรียบร้อย\nคะแนน : $score / ${_items.length}"),
                                           actions: [
                                             TextButton(
                                               onPressed: () {
@@ -496,7 +510,7 @@ class _QuizScreenState extends State<QuizScreen> {
       style: ButtonStyle(
         backgroundColor: MaterialStateProperty.all<Color>(pColor),
       ),
-      child: Text('Next'),
+      child: Text('ถัดไป'),
       onPressed: () {
         if (activeStep < _items.length - 1) {
           setState(() {
@@ -512,7 +526,7 @@ class _QuizScreenState extends State<QuizScreen> {
       style: ButtonStyle(
         backgroundColor: MaterialStateProperty.all<Color>(pColor),
       ),
-      child: Text('Prev'),
+      child: Text('ย้อนกลับ'),
       onPressed: () {
         if (activeStep > 0) {
           setState(() {
@@ -543,22 +557,22 @@ class _QuizScreenState extends State<QuizScreen> {
     print(_user_answers);
     print(_correct_answers);
 
-    showDialog(
-      context: context,
-      builder: (context) {
-        return AlertDialog(
-          title: Text("Score"),
-          content: Text("Score : $score / ${_items.length}"),
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.pop(context);
-              },
-              child: Text("OK"),
-            ),
-          ],
-        );
-      },
-    );
+    // showDialog(
+    //   context: context,
+    //   builder: (context) {
+    //     return AlertDialog(
+    //       title: Text("Score"),
+    //       content: Text("Score : $score / ${_items.length}"),
+    //       actions: [
+    //         TextButton(
+    //           onPressed: () {
+    //             Navigator.pop(context);
+    //           },
+    //           child: Text("OK"),
+    //         ),
+    //       ],
+    //     );
+    //   },
+    // );
   }
 }

@@ -24,9 +24,6 @@ class NavDrawer extends StatelessWidget {
         children: <Widget>[
           heightBox(size.height * 0.1),
           ExpansionTile(
-            collapsedBackgroundColor: pColor,
-            collapsedTextColor: Colors.white,
-            collapsedIconColor: Colors.white,
             textColor: pColor,
             iconColor: pColor,
             collapsedShape: RoundedRectangleBorder(
@@ -78,9 +75,6 @@ class NavDrawer extends StatelessWidget {
           ),
           heightBox(size.height * 0.02),
           ExpansionTile(
-            collapsedBackgroundColor: pColor,
-            collapsedTextColor: Colors.white,
-            collapsedIconColor: Colors.white,
             textColor: pColor,
             iconColor: pColor,
             collapsedShape: RoundedRectangleBorder(

@@ -12,7 +12,14 @@ import '../../config/constant.dart';
 import '../../widget/navdrawer.dart';
 
 class VideoScreen extends StatefulWidget {
-  final dynamic title, video_title, video_url, quiz_id, image_url, section_img;
+  final dynamic title,
+      video_title,
+      video_url,
+      quiz_id,
+      image_url,
+      section_img,
+      course_id,
+      section_id;
   const VideoScreen(
       {super.key,
       required this.title,
@@ -20,7 +27,9 @@ class VideoScreen extends StatefulWidget {
       this.video_url,
       this.quiz_id,
       this.image_url,
-      this.section_img});
+      this.section_img,
+      this.course_id,
+      this.section_id});
 
   @override
   State<VideoScreen> createState() => _VideoScreenState();
@@ -39,6 +48,28 @@ class _VideoScreenState extends State<VideoScreen> {
   late YoutubeMetaData _videoMetaData;
   bool _muted = false;
   bool _isPlayerReady = false;
+  String? quiz_id;
+
+  Future<void> getQuestionID() async {
+    user_id = box.read('u_id');
+    var url = Uri.parse('${API_URL}lesson-question');
+    final response = await http.post(url,
+        body: jsonEncode(<String, String>{
+          'course_id': widget.course_id.toString(),
+          'section_id': widget.section_id.toString(),
+          'title': widget.video_title.toString(),
+        }),
+        headers: {"Content-type": "application/json"});
+    final data = await json.decode(utf8.decode(response.bodyBytes));
+
+    if (data.length > 0) {
+      setState(() {
+        quiz_id = data[0]['id'].toString();
+      });
+    }
+    print(quiz_id);
+    getScore();
+  }
 
   Future<void> getScore() async {
     user_id = box.read('u_id');
@@ -46,7 +77,7 @@ class _VideoScreenState extends State<VideoScreen> {
     final response = await http.post(url,
         body: jsonEncode(<String, String>{
           'user_id': user_id.toString(),
-          'quiz_id': widget.quiz_id.toString(),
+          'quiz_id': quiz_id.toString(),
         }),
         headers: {"Content-type": "application/json"});
     final data = await json.decode(utf8.decode(response.bodyBytes));
@@ -67,7 +98,7 @@ class _VideoScreenState extends State<VideoScreen> {
   @override
   void initState() {
     super.initState();
-    getScore();
+    getQuestionID();
     videoId = YoutubePlayer.convertUrlToId(widget.video_url);
     _controller = YoutubePlayerController(
       initialVideoId: videoId.toString(),
@@ -369,7 +400,7 @@ class _VideoScreenState extends State<VideoScreen> {
                           context,
                           MaterialPageRoute(
                             builder: (_) => QuizScreen(
-                              id: widget.quiz_id,
+                              id: quiz_id,
                               title: widget.title,
                             ),
                           ),
