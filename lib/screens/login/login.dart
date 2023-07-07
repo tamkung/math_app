@@ -102,7 +102,10 @@ class _LoginScreenState extends State<LoginScreen> {
                             context: context,
                             builder: (context) => AlertDialog(
                               title: Text('เข้าสู่ระบบสำเร็จ'),
-                              content: Text(result['message']),
+                              content: Text(result['message'] ==
+                                      'Logged in successfully'
+                                  ? 'ยินดีต้อนรับ ${result['firstname']} ${result['lastname']}'
+                                  : result['message']),
                               actions: [
                                 TextButton(
                                   onPressed: () {
@@ -130,7 +133,12 @@ class _LoginScreenState extends State<LoginScreen> {
                           context: context,
                           builder: (context) => AlertDialog(
                             title: Text('เกิดข้อผิดพลาด'),
-                            content: Text(result['message']),
+                            content: Text(
+                                result['message'] == 'Invalid email or password'
+                                    ? 'อีเมลหรือรหัสผ่านไม่ถูกต้อง'
+                                    : result['message'] == 'User not found'
+                                        ? 'ไม่พบผู้ใช้งาน'
+                                        : result['message']),
                             actions: [
                               TextButton(
                                 onPressed: () => Navigator.pop(context),

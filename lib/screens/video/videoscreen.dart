@@ -6,6 +6,7 @@ import 'package:http/http.dart' as http;
 
 import 'package:flutter/material.dart';
 import 'package:math_app/screens/quiz/quizscreen.dart';
+import 'package:photo_view/photo_view.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
 import '../../config/constant.dart';
@@ -276,12 +277,29 @@ class _VideoScreenState extends State<VideoScreen> {
                     left: 30,
                     child: ElevatedButton(
                       onPressed: () {
-                        showPopUp(
-                          context,
-                          'สูตร \n${widget.title}',
-                          widget.section_img,
-                          size.width * 0.7,
-                          size.height * 0.5,
+                        showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return Dialog(
+                              child: SizedBox(
+                                width: size.width * 0.77,
+                                height: size.height * 0.7,
+                                child: GestureDetector(
+                                  child: PhotoView(
+                                    backgroundDecoration: const BoxDecoration(
+                                      color: Colors.transparent,
+                                    ),
+                                    imageProvider:
+                                        NetworkImage(widget.section_img),
+                                    minScale:
+                                        PhotoViewComputedScale.contained * 1,
+                                    maxScale:
+                                        PhotoViewComputedScale.covered * 2,
+                                  ),
+                                ),
+                              ),
+                            );
+                          },
                         );
                       },
                       style: ElevatedButton.styleFrom(
@@ -291,7 +309,7 @@ class _VideoScreenState extends State<VideoScreen> {
                         ),
                       ),
                       child: Row(
-                        children: [
+                        children: const [
                           Icon(Icons.play_arrow),
                           Text("ดูสรุปสูตร"),
                         ],

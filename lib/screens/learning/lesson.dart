@@ -8,6 +8,7 @@ import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:math_app/config/constant.dart';
 import 'package:math_app/screens/video/videoscreen.dart';
 import 'package:math_app/widget/navdrawer.dart';
+import 'package:photo_view/photo_view.dart';
 
 class LessonScreen extends StatefulWidget {
   final dynamic title, course_id, section_id, image_url, section_img;
@@ -193,12 +194,28 @@ class _LessonScreenState extends State<LessonScreen> {
                   left: 30,
                   child: ElevatedButton(
                     onPressed: () {
-                      showPopUp(
-                        context,
-                        'สูตร \n${widget.title}',
-                        widget.section_img,
-                        size.width * 0.7,
-                        size.height * 0.5,
+                      showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return Dialog(
+                            child: SizedBox(
+                              width: size.width * 0.77,
+                              height: size.height * 0.7,
+                              child: GestureDetector(
+                                child: PhotoView(
+                                  backgroundDecoration: const BoxDecoration(
+                                    color: Colors.transparent,
+                                  ),
+                                  imageProvider:
+                                      NetworkImage(widget.section_img),
+                                  minScale:
+                                      PhotoViewComputedScale.contained * 1,
+                                  maxScale: PhotoViewComputedScale.covered * 2,
+                                ),
+                              ),
+                            ),
+                          );
+                        },
                       );
                     },
                     style: ElevatedButton.styleFrom(
@@ -208,7 +225,7 @@ class _LessonScreenState extends State<LessonScreen> {
                       ),
                     ),
                     child: Row(
-                      children: [
+                      children: const [
                         Icon(Icons.play_arrow),
                         Text("ดูสรุปสูตร"),
                       ],

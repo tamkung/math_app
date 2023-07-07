@@ -14,14 +14,18 @@ class RegisterScreen extends StatefulWidget {
 class _RegisterScreenState extends State<RegisterScreen> {
   final firstnameController = TextEditingController();
   final lastnameController = TextEditingController();
-  final yearController = TextEditingController();
   final phoneNumberController = TextEditingController();
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
   final confirmPasswordController = TextEditingController();
+  final List<String> _user_year =
+      List.generate(55, (index) => (index + 46).toString());
+  String? _selectedUserYear;
   final List<String> _user_type = [
-    'ช่างอุตสาหกรรม',
-    'เคหะบริบาร',
+    'L1',
+    'L2',
+    'L3',
+    'L4',
   ];
   String? _selectedUserType;
   @override
@@ -88,7 +92,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     "ชื่อ", Icons.person, firstnameController, false),
                 buildTextField(
                     "นามสกุล", Icons.person, lastnameController, false),
-                buildTextField("ชั้นปี", Icons.school, yearController, false),
                 Stack(
                   children: [
                     Container(
@@ -119,18 +122,92 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               borderRadius: BorderRadius.circular(10),
                             ),
                             child: DropdownButton(
-                              iconEnabledColor: Colors.white,
-                              hint: const Text(
-                                'กลุ่มผู้เรียน',
-                                style: TextStyle(color: Colors.grey),
+                              menuMaxHeight: size.height * 0.4,
+                              iconEnabledColor: Colors.grey[800],
+                              hint: SizedBox(
+                                width: size.width * 0.3,
+                                child: const Text(
+                                  'รุ่นที่',
+                                  style: TextStyle(color: Colors.grey),
+                                ),
+                              ),
+                              value: _selectedUserYear,
+                              onChanged: (newValue) {
+                                setState(() {
+                                  _selectedUserYear = newValue.toString();
+                                });
+                              },
+                              items: _user_year.map((type) {
+                                return DropdownMenuItem(
+                                  child: new Text('รุ่นที่ : $type'),
+                                  value: type,
+                                );
+                              }).toList(),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    Positioned(
+                      top: 0,
+                      left: 70,
+                      child: Container(
+                        color: Colors.white,
+                        padding: const EdgeInsets.symmetric(horizontal: 10),
+                        child: Text(
+                          'รุ่นที่',
+                          style: TextStyle(
+                              fontSize: 14,
+                              backgroundColor: Colors.white,
+                              color: Colors.grey[700]),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                Stack(
+                  children: [
+                    Container(
+                      decoration: BoxDecoration(
+                          border: Border.all(width: 2),
+                          borderRadius:
+                              const BorderRadius.all(Radius.circular(40))),
+                      margin: const EdgeInsets.symmetric(
+                          horizontal: 20, vertical: 10),
+                      padding: const EdgeInsets.symmetric(horizontal: 10),
+                      child: Row(
+                        children: [
+                          Container(
+                            decoration: const BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: pColor,
+                            ),
+                            padding: const EdgeInsets.all(10),
+                            child: const Icon(
+                              Icons.school,
+                              color: Colors.white,
+                            ),
+                          ),
+                          Container(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 30, vertical: 5),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            child: DropdownButton(
+                              iconEnabledColor: Colors.grey[800],
+                              hint: SizedBox(
+                                width: size.width * 0.3,
+                                child: const Text(
+                                  'กลุ่มผู้เรียน',
+                                  style: TextStyle(color: Colors.grey),
+                                ),
                               ),
                               value: _selectedUserType,
                               onChanged: (newValue) {
                                 setState(() {
                                   _selectedUserType = newValue.toString();
                                 });
-
-                                print(_selectedUserType);
                               },
                               items: _user_type.map((type) {
                                 return DropdownMenuItem(
@@ -188,22 +265,23 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   onPressed: () async {
                     final firstname = firstnameController.text;
                     final lastName = lastnameController.text;
-                    final year = yearController.text;
                     final phoneNumber = phoneNumberController.text;
                     final email = emailController.text;
                     final password = passwordController.text;
                     final confirmPassword = confirmPasswordController.text;
                     if (firstname.isEmpty ||
                         lastName.isEmpty ||
-                        year.isEmpty ||
                         phoneNumber.isEmpty ||
                         email.isEmpty ||
                         password.isEmpty ||
-                        confirmPassword.isEmpty) {
+                        confirmPassword.isEmpty ||
+                        _selectedUserType == null ||
+                        _selectedUserYear == null) {
                       showDialog(
                         context: context,
                         builder: (context) => AlertDialog(
-                          title: const Text('กรุณากรอกข้อมูลให้ครบ'),
+                          title: const Text('แจ้งเตือน'),
+                          content: const Text('กรุณากรอกข้อมูลให้ครบถ้วน'),
                           actions: [
                             TextButton(
                               onPressed: () => Navigator.pop(context),
@@ -263,7 +341,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         var response = await http.post(url, body: {
                           'fname': firstname,
                           'lname': lastName,
-                          'year': year,
+                          'year': _selectedUserYear,
                           'user_type': _selectedUserType,
                           'phone': phoneNumber,
                           'email': email,

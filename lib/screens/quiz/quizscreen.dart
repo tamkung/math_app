@@ -43,7 +43,7 @@ class _QuizScreenState extends State<QuizScreen> {
         }),
         headers: {"Content-type": "application/json"});
     final data = await json.decode(utf8.decode(response.bodyBytes));
-
+    //print(data);
     setState(() {
       _items = data;
     });
@@ -51,10 +51,7 @@ class _QuizScreenState extends State<QuizScreen> {
     if (_items.isNotEmpty) {
       isSeleted.add({
         for (var i = 0; i < _items.length; i++)
-          i + 1: [
-            for (var j = 0; j < jsonDecode(_items[i]["options"]).length; j++)
-              false
-          ],
+          i + 1: [for (var j = 0; j < _items[i]["options"].length; j++) false],
       });
     }
   }
@@ -174,10 +171,8 @@ class _QuizScreenState extends State<QuizScreen> {
                                       txt_id = _items[activeStep]["id"];
                                       txt_title = _items[activeStep]["title"];
                                       options = _items[activeStep]["options"];
-                                      answers = jsonDecode(_items[activeStep]
-                                          ["correct_answers"]);
-
-                                      List opList = jsonDecode(options);
+                                      answers = _items[activeStep]["answer"];
+                                      List opList = options;
                                       String htmlData = txt_title;
                                       dom.Document document =
                                           htmlparser.parse(htmlData);
@@ -187,7 +182,7 @@ class _QuizScreenState extends State<QuizScreen> {
 
                                       List<bool> isChk =
                                           isSeleted[0][activeStep + 1];
-                                      //print(htmlData);
+                                      //opList.shuffle();
                                       return Column(
                                         mainAxisAlignment:
                                             MainAxisAlignment.start,
@@ -244,7 +239,9 @@ class _QuizScreenState extends State<QuizScreen> {
                                                 child: Column(
                                                   children: List.generate(
                                                       opList.length, (index) {
-                                                    //print(opList[index]);
+                                                    var newIndex = opList[index]
+                                                            ['option_index'] -
+                                                        1;
                                                     return Card(
                                                       elevation: 3,
                                                       margin:
@@ -259,12 +256,14 @@ class _QuizScreenState extends State<QuizScreen> {
                                                                       .circular(
                                                                           10)),
                                                       child: ListTile(
-                                                        tileColor: isChk[index]
-                                                            ? Colors.green
-                                                            : pColor,
+                                                        tileColor:
+                                                            isChk[newIndex]
+                                                                ? Colors.green
+                                                                : pColor,
                                                         textColor: Colors.white,
                                                         title: Html(
-                                                          data: opList[index],
+                                                          data: opList[index]
+                                                              ['option'],
                                                           customRender: {
                                                             "img":
                                                                 (RenderContext
@@ -310,19 +309,21 @@ class _QuizScreenState extends State<QuizScreen> {
                                                             ),
                                                           },
                                                         ),
-                                                        enabled: !isChk[index],
+                                                        enabled:
+                                                            !isChk[newIndex],
                                                         onTap: () async {
                                                           setState(() {
-                                                            isChk[index] = true;
+                                                            isChk[newIndex] =
+                                                                true;
                                                           });
+
                                                           for (int i = 0;
                                                               i < isChk.length;
                                                               i++) {
-                                                            if (i != index) {
+                                                            if (i != newIndex) {
                                                               isChk[i] = false;
                                                             }
                                                           }
-                                                          //print(isChk);
 
                                                           _user_answers
                                                               .removeWhere(
@@ -332,7 +333,8 @@ class _QuizScreenState extends State<QuizScreen> {
                                                                           .first ==
                                                                       txt_id);
                                                           _user_answers.add({
-                                                            txt_id: index + 1,
+                                                            txt_id:
+                                                                newIndex + 1,
                                                           });
 
                                                           _correct_answers
@@ -343,7 +345,7 @@ class _QuizScreenState extends State<QuizScreen> {
                                                                           .first ==
                                                                       txt_id);
                                                           _correct_answers.add({
-                                                            txt_id: answers[0],
+                                                            txt_id: answers,
                                                           });
 
                                                           if (activeStep <
@@ -353,6 +355,9 @@ class _QuizScreenState extends State<QuizScreen> {
                                                               activeStep++;
                                                             });
                                                           }
+                                                          print(_user_answers);
+                                                          print(
+                                                              _correct_answers);
                                                         },
                                                       ),
                                                     );
@@ -546,9 +551,9 @@ class _QuizScreenState extends State<QuizScreen> {
       var correctAnswer = _correct_answers[i];
 
       // แปลงชนิดข้อมูลของ userAnswer เป็นสตริง
-      var userAnswerString = userAnswer.values.first.toString();
+      //var userAnswerString = userAnswer.values.first.toString();
 
-      if (userAnswerString == correctAnswer.values.first) {
+      if (userAnswer.values.first == correctAnswer.values.first) {
         score += 1;
         print('score: $score');
       }
