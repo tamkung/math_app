@@ -31,14 +31,18 @@ class _LessonScreenState extends State<LessonScreen> {
   bool chk = false;
   GetStorage box = GetStorage();
   dynamic user_id;
-  dynamic txt_id, txt_title, txt_course_id, txt_section_id, video_url;
+  dynamic txt_id,
+      txt_title,
+      txt_course_id,
+      txt_section_id,
+      video_url,
+      lesson_quiz_id;
 
   //dynamic percent = 0;
 
   Future<void> getSection() async {
     user_id = box.read('u_id');
     var url = Uri.parse('${API_URL}lesson');
-    var url2 = Uri.parse('${API_URL}lesson-question');
     final response = await http.post(url,
         body: jsonEncode(<String, String>{
           'course_id': widget.course_id,
@@ -50,15 +54,7 @@ class _LessonScreenState extends State<LessonScreen> {
       _items = data;
     });
     for (var i = 0; i < _items.length; i++) {
-      final responseQuiz = await http.post(url2,
-          body: jsonEncode(<String, String>{
-            'course_id': widget.course_id,
-            'section_id': widget.section_id,
-            'title': _items[i]['title'],
-          }),
-          headers: {"Content-type": "application/json"});
-      final dataQuiz = await json.decode(utf8.decode(responseQuiz.bodyBytes));
-      _quiz_id.add(dataQuiz[0]['id']);
+      _quiz_id.add(_items[i]['quiz_id']);
     }
     chk = true;
     getPercent();
@@ -77,9 +73,6 @@ class _LessonScreenState extends State<LessonScreen> {
     setState(() {
       _percent = data;
     });
-    // print(_percent.length);
-    // print(_percent);
-    // print(_items);
   }
 
   @override
@@ -92,7 +85,7 @@ class _LessonScreenState extends State<LessonScreen> {
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
     return Scaffold(
-      endDrawer: NavDrawer(),
+      endDrawer: const NavDrawer(),
       appBar: AppBar(
         backgroundColor: Colors.white,
         foregroundColor: Colors.black,
@@ -277,6 +270,7 @@ class _LessonScreenState extends State<LessonScreen> {
                                   txt_course_id = _items[index]['course_id'];
                                   txt_section_id = _items[index]['section_id'];
                                   video_url = _items[index]['video_url'];
+                                  lesson_quiz_id = _items[index]['quiz_id'];
 
                                   dynamic percent = 0;
                                   _percent.forEach((element) {
@@ -284,9 +278,8 @@ class _LessonScreenState extends State<LessonScreen> {
                                       percent = element['percent_score'];
                                     }
                                   });
-
                                   return cardItem(
-                                    txt_id.toString(),
+                                    lesson_quiz_id.toString(),
                                     txt_title,
                                     video_url,
                                     percent.toString(),
@@ -333,8 +326,6 @@ class _LessonScreenState extends State<LessonScreen> {
                   quiz_id: id.toString(),
                   image_url: widget.image_url.toString(),
                   section_img: widget.section_img,
-                  course_id: widget.course_id.toString(),
-                  section_id: widget.section_id.toString(),
                 ),
               ),
             );
