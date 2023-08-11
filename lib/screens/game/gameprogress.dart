@@ -167,8 +167,13 @@ class _GameProgressScreenState extends State<GameProgressScreen> {
                             txt_title = _items[index]["title"];
                             txt_course_id = _items[index]['course_id'];
                             txt_order = _items[index]['order'];
-                            return menuProgressContainer(txt_title,
-                                _image[index], txt_id, txt_course_id, context);
+                            return menuProgressContainer(
+                                txt_title,
+                                _image[index],
+                                txt_id,
+                                txt_course_id,
+                                context,
+                                size);
                           },
                         ),
                       )
@@ -184,7 +189,8 @@ class _GameProgressScreenState extends State<GameProgressScreen> {
   }
 }
 
-Widget menuProgressContainer(title, image, section_id, course_id, context) {
+Widget menuProgressContainer(
+    title, image, section_id, course_id, context, size) {
   return Stack(
     alignment: Alignment.centerRight,
     children: [
@@ -193,8 +199,8 @@ Widget menuProgressContainer(title, image, section_id, course_id, context) {
         padding: const EdgeInsets.only(
           left: 10,
           right: 20,
-          bottom: 5,
-          top: 5,
+          bottom: 4,
+          top: 4,
         ),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(20),
@@ -210,8 +216,8 @@ Widget menuProgressContainer(title, image, section_id, course_id, context) {
                 Container(
                   padding: EdgeInsets.all(10),
                   alignment: Alignment.centerLeft,
-                  height: 65,
-                  width: 250,
+                  height: size.height * 0.095,
+                  width: size.width * 0.68,
                   child: Text(
                     title,
                     style: const TextStyle(

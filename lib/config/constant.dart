@@ -3,7 +3,7 @@ import 'dart:ffi';
 import 'package:flutter/material.dart';
 
 //const API_URL = 'http://192.168.43.23:8080/api/';
-const API_URL = 'https://mathapp-api-production.up.railway.app/api/';
+const API_URL = 'https://math-app-api.cyclic.cloud/api/';
 
 const pColor = Color(0xFF8159FB);
 

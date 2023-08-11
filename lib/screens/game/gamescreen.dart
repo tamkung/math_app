@@ -7,6 +7,7 @@ import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:math_app/config/constant.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../widget/navdrawer.dart';
 import '../home.dart';
@@ -160,8 +161,8 @@ class _GameScreenState extends State<GameScreen> {
                             txt_title = _items[index]["title"];
                             txt_course_id = _items[index]['course_id'];
                             txt_order = _items[index]['order'];
-                            return menuProgressContainer(
-                                txt_title, txt_id, txt_course_id, context);
+                            return menuProgressContainer(txt_title, txt_id,
+                                txt_course_id, context, size);
                           },
                         ),
                       )
@@ -177,7 +178,7 @@ class _GameScreenState extends State<GameScreen> {
   }
 }
 
-Widget menuProgressContainer(title, section_id, course_id, context) {
+Widget menuProgressContainer(title, section_id, course_id, context, size) {
   return Stack(
     alignment: Alignment.centerRight,
     children: [
@@ -186,8 +187,8 @@ Widget menuProgressContainer(title, section_id, course_id, context) {
         padding: const EdgeInsets.only(
           left: 10,
           right: 20,
-          bottom: 5,
-          top: 5,
+          bottom: 4,
+          top: 4,
         ),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(20),
@@ -203,8 +204,8 @@ Widget menuProgressContainer(title, section_id, course_id, context) {
                 Container(
                   padding: const EdgeInsets.all(10),
                   alignment: Alignment.centerLeft,
-                  height: 65,
-                  width: 250,
+                  height: size.height * 0.095,
+                  width: size.width * 0.68,
                   child: Text(
                     title,
                     style: const TextStyle(
@@ -235,12 +236,19 @@ Widget menuProgressContainer(title, section_id, course_id, context) {
             shape: BoxShape.circle,
             color: Colors.white,
           ),
-          child: const Center(
-            child: Text(
-              "เล่นเกม",
+          child: TextButton(
+            style: TextButton.styleFrom(
+              padding: const EdgeInsets.all(0),
+              shape: const CircleBorder(),
+            ),
+            onPressed: () {
+              print("section_id = $section_id");
+            },
+            child: const Text(
+              'เล่นเกม',
               style: TextStyle(
                 color: pColor,
-                fontSize: 20,
+                fontSize: 18,
                 fontWeight: FontWeight.bold,
               ),
             ),
@@ -249,4 +257,15 @@ Widget menuProgressContainer(title, section_id, course_id, context) {
       ),
     ],
   );
+}
+
+_launchURL() async {
+  dynamic section = 'section';
+  final Uri url = Uri.parse('https://math-app-api.cyclic.cloud/api/' + section);
+  if (!await launchUrl(
+    url,
+    mode: LaunchMode.externalApplication,
+  )) {
+    throw Exception('Could not launch $url');
+  }
 }

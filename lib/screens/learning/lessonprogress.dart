@@ -168,7 +168,7 @@ class _LessonProgressScreenState extends State<LessonProgressScreen> {
                                 : avg_percent = _items[index]['avg_percent'];
 
                             return menuProgressContainer(
-                                txt_title, avg_percent, context);
+                                txt_title, avg_percent, context, size);
                           },
                         ),
                       )
@@ -186,7 +186,7 @@ class _LessonProgressScreenState extends State<LessonProgressScreen> {
   }
 }
 
-Widget menuProgressContainer(title, percent, context) {
+Widget menuProgressContainer(title, percent, context, size) {
   return Stack(
     alignment: Alignment.centerRight,
     children: [
@@ -211,8 +211,8 @@ Widget menuProgressContainer(title, percent, context) {
                 Container(
                   padding: const EdgeInsets.all(10),
                   alignment: Alignment.centerLeft,
-                  height: 65,
-                  width: 250,
+                  height: size.height * 0.085,
+                  width: size.width * 0.68,
                   child: Text(
                     title,
                     style: const TextStyle(
@@ -225,7 +225,7 @@ Widget menuProgressContainer(title, percent, context) {
                 Container(
                   margin: const EdgeInsets.only(left: 10),
                   color: pColor,
-                  width: 230,
+                  width: size.width * 0.6,
                   child: LinearProgressIndicator(
                     backgroundColor: Colors.white,
                     valueColor: const AlwaysStoppedAnimation<Color>(pColor),

@@ -324,40 +324,52 @@ class _VideoScreenState extends State<VideoScreen> {
                           bottomRight: Radius.circular(30),
                         ),
                       ),
-                      child: Column(
-                        children: [
-                          Row(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: [
-                              const Icon(
-                                Icons.play_circle_filled,
-                                color: Colors.red,
+                      child: widget.video_url != "null"
+                          ? Column(
+                              children: [
+                                Row(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: [
+                                    const Icon(
+                                      Icons.play_circle_filled,
+                                      color: Colors.red,
+                                    ),
+                                    widthBox(size.width * 0.02),
+                                    Text(widget.video_title),
+                                  ],
+                                ),
+                                heightBox(10),
+                                YoutubePlayerBuilder(
+                                  player: YoutubePlayer(
+                                    controller: _controller,
+                                    showVideoProgressIndicator: true,
+                                    progressIndicatorColor: Colors.blueAccent,
+                                    // onReady: () {
+                                    //   _isPlayerReady = true;
+                                    // },
+                                  ),
+                                  builder: (context, player) {
+                                    return Column(
+                                      children: [
+                                        player,
+                                      ],
+                                    );
+                                  },
+                                ),
+                              ],
+                            )
+                          : Container(
+                              height: size.height * 0.25,
+                              child: const Center(
+                                child: Text(
+                                  'ไม่มีวิดีโอ',
+                                  style: TextStyle(
+                                    fontSize: 18,
+                                  ),
+                                ),
                               ),
-                              widthBox(size.width * 0.02),
-                              Text(widget.video_title),
-                            ],
-                          ),
-                          heightBox(10),
-                          YoutubePlayerBuilder(
-                            player: YoutubePlayer(
-                              controller: _controller,
-                              showVideoProgressIndicator: true,
-                              progressIndicatorColor: Colors.blueAccent,
-                              // onReady: () {
-                              //   _isPlayerReady = true;
-                              // },
                             ),
-                            builder: (context, player) {
-                              return Column(
-                                children: [
-                                  player,
-                                ],
-                              );
-                            },
-                          ),
-                        ],
-                      ),
                     ),
                   ),
                   heightBox(size.height * 0.03),
