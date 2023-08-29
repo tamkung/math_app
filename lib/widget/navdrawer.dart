@@ -169,10 +169,8 @@ class NavDrawer extends StatelessWidget {
                       ),
                       TextButton(
                         onPressed: () {
-                          print(box.getValues());
                           box.erase();
                           box.write('isLogin', false);
-                          //Navigator.pushNamed(context, 'Login');
                           Navigator.pushAndRemoveUntil(
                             context,
                             MaterialPageRoute(

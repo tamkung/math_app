@@ -43,7 +43,6 @@ class _QuizScreenState extends State<QuizScreen> {
         }),
         headers: {"Content-type": "application/json"});
     final data = await json.decode(utf8.decode(response.bodyBytes));
-    //print(data);
     setState(() {
       _items = data;
     });
@@ -277,7 +276,6 @@ class _QuizScreenState extends State<QuizScreen> {
                                                                       .attributes[
                                                                           'src']
                                                                       .toString();
-                                                              //print(imgUrl);
                                                               return Container(
                                                                 height:
                                                                     size.height *
@@ -355,9 +353,6 @@ class _QuizScreenState extends State<QuizScreen> {
                                                               activeStep++;
                                                             });
                                                           }
-                                                          print(_user_answers);
-                                                          print(
-                                                              _correct_answers);
                                                         },
                                                       ),
                                                     );
@@ -507,7 +502,7 @@ class _QuizScreenState extends State<QuizScreen> {
         }),
         headers: {"Content-type": "application/json"});
     final data = await json.decode(utf8.decode(response.bodyBytes));
-    print(data);
+    //print(data);
   }
 
   Widget nextButton() {
@@ -555,12 +550,11 @@ class _QuizScreenState extends State<QuizScreen> {
 
       if (userAnswer.values.first == correctAnswer.values.first) {
         score += 1;
-        print('score: $score');
       }
     }
 
-    print(_user_answers);
-    print(_correct_answers);
+    // print(_user_answers);
+    // print(_correct_answers);
 
     // showDialog(
     //   context: context,

@@ -43,7 +43,6 @@ class _GameScreenState extends State<GameScreen> {
       _items = data;
     });
     chk = true;
-    print(_items);
   }
 
   @override
@@ -161,8 +160,9 @@ class _GameScreenState extends State<GameScreen> {
                             txt_title = _items[index]["title"];
                             txt_course_id = _items[index]['course_id'];
                             txt_order = _items[index]['order'];
+                            print(_items);
                             return menuProgressContainer(txt_title, txt_id,
-                                txt_course_id, context, size);
+                                txt_course_id, context, size, u_id, txt_id);
                           },
                         ),
                       )
@@ -178,7 +178,8 @@ class _GameScreenState extends State<GameScreen> {
   }
 }
 
-Widget menuProgressContainer(title, section_id, course_id, context, size) {
+Widget menuProgressContainer(
+    title, section_id, course_id, context, size, u_id, game_id) {
   return Stack(
     alignment: Alignment.centerRight,
     children: [
@@ -242,7 +243,7 @@ Widget menuProgressContainer(title, section_id, course_id, context, size) {
               shape: const CircleBorder(),
             ),
             onPressed: () {
-              print("section_id = $section_id");
+              _launchURL(game_id, u_id);
             },
             child: const Text(
               'เล่นเกม',
@@ -259,9 +260,11 @@ Widget menuProgressContainer(title, section_id, course_id, context, size) {
   );
 }
 
-_launchURL() async {
-  dynamic section = 'section';
-  final Uri url = Uri.parse('https://math-app-api.cyclic.cloud/api/' + section);
+_launchURL(game_id, u_id) async {
+  String gID = game_id.toString();
+  String uID = u_id.toString();
+  final Uri url =
+      Uri.parse('http://example.com/game-id/' + gID + '/user-id/' + uID);
   if (!await launchUrl(
     url,
     mode: LaunchMode.externalApplication,

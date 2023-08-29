@@ -49,7 +49,6 @@ class _GameProgressScreenState extends State<GameProgressScreen> {
       _items = data;
     });
     chk = true;
-    print(_items);
   }
 
   @override

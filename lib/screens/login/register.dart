@@ -358,7 +358,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                   onPressed: () {
                                     Map<String, dynamic> user =
                                         jsonDecode(response.body);
-                                    print(user['token']);
                                     Navigator.pop(context);
                                     Navigator.pop(context);
                                   },
