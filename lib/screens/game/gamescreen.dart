@@ -263,8 +263,7 @@ Widget menuProgressContainer(
 _launchURL(game_id, u_id) async {
   String gID = game_id.toString();
   String uID = u_id.toString();
-  final Uri url =
-      Uri.parse('http://example.com/game-id/' + gID + '/user-id/' + uID);
+  final Uri url = Uri.parse(GAME_URL + '?user_id=' + uID);
   if (!await launchUrl(
     url,
     mode: LaunchMode.externalApplication,

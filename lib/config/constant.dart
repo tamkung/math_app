@@ -1,9 +1,10 @@
-import 'dart:ffi';
+//import 'dart:ffi';
 
 import 'package:flutter/material.dart';
 
 //const API_URL = 'http://192.168.43.23:8080/api/';
 const API_URL = 'https://math-app-api.cyclic.cloud/api/';
+const GAME_URL = 'http://18.139.38.227:8058/LittleTurtle/';
 
 const pColor = Color(0xFF8159FB);
 
