@@ -25,7 +25,7 @@ jobs:
           name: release-apk
           path: build/app/outputs/apk/release/app-release.apk
 
-  build-and-deploy-web:
+  build-web:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -43,6 +43,16 @@ jobs:
         with:
           name: release-web
           path: build/web
+
+  deploy:
+    needs: build-web
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/download-artifact@v2
+        with:
+          name: release-web
+          path: release-web
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v1
         with:
@@ -50,5 +60,4 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ secrets.AWS_REGION }}
       - name: Deploy Web to S3
-        run: aws s3 sync ./build/web/ s3://${{ secrets.S3_BUCKET }} --delete
-
+        run: aws s3 sync release-web/ s3://${{ secrets.S3_BUCKET }} --delete
