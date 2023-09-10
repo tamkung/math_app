@@ -46,7 +46,7 @@ jobs:
 
   deploy:
     runs-on: ubuntu-latest
-    needs: [build-apk, build-web]
+    needs: build-web
     steps:
       - uses: actions/checkout@v3
       - name: Configure AWS Credentials
