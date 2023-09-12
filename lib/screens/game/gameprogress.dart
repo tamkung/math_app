@@ -7,6 +7,7 @@ import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:math_app/config/constant.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 import '../../widget/navdrawer.dart';
 import '../home.dart';
@@ -31,6 +32,7 @@ class _GameProgressScreenState extends State<GameProgressScreen> {
   bool chk = false;
   dynamic txt_id, txt_title, txt_course_id, txt_order;
   GetStorage box = GetStorage();
+  String? API_URL = dotenv.env['API_URL'];
 
   dynamic u_id, firstname, lastname;
 
@@ -166,13 +168,18 @@ class _GameProgressScreenState extends State<GameProgressScreen> {
                             txt_title = _items[index]["title"];
                             txt_course_id = _items[index]['course_id'];
                             txt_order = _items[index]['order'];
-                            return menuProgressContainer(
-                                txt_title,
-                                _image[index],
-                                txt_id,
-                                txt_course_id,
-                                context,
-                                size);
+                            if (txt_id != 1 ||
+                                txt_title != "รูปเรขาคณิตสองมิติและสามมิติ") {
+                              return menuProgressContainer(
+                                  txt_title,
+                                  _image[index],
+                                  txt_id,
+                                  txt_course_id,
+                                  context,
+                                  size);
+                            } else {
+                              return Container();
+                            }
                           },
                         ),
                       )

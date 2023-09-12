@@ -8,6 +8,7 @@ import 'package:math_app/config/constant.dart';
 import 'package:math_app/screens/learning/lesson.dart';
 import 'package:math_app/widget/navdrawer.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -28,6 +29,7 @@ class _HomeScreenState extends State<HomeScreen> {
   bool chk = false;
   dynamic txt_id, txt_title, txt_course_id, txt_order, section_img;
   GetStorage box = GetStorage();
+  String? API_URL = dotenv.env['API_URL'];
 
   dynamic u_id, firstname, lastname;
 

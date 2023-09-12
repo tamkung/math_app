@@ -13,6 +13,7 @@ import 'package:math_app/screens/profile.dart';
 import 'package:math_app/screens/quiz/test.dart';
 import 'package:splashscreen/splashscreen.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 import 'config/constant.dart';
 import 'screens/home.dart';
@@ -23,6 +24,7 @@ import 'screens/video/videoscreen.dart';
 
 void main() async {
   await GetStorage.init();
+  await dotenv.load();
   runApp(const MyApp());
   SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
   WidgetsFlutterBinding.ensureInitialized();

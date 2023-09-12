@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:math';
 
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
@@ -8,6 +9,7 @@ import 'package:get_storage/get_storage.dart';
 import 'package:math_app/config/constant.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 import '../../widget/navdrawer.dart';
 import '../home.dart';
@@ -25,6 +27,7 @@ class _GameScreenState extends State<GameScreen> {
   bool chk = false;
   dynamic txt_id, txt_title, txt_course_id, txt_order;
   GetStorage box = GetStorage();
+  String? API_URL = dotenv.env['API_URL'];
 
   dynamic u_id, firstname, lastname;
 
@@ -160,9 +163,12 @@ class _GameScreenState extends State<GameScreen> {
                             txt_title = _items[index]["title"];
                             txt_course_id = _items[index]['course_id'];
                             txt_order = _items[index]['order'];
-                            print(_items);
-                            return menuProgressContainer(txt_title, txt_id,
-                                txt_course_id, context, size, u_id, txt_id);
+                            if (txt_title != "รูปเรขาคณิตสองมิติและสามมิติ") {
+                              return menuProgressContainer(txt_title, txt_id,
+                                  txt_course_id, context, size, u_id, txt_id);
+                            } else {
+                              return Container();
+                            }
                           },
                         ),
                       )
@@ -243,7 +249,7 @@ Widget menuProgressContainer(
               shape: const CircleBorder(),
             ),
             onPressed: () {
-              _launchURL(game_id, u_id);
+              _launchURL(title, u_id);
             },
             child: const Text(
               'เล่นเกม',
@@ -260,10 +266,18 @@ Widget menuProgressContainer(
   );
 }
 
-_launchURL(game_id, u_id) async {
-  String gID = game_id.toString();
+_launchURL(title, u_id) async {
+  String? GAME_URL = dotenv.env['GAME_URL'];
   String uID = u_id.toString();
-  final Uri url = Uri.parse(GAME_URL + '?user_id=' + uID);
+  String gamePath = "";
+  if (title == "การหาพื้นที่") {
+    gamePath = "LittleTurtle/";
+  } else if (title == "การหาความยาวรอบรูป") {
+    gamePath = "AirPlane/";
+  } else {
+    gamePath = "None/";
+  }
+  final Uri url = Uri.parse(GAME_URL! + gamePath + '?user_id=' + uID);
   if (!await launchUrl(
     url,
     mode: LaunchMode.externalApplication,

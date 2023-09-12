@@ -17,6 +17,8 @@ jobs:
         with:
           flutter-version: "3.7.7"
           channel: "stable"
+      - name: Create env file
+        run: echo "${{ secrets.ENV_FILE }}" > .env
       - run: flutter pub get
       - name: Build Android APK
         run: flutter build apk --release --no-sound-null-safety
@@ -36,6 +38,8 @@ jobs:
         with:
           flutter-version: "3.7.7"
           channel: "stable"
+      - name: Create env file
+        run: echo "${{ secrets.ENV_FILE }}" > .env
       - run: flutter pub get
       - name: Build Web
         run: flutter build web --release --no-sound-null-safety

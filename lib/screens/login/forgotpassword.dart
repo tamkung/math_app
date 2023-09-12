@@ -6,6 +6,7 @@ import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:math_app/config/constant.dart';
 import 'package:http/http.dart' as http;
 import 'package:math_app/screens/home.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class ForgotPassword extends StatefulWidget {
   const ForgotPassword({super.key});
@@ -16,6 +17,8 @@ class ForgotPassword extends StatefulWidget {
 
 class _ForgotPasswordState extends State<ForgotPassword> {
   final emailController = TextEditingController();
+  String? API_URL = dotenv.env['API_URL'];
+
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;

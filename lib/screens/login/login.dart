@@ -7,6 +7,7 @@ import 'package:get_storage/get_storage.dart';
 import 'package:math_app/config/constant.dart';
 import 'package:http/http.dart' as http;
 import 'package:math_app/screens/home.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class LoginScreen extends StatefulWidget {
   @override
@@ -16,6 +17,8 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
+  String? API_URL = dotenv.env['API_URL'];
+
   @override
   Widget build(BuildContext context) {
     GetStorage box = GetStorage();

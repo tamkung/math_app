@@ -8,6 +8,7 @@ import 'package:get_storage/get_storage.dart';
 import 'package:math_app/config/constant.dart';
 import 'package:math_app/screens/home.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 import '../../widget/navdrawer.dart';
 
@@ -30,6 +31,7 @@ class _LessonProgressScreenState extends State<LessonProgressScreen> {
   bool chk = false;
   dynamic txt_id, txt_title, avg_percent;
   GetStorage box = GetStorage();
+  String? API_URL = dotenv.env['API_URL'];
 
   dynamic user_id;
 

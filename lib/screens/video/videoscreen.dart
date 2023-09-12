@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:math_app/screens/quiz/quizscreen.dart';
 import 'package:photo_view/photo_view.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 import '../../config/constant.dart';
 import '../../widget/navdrawer.dart';
@@ -34,6 +35,7 @@ class _VideoScreenState extends State<VideoScreen> {
   dynamic user_id;
   GetStorage box = GetStorage();
   String? videoId;
+  String? API_URL = dotenv.env['API_URL'];
 
   late YoutubePlayerController _controller;
   late PlayerState _playerState;
@@ -313,19 +315,19 @@ class _VideoScreenState extends State<VideoScreen> {
                     ),
                     //height: size.height * 0.1,
                     width: size.width,
-                    child: Container(
-                      margin: const EdgeInsets.fromLTRB(20, 50, 20, 40),
-                      padding: const EdgeInsets.fromLTRB(20, 20, 20, 20),
-                      decoration: const BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(30),
-                          bottomLeft: Radius.circular(30),
-                          bottomRight: Radius.circular(30),
-                        ),
-                      ),
-                      child: widget.video_url != "null"
-                          ? Column(
+                    child: widget.video_url != "null"
+                        ? Container(
+                            margin: const EdgeInsets.fromLTRB(20, 50, 20, 40),
+                            padding: const EdgeInsets.fromLTRB(20, 20, 20, 20),
+                            decoration: const BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.only(
+                                topLeft: Radius.circular(30),
+                                bottomLeft: Radius.circular(30),
+                                bottomRight: Radius.circular(30),
+                              ),
+                            ),
+                            child: Column(
                               children: [
                                 Row(
                                   crossAxisAlignment: CrossAxisAlignment.center,
@@ -358,19 +360,20 @@ class _VideoScreenState extends State<VideoScreen> {
                                   },
                                 ),
                               ],
-                            )
-                          : Container(
-                              height: size.height * 0.25,
-                              child: const Center(
-                                child: Text(
-                                  'ไม่มีวิดีโอ',
-                                  style: TextStyle(
-                                    fontSize: 18,
-                                  ),
-                                ),
+                            ),
+                          )
+                        : Container(
+                            margin: const EdgeInsets.fromLTRB(20, 50, 20, 40),
+                            padding: const EdgeInsets.fromLTRB(20, 20, 20, 20),
+                            decoration: const BoxDecoration(
+                              borderRadius: BorderRadius.only(
+                                topLeft: Radius.circular(30),
+                                bottomLeft: Radius.circular(30),
+                                bottomRight: Radius.circular(30),
                               ),
                             ),
-                    ),
+                            height: size.height * 0.27,
+                          ),
                   ),
                   heightBox(size.height * 0.03),
                   Text(

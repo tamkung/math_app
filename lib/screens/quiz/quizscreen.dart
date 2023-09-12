@@ -8,6 +8,7 @@ import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:im_stepper/stepper.dart';
 import 'package:math_app/config/constant.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 import '../home.dart';
 
@@ -33,6 +34,7 @@ class _QuizScreenState extends State<QuizScreen> {
 
   List isSeleted = [];
   List<bool> isChk = [];
+  String? API_URL = dotenv.env['API_URL'];
 
   Future<void> getQuiz() async {
     user_id = box.read('u_id');

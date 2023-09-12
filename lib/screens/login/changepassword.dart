@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:get_storage/get_storage.dart';
 import 'package:math_app/config/constant.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class ChangePassword extends StatefulWidget {
   const ChangePassword({super.key});
@@ -19,6 +20,7 @@ class _ChangePasswordState extends State<ChangePassword> {
 
   dynamic email, user_id;
   GetStorage box = GetStorage();
+  String? API_URL = dotenv.env['API_URL'];
 
   Future<void> getUser() async {
     email = box.read('email');

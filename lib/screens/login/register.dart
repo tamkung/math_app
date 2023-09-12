@@ -5,6 +5,7 @@ import 'package:http/http.dart' as http;
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:math_app/config/constant.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class RegisterScreen extends StatefulWidget {
   @override
@@ -28,6 +29,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
     'L4',
   ];
   String? _selectedUserType;
+  String? API_URL = dotenv.env['API_URL'];
+
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;

@@ -9,6 +9,7 @@ import 'package:math_app/config/constant.dart';
 import 'package:math_app/screens/video/videoscreen.dart';
 import 'package:math_app/widget/navdrawer.dart';
 import 'package:photo_view/photo_view.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class LessonScreen extends StatefulWidget {
   final dynamic title, course_id, section_id, image_url, section_img;
@@ -38,7 +39,7 @@ class _LessonScreenState extends State<LessonScreen> {
       video_url,
       lesson_quiz_id;
 
-  //dynamic percent = 0;
+  String? API_URL = dotenv.env['API_URL'];
 
   Future<void> getSection() async {
     user_id = box.read('u_id');
