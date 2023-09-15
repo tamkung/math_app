@@ -25,7 +25,7 @@ class _GameScreenState extends State<GameScreen> {
   List _items = [];
   List _items2 = [];
   bool chk = false;
-  dynamic txt_id, txt_title, txt_course_id, txt_order;
+  dynamic txt_id, txt_title, txt_course_id, txt_order, game_path;
   GetStorage box = GetStorage();
   String? API_URL = dotenv.env['API_URL'];
 
@@ -163,9 +163,16 @@ class _GameScreenState extends State<GameScreen> {
                             txt_title = _items[index]["title"];
                             txt_course_id = _items[index]['course_id'];
                             txt_order = _items[index]['order'];
+                            game_path = _items[index]['game_path'];
                             if (txt_title != "รูปเรขาคณิตสองมิติและสามมิติ") {
-                              return menuProgressContainer(txt_title, txt_id,
-                                  txt_course_id, context, size, u_id, txt_id);
+                              return menuProgressContainer(
+                                  txt_title,
+                                  txt_id,
+                                  txt_course_id,
+                                  context,
+                                  size,
+                                  u_id,
+                                  game_path);
                             } else {
                               return Container();
                             }
@@ -185,7 +192,7 @@ class _GameScreenState extends State<GameScreen> {
 }
 
 Widget menuProgressContainer(
-    title, section_id, course_id, context, size, u_id, game_id) {
+    title, section_id, course_id, context, size, u_id, game_path) {
   return Stack(
     alignment: Alignment.centerRight,
     children: [
@@ -249,7 +256,7 @@ Widget menuProgressContainer(
               shape: const CircleBorder(),
             ),
             onPressed: () {
-              _launchURL(title, u_id);
+              _launchURL(title, u_id, game_path);
             },
             child: const Text(
               'เล่นเกม',
@@ -266,18 +273,10 @@ Widget menuProgressContainer(
   );
 }
 
-_launchURL(title, u_id) async {
+_launchURL(title, u_id, game_path) async {
   String? GAME_URL = dotenv.env['GAME_URL'];
   String uID = u_id.toString();
-  String gamePath = "";
-  if (title == "การหาพื้นที่") {
-    gamePath = "LittleTurtle/";
-  } else if (title == "การหาความยาวรอบรูป") {
-    gamePath = "AirPlane/";
-  } else {
-    gamePath = "None/";
-  }
-  final Uri url = Uri.parse(GAME_URL! + gamePath + '?user_id=' + uID);
+  final Uri url = Uri.parse(GAME_URL! + '${game_path}' + '/?user_id=' + uID);
   if (!await launchUrl(
     url,
     mode: LaunchMode.externalApplication,
