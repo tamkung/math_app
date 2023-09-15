@@ -21,14 +21,6 @@ class GameProgressScreen extends StatefulWidget {
 
 class _GameProgressScreenState extends State<GameProgressScreen> {
   List _items = [];
-  List _items2 = [];
-  List _image = [
-    'assets/images/menu1.png',
-    'assets/images/menu2.png',
-    'assets/images/menu3.png',
-    'assets/images/menu4.png',
-    'assets/images/menu5.png'
-  ];
   bool chk = false;
   dynamic txt_id, txt_title, txt_course_id, txt_order;
   GetStorage box = GetStorage();
@@ -170,13 +162,8 @@ class _GameProgressScreenState extends State<GameProgressScreen> {
                             txt_order = _items[index]['order'];
                             if (txt_id != 1 ||
                                 txt_title != "รูปเรขาคณิตสองมิติและสามมิติ") {
-                              return menuProgressContainer(
-                                  txt_title,
-                                  _image[index],
-                                  txt_id,
-                                  txt_course_id,
-                                  context,
-                                  size);
+                              return menuProgressContainer(txt_title, txt_id,
+                                  txt_course_id, context, size);
                             } else {
                               return Container();
                             }
@@ -195,8 +182,7 @@ class _GameProgressScreenState extends State<GameProgressScreen> {
   }
 }
 
-Widget menuProgressContainer(
-    title, image, section_id, course_id, context, size) {
+Widget menuProgressContainer(title, section_id, course_id, context, size) {
   return Stack(
     alignment: Alignment.centerRight,
     children: [
@@ -258,38 +244,20 @@ Widget menuProgressContainer(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               const Text(
-                '32',
+                '0',
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   color: pColor,
+                  fontSize: 20,
                   fontWeight: FontWeight.bold,
                 ),
               ),
+              heightBox(size.height * 0.005),
               const Text(
                 'คะแนน',
                 textAlign: TextAlign.center,
                 style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              Container(
-                margin: const EdgeInsets.only(top: 5, bottom: 5),
-                color: Colors.black,
-                width: 70,
-                height: 2,
-              ),
-              const Text(
-                '08:45',
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  color: pColor,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              const Text(
-                'นาที',
-                textAlign: TextAlign.center,
-                style: TextStyle(
+                  fontSize: 15,
                   fontWeight: FontWeight.bold,
                 ),
               ),
