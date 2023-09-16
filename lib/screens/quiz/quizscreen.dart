@@ -9,6 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:im_stepper/stepper.dart';
 import 'package:math_app/config/constant.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:photo_view/photo_view.dart';
 
 import '../home.dart';
 
@@ -180,10 +181,17 @@ class _QuizScreenState extends State<QuizScreen> {
                                       String htmlData2 = document.body!.text;
                                       dom.Document document2 =
                                           htmlparser.parse(htmlData2);
-
+                                      //check image tag
+                                      bool isImage =
+                                          document.body!.text.contains("<img");
+                                      List<String> partImg =
+                                          document.body!.text.split('src="');
+                                      String imageUrl = "";
+                                      if (partImg.length > 1) {
+                                        imageUrl = partImg[1].split('"')[0];
+                                      }
                                       List<bool> isChk =
                                           isSeleted[0][activeStep + 1];
-                                      //opList.shuffle();
                                       return Column(
                                         mainAxisAlignment:
                                             MainAxisAlignment.start,
@@ -208,26 +216,104 @@ class _QuizScreenState extends State<QuizScreen> {
                                                   ),
                                                 ),
                                                 heightBox(10),
-                                                Html(
-                                                  data:
-                                                      document2.body!.text != ''
-                                                          ? document2.body!.text
-                                                          : document.body!.text,
-                                                  style: {
-                                                    '*': Style(
-                                                      margin: EdgeInsets.zero,
-                                                      fontSize: FontSize(18),
-                                                      color: Color(0xFF000000),
-                                                    ),
-                                                    'span': Style(
-                                                      backgroundColor:
-                                                          Color(0xFFFFFFFF),
-                                                    ),
-                                                  },
-                                                ),
-                                                // Text(txt_title,
-                                                //     style: const TextStyle(
-                                                //         fontSize: 16)),
+                                                isImage == true
+                                                    ? Center(
+                                                        child: GestureDetector(
+                                                          onTap: () {
+                                                            showGeneralDialog(
+                                                                context:
+                                                                    context,
+                                                                barrierDismissible:
+                                                                    true,
+                                                                barrierLabel:
+                                                                    MaterialLocalizations.of(
+                                                                            context)
+                                                                        .modalBarrierDismissLabel,
+                                                                barrierColor:
+                                                                    Colors
+                                                                        .black45,
+                                                                transitionDuration:
+                                                                    const Duration(
+                                                                        milliseconds:
+                                                                            200),
+                                                                pageBuilder: (BuildContext
+                                                                        buildContext,
+                                                                    Animation
+                                                                        animation,
+                                                                    Animation
+                                                                        secondaryAnimation) {
+                                                                  return Center(
+                                                                    child:
+                                                                        Container(
+                                                                      width:
+                                                                          size.width -
+                                                                              10,
+                                                                      height:
+                                                                          size.height *
+                                                                              0.3,
+                                                                      color: Colors
+                                                                          .white,
+                                                                      child:
+                                                                          PhotoView(
+                                                                        backgroundDecoration:
+                                                                            const BoxDecoration(
+                                                                          color:
+                                                                              Colors.transparent,
+                                                                        ),
+                                                                        imageProvider:
+                                                                            NetworkImage(imageUrl),
+                                                                        initialScale:
+                                                                            PhotoViewComputedScale.contained *
+                                                                                1,
+                                                                        minScale:
+                                                                            PhotoViewComputedScale.contained *
+                                                                                1,
+                                                                        maxScale:
+                                                                            PhotoViewComputedScale.covered *
+                                                                                2,
+                                                                      ),
+                                                                    ),
+                                                                  );
+                                                                });
+                                                          },
+                                                          child: Hero(
+                                                            tag: "someTag",
+                                                            child:
+                                                                Image.network(
+                                                              imageUrl,
+                                                              loadingBuilder: (_,
+                                                                      child,
+                                                                      chunk) =>
+                                                                  chunk != null
+                                                                      ? const Text(
+                                                                          "loading")
+                                                                      : child,
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      )
+                                                    : Html(
+                                                        data: document2.body!
+                                                                    .text !=
+                                                                ''
+                                                            ? document2
+                                                                .body!.text
+                                                            : document
+                                                                .body!.text,
+                                                        style: {
+                                                          '*': Style(
+                                                            margin:
+                                                                EdgeInsets.zero,
+                                                            fontSize:
+                                                                const FontSize(
+                                                                    18),
+                                                            color: Colors.black,
+                                                          ),
+                                                          'span': Style(
+                                                              backgroundColor:
+                                                                  Colors.white),
+                                                        },
+                                                      ),
                                               ],
                                             ),
                                           ),
@@ -554,26 +640,66 @@ class _QuizScreenState extends State<QuizScreen> {
         score += 1;
       }
     }
-
-    // print(_user_answers);
-    // print(_correct_answers);
-
-    // showDialog(
-    //   context: context,
-    //   builder: (context) {
-    //     return AlertDialog(
-    //       title: Text("Score"),
-    //       content: Text("Score : $score / ${_items.length}"),
-    //       actions: [
-    //         TextButton(
-    //           onPressed: () {
-    //             Navigator.pop(context);
-    //           },
-    //           child: Text("OK"),
-    //         ),
-    //       ],
-    //     );
-    //   },
-    // );
   }
 }
+
+/*
+class HeroPhotoViewRouteWrapper extends StatelessWidget {
+  const HeroPhotoViewRouteWrapper({
+    required this.imageProvider,
+    this.backgroundDecoration,
+    this.minScale,
+    this.maxScale,
+  });
+
+  final ImageProvider imageProvider;
+  final BoxDecoration? backgroundDecoration;
+  final dynamic minScale;
+  final dynamic maxScale;
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: pColor,
+        elevation: 0,
+        title: const Text("รูปโจทย์"),
+        centerTitle: true,
+        automaticallyImplyLeading: false,
+      ),
+      backgroundColor: Colors.white,
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Container(
+              color: Colors.white,
+              constraints: BoxConstraints.expand(
+                height: MediaQuery.of(context).size.height * 0.5,
+              ),
+              child: PhotoView(
+                imageProvider: imageProvider,
+                backgroundDecoration: const BoxDecoration(
+                  color: Colors.transparent,
+                ),
+                heroAttributes: const PhotoViewHeroAttributes(tag: "someTag"),
+                minScale: PhotoViewComputedScale.contained * 1,
+                maxScale: PhotoViewComputedScale.covered * 2,
+              ),
+            ),
+          ],
+        ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.pop(context);
+        },
+        child: const Icon(Icons.close),
+        backgroundColor: pColor,
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+    );
+  }
+}
+*/
